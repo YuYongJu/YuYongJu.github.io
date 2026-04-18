@@ -119,6 +119,14 @@
     .comp-table { font-size: 0.75rem; }
     .streams { grid-template-columns: 1fr; }
     .tier-bar.t1, .tier-bar.t2, .tier-bar.t3, .tier-bar.t4 { width: 100%; }
+    .comp-table { display: block; overflow-x: auto; white-space: nowrap; }
+  }
+  @media print {
+    body { font-size: 14px; }
+    .section { padding: 2rem 0; break-inside: avoid; }
+    .hero { padding: 1.5rem 0; }
+    .pipeline-step:hover, .tier-bar:hover { background: transparent; }
+    .back-link { display: none; }
   }
 </style>
 </head>

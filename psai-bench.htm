@@ -98,7 +98,14 @@
     .track-row { grid-template-columns: 1fr; gap: 0.5rem; }
     .metric-cards, .eval-cards { grid-template-columns: 1fr; }
     .impact-grid { grid-template-columns: 1fr; }
-    .matrix { font-size: 0.65rem; }
+    .matrix-section { overflow-x: auto; }
+    .matrix { font-size: 0.65rem; min-width: 560px; }
+  }
+  @media print {
+    body { font-size: 14px; }
+    .section { padding: 2rem 0; break-inside: avoid; }
+    .hero { padding: 1.5rem 0; }
+    .back-link { display: none; }
   }
 </style>
 </head>

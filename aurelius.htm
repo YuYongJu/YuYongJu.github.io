@@ -106,8 +106,14 @@
     .overview-grid { grid-template-columns: 1fr; }
     .layer-cards { grid-template-columns: 1fr; }
     .funnel-row { grid-template-columns: 1fr; }
-    .pos-matrix { font-size: 0.7rem; }
+    .pos-matrix { font-size: 0.62rem; display: block; overflow-x: auto; min-width: 0; }
     .impact-grid { grid-template-columns: 1fr; }
+  }
+  @media print {
+    body { font-size: 14px; }
+    .section { padding: 2rem 0; break-inside: avoid; }
+    .hero { padding: 1.5rem 0; }
+    .back-link { display: none; }
   }
 </style>
 </head>
