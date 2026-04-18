@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addison Apisarnthanarax — Emotion-Based Music Recommender</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+  :root {
+    --black: #0a0a0a; --white: #fafaf9; --accent: #e11d48; --accent-light: #fff1f2;
+    --gray-100: #f5f5f4; --gray-200: #e7e5e4; --gray-400: #a8a29e; --gray-600: #57534e; --gray-800: #292524;
+    --border: 3px solid var(--black); --border-thin: 1.5px solid var(--black);
+    --mono: 'Space Mono', 'Courier New', monospace; --sans: 'Space Grotesk', 'Arial', sans-serif; --serif: 'Instrument Serif', 'Georgia', serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body { background: var(--white); color: var(--black); font-family: var(--sans); line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .section { padding: 4rem 0; border-bottom: var(--border); }
+  .section:last-of-type { border-bottom: none; }
+  .label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray-600); margin-bottom: 0.75rem; display: block; }
+  .accent { color: var(--accent); }
+  .back-link { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; display: inline-block; padding: 1.5rem 0; }
+  .hero { padding: 3rem 0 2rem; border-bottom: var(--border); }
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; gap: 2rem; flex-wrap: wrap; }
+  .hero-name { font-family: var(--mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.2em; border: var(--border); padding: 0.5rem 1rem; display: inline-block; }
+  .hero-meta { font-family: var(--mono); font-size: 0.7rem; text-align: right; color: var(--gray-600); line-height: 1.8; }
+  .hero-meta a { font-weight: 400; }
+  .hero-title { font-family: var(--serif); font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.08; font-weight: 400; margin-bottom: 1.5rem; max-width: 900px; letter-spacing: -0.02em; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-subtitle { font-family: var(--mono); font-size: 0.8rem; color: var(--gray-600); letter-spacing: 0.05em; max-width: 700px; line-height: 1.7; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: var(--border); margin-top: 2.5rem; }
+  .metric { padding: 1.5rem 1rem; border-right: var(--border-thin); }
+  .metric:last-child { border-right: none; }
+  .metric-value { font-family: var(--serif); font-size: 2.8rem; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+  .metric-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-600); }
+  .overview-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .overview-text { font-size: 1.05rem; line-height: 1.75; color: var(--gray-800); }
+  .overview-text p { margin-bottom: 1.25rem; }
+  .overview-text strong { color: var(--black); font-weight: 600; }
+  .tags-box { border: var(--border); padding: 1.5rem; align-self: start; }
+  .tags-box .label { margin-bottom: 1rem; }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.65rem; border: 1.5px solid var(--black); margin: 0 0.4rem 0.5rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag.highlight { background: var(--black); color: var(--white); }
+  .pipeline-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: var(--border); margin-bottom: 2.5rem; }
+  .pipeline-step { padding: 1.5rem 1rem; border-right: var(--border-thin); position: relative; }
+  .pipeline-step:last-child { border-right: none; }
+  .pipeline-step:hover { background: var(--accent-light); }
+  .step-number { font-family: var(--serif); font-size: 2rem; color: var(--accent); line-height: 1; margin-bottom: 0.6rem; }
+  .step-name { font-family: var(--sans); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+  .step-detail { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-600); line-height: 1.6; }
+  .step-tool { font-family: var(--mono); font-size: 0.6rem; display: inline-block; margin-top: 0.6rem; padding: 0.2rem 0.4rem; border: 1px solid var(--gray-400); color: var(--gray-600); }
+  .finding-list { list-style: none; margin-top: 1rem; }
+  .finding-list li { font-size: 0.88rem; padding: 0.5rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); line-height: 1.5; }
+  .finding-list li::before { content: '\2192'; margin-right: 0.5rem; color: var(--accent); font-weight: 700; }
+  .footer { padding: 2rem 0; border-top: var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-left { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-600); letter-spacing: 0.05em; }
+  .footer-right { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.1em; }
+  @media print { body { font-size: 14px; } .section { padding: 2rem 0; break-inside: avoid; } .hero { padding: 1.5rem 0; } .pipeline-step:hover { background: transparent; } }
+  @media (max-width: 768px) { .hero-top { flex-direction: column; } .hero-meta { text-align: left; } .metrics { grid-template-columns: repeat(2, 1fr); } .metric { border-bottom: var(--border-thin); } .overview-grid { grid-template-columns: 1fr; } .pipeline-flow { grid-template-columns: repeat(2, 1fr); } .pipeline-step { border-bottom: var(--border-thin); } }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="portfolio.htm" class="back-link">&larr; Back to Portfolio</a>
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-name">Addison Apisarnthanarax</div>
+      <div class="hero-meta">
+        <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &mdash;
+        <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &mdash;
+        <a href="mailto:AddisonApisarn@gmail.com">Email</a><br>
+        Multimodal ML &mdash; 2024
+      </div>
+    </div>
+    <h1 class="hero-title">Multimodal <em>Video-to-Music</em> Recommendation</h1>
+    <p class="hero-subtitle">An AI system that analyzes video content, classifies emotional context with a trained neural network, and recommends emotionally matching music from Spotify &mdash; bridging visual, emotional, and audio modalities.</p>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value">3</div>
+        <div class="metric-label">APIs Integrated</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">3</div>
+        <div class="metric-label">Modalities Bridged</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">1</div>
+        <div class="metric-label">Trained Model (.h5)</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">4</div>
+        <div class="metric-label">Pipeline Stages</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <div class="overview-grid">
+      <div class="overview-text">
+        <span class="label">01 &mdash; Project Overview</span>
+        <p>
+          Matching music to video content is a fundamentally multimodal problem &mdash; it requires understanding visual scenes, mapping them to emotional categories, and finding audio that evokes the same feeling. This project builds an end-to-end pipeline that bridges all three modalities automatically.
+        </p>
+        <p>
+          The system uses <strong>Google Cloud Video Intelligence API</strong> to extract scene labels and context from video content, a <strong>trained Keras neural network</strong> to classify music tracks by emotional content based on Spotify audio features, and the <strong>Spotify Web API</strong> to retrieve playlist metadata. The emotion classifier model (<code>emotion_classifier_model.h5</code>) is trained on standardized audio features using scikit-learn's StandardScaler.
+        </p>
+        <p>
+          The result is a recommendation engine that takes any video as input and outputs a ranked list of emotionally appropriate music tracks from curated Spotify playlists.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">TensorFlow</span>
+        <span class="tag highlight">Keras</span>
+        <span class="tag">Google Cloud</span>
+        <span class="tag">Video Intelligence</span>
+        <span class="tag">Spotify API</span>
+        <span class="tag">Scikit-learn</span>
+        <span class="tag">Python</span>
+        <span class="tag">Pandas</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <span class="label">02 &mdash; Pipeline</span>
+    <div class="pipeline-flow">
+      <div class="pipeline-step">
+        <div class="step-number">01</div>
+        <div class="step-name">Fetch</div>
+        <div class="step-detail">Retrieve Spotify playlist metadata and audio features (energy, valence, tempo, danceability)</div>
+        <span class="step-tool">Spotify API</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">02</div>
+        <div class="step-name">Analyze</div>
+        <div class="step-detail">Extract labels, scenes, and contextual signals from video content</div>
+        <span class="step-tool">Video Intelligence</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">03</div>
+        <div class="step-name">Classify</div>
+        <div class="step-detail">Train emotion classifier on standardized audio features with Keras neural network</div>
+        <span class="step-tool">Keras (.h5)</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">04</div>
+        <div class="step-name">Recommend</div>
+        <div class="step-detail">Match video emotional tone to music tracks by predicted emotion category</div>
+        <span class="step-tool">Python</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <span class="label">03 &mdash; Key Results</span>
+    <ul class="finding-list">
+      <li>Trained <strong>emotion_classifier_model.h5</strong> neural network for music emotion classification</li>
+      <li><strong>Google Cloud Video Intelligence API</strong> integration for scene label and context extraction</li>
+      <li><strong>Spotify Web API</strong> for playlist metadata retrieval and audio feature analysis</li>
+      <li>Feature scaling with scikit-learn <strong>StandardScaler</strong> for normalized model input</li>
+      <li>Full end-to-end pipeline: <strong>fetch &rarr; analyze &rarr; train &rarr; recommend</strong></li>
+      <li>Bridges three modalities &mdash; visual content, emotion classification, and audio features &mdash; into a unified recommendation system</li>
+    </ul>
+  </div>
+</div>
+
+<div class="container">
+  <div class="footer">
+    <div class="footer-left">
+      Addison Apisarnthanarax &mdash;
+      <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &middot;
+      <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &middot;
+      <a href="mailto:AddisonApisarn@gmail.com">AddisonApisarn@gmail.com</a>
+    </div>
+    <div class="footer-right">Portfolio &mdash; 2026</div>
+  </div>
+</div>
+</body>
+</html>

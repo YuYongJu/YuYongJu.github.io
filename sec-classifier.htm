@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addison Apisarnthanarax — SEC Business Classifier</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+  :root {
+    --black: #0a0a0a; --white: #fafaf9; --accent: #e11d48; --accent-light: #fff1f2;
+    --gray-100: #f5f5f4; --gray-200: #e7e5e4; --gray-400: #a8a29e; --gray-600: #57534e; --gray-800: #292524;
+    --border: 3px solid var(--black); --border-thin: 1.5px solid var(--black);
+    --mono: 'Space Mono', 'Courier New', monospace; --sans: 'Space Grotesk', 'Arial', sans-serif; --serif: 'Instrument Serif', 'Georgia', serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body { background: var(--white); color: var(--black); font-family: var(--sans); line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .section { padding: 4rem 0; border-bottom: var(--border); }
+  .section:last-of-type { border-bottom: none; }
+  .label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray-600); margin-bottom: 0.75rem; display: block; }
+  .accent { color: var(--accent); }
+  .back-link { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; display: inline-block; padding: 1.5rem 0; }
+  .hero { padding: 3rem 0 2rem; border-bottom: var(--border); }
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; gap: 2rem; flex-wrap: wrap; }
+  .hero-name { font-family: var(--mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.2em; border: var(--border); padding: 0.5rem 1rem; display: inline-block; }
+  .hero-meta { font-family: var(--mono); font-size: 0.7rem; text-align: right; color: var(--gray-600); line-height: 1.8; }
+  .hero-meta a { font-weight: 400; }
+  .hero-title { font-family: var(--serif); font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.08; font-weight: 400; margin-bottom: 1.5rem; max-width: 900px; letter-spacing: -0.02em; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-subtitle { font-family: var(--mono); font-size: 0.8rem; color: var(--gray-600); letter-spacing: 0.05em; max-width: 700px; line-height: 1.7; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: var(--border); margin-top: 2.5rem; }
+  .metric { padding: 1.5rem 1rem; border-right: var(--border-thin); }
+  .metric:last-child { border-right: none; }
+  .metric-value { font-family: var(--serif); font-size: 2.8rem; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+  .metric-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-600); }
+  .overview-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .overview-text { font-size: 1.05rem; line-height: 1.75; color: var(--gray-800); }
+  .overview-text p { margin-bottom: 1.25rem; }
+  .overview-text strong { color: var(--black); font-weight: 600; }
+  .tags-box { border: var(--border); padding: 1.5rem; align-self: start; }
+  .tags-box .label { margin-bottom: 1rem; }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.65rem; border: 1.5px solid var(--black); margin: 0 0.4rem 0.5rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag.highlight { background: var(--black); color: var(--white); }
+  .finding-list { list-style: none; margin-top: 1rem; }
+  .finding-list li { font-size: 0.88rem; padding: 0.5rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); line-height: 1.5; }
+  .finding-list li::before { content: '\2192'; margin-right: 0.5rem; color: var(--accent); font-weight: 700; }
+  .viz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 2rem; }
+  .viz-panel { border: var(--border); padding: 2rem; margin-right: -3px; }
+  .viz-panel h3 { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; margin-bottom: 1.5rem; }
+  .growth-chart { display: flex; flex-direction: column; gap: 0.5rem; }
+  .growth-row { display: grid; grid-template-columns: 140px 1fr 50px; align-items: center; gap: 0.75rem; height: 28px; }
+  .growth-label { font-family: var(--mono); font-size: 0.62rem; text-align: right; color: var(--gray-800); line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .growth-bar-wrap { height: 22px; position: relative; background: var(--gray-100); border: 1.5px solid var(--black); }
+  .growth-bar { height: 100%; transition: width 0.3s ease; }
+  .growth-bar.positive { background: var(--accent); }
+  .growth-bar.negative { background: var(--gray-400); }
+  .growth-value { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; }
+  .growth-value.positive { color: var(--accent); }
+  .growth-value.negative { color: var(--gray-400); }
+  .growth-divider { grid-column: 1 / -1; border-top: 1.5px dashed var(--gray-200); margin: 0.3rem 0; }
+  .results-table-wrapper { overflow-x: auto; margin-top: 1.5rem; }
+  .results-table { width: 100%; border-collapse: collapse; border: var(--border); font-size: 0.82rem; }
+  .results-table thead { background: var(--black); color: var(--white); }
+  .results-table th { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; padding: 1rem 1.2rem; text-align: left; font-weight: 400; border-right: 1px solid var(--gray-800); }
+  .results-table th:last-child { border-right: none; }
+  .results-table td { padding: 0.75rem 1.2rem; border-bottom: 1px solid var(--gray-200); border-right: 1px solid var(--gray-200); vertical-align: top; }
+  .results-table td:last-child { border-right: none; }
+  .results-table tbody tr:hover { background: var(--gray-100); }
+  .results-table .col-category { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; white-space: nowrap; }
+  .results-table .col-stat { font-family: var(--mono); font-size: 0.78rem; color: var(--gray-600); white-space: nowrap; }
+  .footer { padding: 2rem 0; border-top: var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-left { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-600); letter-spacing: 0.05em; }
+  .footer-right { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.1em; }
+  @media print { body { font-size: 14px; } .section { padding: 2rem 0; break-inside: avoid; } .hero { padding: 1.5rem 0; } }
+  @media (max-width: 768px) { .hero-top { flex-direction: column; } .hero-meta { text-align: left; } .metrics { grid-template-columns: repeat(2, 1fr); } .metric { border-bottom: var(--border-thin); } .overview-grid { grid-template-columns: 1fr; } .viz-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="portfolio.htm" class="back-link">&larr; Back to Portfolio</a>
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-name">Addison Apisarnthanarax</div>
+      <div class="hero-meta">
+        <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &mdash;
+        <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &mdash;
+        <a href="mailto:AddisonApisarn@gmail.com">Email</a><br>
+        ML Classification &mdash; 2024
+      </div>
+    </div>
+    <h1 class="hero-title">RoBERTa-Powered SEC <em>Business Classification</em></h1>
+    <p class="hero-subtitle">Production-grade SEC filings analysis system using fine-tuned RoBERTa models for multi-level business description classification with transparent fallback chains and SIC/NAICS crosswalk mapping.</p>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value">100<span class="accent">%</span></div>
+        <div class="metric-label">Validation Accuracy</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">880</div>
+        <div class="metric-label">Training Examples</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">159</div>
+        <div class="metric-label">SIC Codes Mapped</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">60.8<span class="accent">%</span></div>
+        <div class="metric-label">Text Reduction</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <div class="overview-grid">
+      <div class="overview-text">
+        <span class="label">01 &mdash; Project Overview</span>
+        <p>
+          SEC filings contain rich business descriptions that are critical for sector classification, but manually categorizing thousands of filings across industries is impractical. This system uses a <strong>fine-tuned RoBERTa model</strong> with GPU-accelerated inference to automatically classify business descriptions into sectors, industries, and sub-industries.
+        </p>
+        <p>
+          The classifier implements a <strong>10-method classification cascade</strong> with 18 rule categories, ensuring transparent fallback when the primary model's confidence drops below threshold. A SIC/NAICS code crosswalk maps 159 standard codes across 16 sectors, while semantic summarization achieves <strong>60.8% text reduction</strong> without losing classification signal.
+        </p>
+        <p>
+          The system includes conglomerate detection via a <strong>0.55 dominance ratio threshold</strong>, identifying companies that span multiple sectors rather than forcing single-sector assignment. Development followed a 5-phase lifecycle from data collection through production deployment.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">RoBERTa</span>
+        <span class="tag highlight">PyTorch</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Sentence-Transformers</span>
+        <span class="tag">MiniLM</span>
+        <span class="tag">Scikit-learn</span>
+        <span class="tag">SEC EDGAR</span>
+        <span class="tag">Python</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <span class="label">02 &mdash; Visualizations</span>
+    <div class="viz-grid">
+      <div class="viz-panel">
+        <h3>Sector Distribution</h3>
+        <div class="growth-chart">
+          <div class="growth-row">
+            <div class="growth-label">Technology</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 100%"></div></div>
+            <div class="growth-value positive">210</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">Healthcare</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 85%"></div></div>
+            <div class="growth-value positive">178</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">Financial</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 72%"></div></div>
+            <div class="growth-value positive">152</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">Industrial</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 60%"></div></div>
+            <div class="growth-value positive">126</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">Consumer</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 48%"></div></div>
+            <div class="growth-value positive">108</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">Energy</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 40%"></div></div>
+            <div class="growth-value positive">106</div>
+          </div>
+        </div>
+      </div>
+      <div class="viz-panel">
+        <h3>Classification Cascade</h3>
+        <div class="results-table-wrapper">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Coverage</th>
+                <th>Confidence</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="col-category">RoBERTa</td>
+                <td class="col-stat">~72%</td>
+                <td class="col-stat" style="color: var(--accent); font-weight: 700;">&gt;0.75</td>
+              </tr>
+              <tr>
+                <td class="col-category">SIC Crosswalk</td>
+                <td class="col-stat">~12%</td>
+                <td class="col-stat">Deterministic</td>
+              </tr>
+              <tr>
+                <td class="col-category">Theme-Based</td>
+                <td class="col-stat">~8%</td>
+                <td class="col-stat">&gt;0.75</td>
+              </tr>
+              <tr>
+                <td class="col-category">Semantic Sim</td>
+                <td class="col-stat">~5%</td>
+                <td class="col-stat">&gt;0.55</td>
+              </tr>
+              <tr>
+                <td class="col-category">Rule-Based</td>
+                <td class="col-stat">~3%</td>
+                <td class="col-stat">18 rules</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <span class="label">03 &mdash; Key Results</span>
+    <ul class="finding-list">
+      <li>Fine-tuned RoBERTa with <strong>GPU-accelerated inference</strong> for business description classification across 6 sectors</li>
+      <li>10 classification methods with 18 rule categories for <strong>transparent fallback chains</strong></li>
+      <li>SIC/NAICS crosswalk mapping across <strong>159 codes and 16 sectors</strong></li>
+      <li><strong>0.75 confidence threshold</strong> for theme-based fallback with 0.55 dominance ratio for conglomerate detection</li>
+      <li>Semantic summarization achieves <strong>60.8% text reduction</strong> while preserving classification signal</li>
+      <li><strong>880 training examples</strong> with 100% validation accuracy on the training dataset</li>
+      <li>5-phase development lifecycle from data collection to production deployment</li>
+    </ul>
+  </div>
+</div>
+
+<div class="container">
+  <div class="footer">
+    <div class="footer-left">
+      Addison Apisarnthanarax &mdash;
+      <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &middot;
+      <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &middot;
+      <a href="mailto:AddisonApisarn@gmail.com">AddisonApisarn@gmail.com</a>
+    </div>
+    <div class="footer-right">Portfolio &mdash; 2026</div>
+  </div>
+</div>
+</body>
+</html>

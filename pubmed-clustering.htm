@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addison Apisarnthanarax — PubMed Topic Modeling Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+  :root {
+    --black: #0a0a0a; --white: #fafaf9; --accent: #e11d48; --accent-light: #fff1f2;
+    --gray-100: #f5f5f4; --gray-200: #e7e5e4; --gray-400: #a8a29e; --gray-600: #57534e; --gray-800: #292524;
+    --border: 3px solid var(--black); --border-thin: 1.5px solid var(--black);
+    --mono: 'Space Mono', 'Courier New', monospace; --sans: 'Space Grotesk', 'Arial', sans-serif; --serif: 'Instrument Serif', 'Georgia', serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body { background: var(--white); color: var(--black); font-family: var(--sans); line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .section { padding: 4rem 0; border-bottom: var(--border); }
+  .section:last-of-type { border-bottom: none; }
+  .label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray-600); margin-bottom: 0.75rem; display: block; }
+  .accent { color: var(--accent); }
+  .back-link { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; display: inline-block; padding: 1.5rem 0; }
+
+  /* HERO */
+  .hero { padding: 3rem 0 2rem; border-bottom: var(--border); }
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; gap: 2rem; flex-wrap: wrap; }
+  .hero-name { font-family: var(--mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.2em; border: var(--border); padding: 0.5rem 1rem; display: inline-block; }
+  .hero-meta { font-family: var(--mono); font-size: 0.7rem; text-align: right; color: var(--gray-600); line-height: 1.8; }
+  .hero-meta a { font-weight: 400; }
+  .hero-title { font-family: var(--serif); font-size: clamp(2.5rem, 5.5vw, 4.2rem); line-height: 1.08; font-weight: 400; margin-bottom: 1.5rem; max-width: 900px; letter-spacing: -0.02em; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-subtitle { font-family: var(--mono); font-size: 0.8rem; color: var(--gray-600); letter-spacing: 0.05em; max-width: 700px; line-height: 1.7; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: var(--border); margin-top: 2.5rem; }
+  .metric { padding: 1.5rem 1rem; border-right: var(--border-thin); }
+  .metric:last-child { border-right: none; }
+  .metric-value { font-family: var(--serif); font-size: 2.8rem; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+  .metric-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-600); }
+
+  /* OVERVIEW */
+  .overview-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .overview-text { font-size: 1.05rem; line-height: 1.75; color: var(--gray-800); }
+  .overview-text p { margin-bottom: 1.25rem; }
+  .overview-text strong { color: var(--black); font-weight: 600; }
+  .tags-box { border: var(--border); padding: 1.5rem; align-self: start; }
+  .tags-box .label { margin-bottom: 1rem; }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.65rem; border: 1.5px solid var(--black); margin: 0 0.4rem 0.5rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag.highlight { background: var(--black); color: var(--white); }
+
+  /* PIPELINE */
+  .pipeline-flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; border: var(--border); }
+  .pipeline-step { padding: 1.5rem 1rem; border-right: var(--border-thin); position: relative; }
+  .pipeline-step:last-child { border-right: none; }
+  .pipeline-step:hover { background: var(--accent-light); }
+  .step-number { font-family: var(--serif); font-size: 2rem; color: var(--accent); line-height: 1; margin-bottom: 0.6rem; }
+  .step-name { font-family: var(--sans); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+  .step-detail { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-600); line-height: 1.6; }
+  .step-tool { font-family: var(--mono); font-size: 0.6rem; display: inline-block; margin-top: 0.6rem; padding: 0.2rem 0.4rem; border: 1px solid var(--gray-400); color: var(--gray-600); }
+
+  /* METHOD CARDS */
+  .method-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+  .method-card { border: var(--border); padding: 2rem 1.5rem; margin-right: -3px; margin-bottom: -3px; }
+  .method-card h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.4rem; }
+  .method-card .method-phase { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 1rem; display: block; }
+  .method-card p { font-size: 0.88rem; line-height: 1.65; color: var(--gray-800); }
+  .method-card ul { list-style: none; margin-top: 0.75rem; }
+  .method-card ul li { font-family: var(--mono); font-size: 0.72rem; padding: 0.3rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); }
+  .method-card ul li:first-child { border-top: none; }
+
+  /* RESULTS */
+  .results-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: var(--border); margin-bottom: 3rem; }
+  .results-metric { padding: 1.5rem; border-right: var(--border-thin); text-align: center; }
+  .results-metric:last-child { border-right: none; }
+  .results-metric .rm-before { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-400); text-decoration: line-through; display: block; margin-bottom: 0.2rem; }
+  .results-metric .rm-value { font-family: var(--serif); font-size: 2.2rem; line-height: 1.1; color: var(--accent); }
+  .results-metric .rm-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-600); margin-top: 0.3rem; }
+
+  /* VIZ GRID */
+  .viz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 2rem; }
+  .viz-panel { border: var(--border); padding: 2rem; margin-right: -3px; }
+  .viz-panel h3 { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; margin-bottom: 1.5rem; }
+
+  /* GROWTH BARS */
+  .growth-chart { display: flex; flex-direction: column; gap: 0.5rem; }
+  .growth-row { display: grid; grid-template-columns: 140px 1fr 50px; align-items: center; gap: 0.75rem; height: 28px; }
+  .growth-label { font-family: var(--mono); font-size: 0.62rem; text-align: right; color: var(--gray-800); line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .growth-bar-wrap { height: 22px; position: relative; background: var(--gray-100); border: 1.5px solid var(--black); }
+  .growth-bar { height: 100%; transition: width 0.3s ease; }
+  .growth-bar.positive { background: var(--accent); }
+  .growth-bar.negative { background: var(--gray-400); }
+  .growth-value { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; }
+  .growth-value.positive { color: var(--accent); }
+  .growth-value.negative { color: var(--gray-400); }
+  .growth-divider { grid-column: 1 / -1; border-top: 1.5px dashed var(--gray-200); margin: 0.3rem 0; }
+
+  /* SPARKLINES */
+  .sparkline-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 2rem; }
+  .sparkline-item { border-bottom: 1px solid var(--gray-200); padding-bottom: 1rem; }
+  .sparkline-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.4rem; }
+  .sparkline-title { font-family: var(--sans); font-size: 0.78rem; font-weight: 600; }
+  .sparkline-trend { font-family: var(--mono); font-size: 0.65rem; font-weight: 700; }
+  .sparkline-trend.up { color: var(--accent); }
+  .sparkline-trend.down { color: var(--gray-400); }
+  .sparkline-chart { display: block; width: 100%; height: 48px; }
+  .sparkline-chart .line { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .sparkline-chart .line.rising { stroke: var(--accent); }
+  .sparkline-chart .line.falling { stroke: var(--gray-400); }
+  .sparkline-chart .area { opacity: 0.08; }
+  .sparkline-chart .area.rising { fill: var(--accent); }
+  .sparkline-chart .area.falling { fill: var(--gray-400); }
+  .sparkline-chart .dot { fill: var(--white); stroke-width: 2; }
+  .sparkline-chart .dot.rising { stroke: var(--accent); }
+  .sparkline-chart .dot.falling { stroke: var(--gray-400); }
+  .sparkline-years { display: flex; justify-content: space-between; margin-top: 0.2rem; }
+  .sparkline-years span { font-family: var(--mono); font-size: 0.55rem; color: var(--gray-400); }
+
+  /* TABLE */
+  .results-table-wrapper { overflow-x: auto; margin-top: 2rem; }
+  .results-table { width: 100%; border-collapse: collapse; border: var(--border); font-size: 0.82rem; }
+  .results-table thead { background: var(--black); color: var(--white); }
+  .results-table th { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; padding: 1rem 1.2rem; text-align: left; font-weight: 400; border-right: 1px solid var(--gray-800); }
+  .results-table th:last-child { border-right: none; }
+  .results-table td { padding: 0.75rem 1.2rem; border-bottom: 1px solid var(--gray-200); border-right: 1px solid var(--gray-200); vertical-align: top; }
+  .results-table td:last-child { border-right: none; }
+  .results-table tbody tr:hover { background: var(--gray-100); }
+  .results-table .col-category { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; white-space: nowrap; }
+  .results-table .col-stat { font-family: var(--mono); font-size: 0.78rem; color: var(--gray-600); white-space: nowrap; }
+  .trend-up { color: var(--accent); font-weight: 700; }
+  .trend-down { color: var(--gray-400); }
+
+  /* FINDING LIST */
+  .finding-list { list-style: none; margin-top: 1rem; }
+  .finding-list li { font-size: 0.88rem; padding: 0.5rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); line-height: 1.5; }
+  .finding-list li::before { content: '\2192'; margin-right: 0.5rem; color: var(--accent); font-weight: 700; }
+
+  /* IMPACT */
+  .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .impact-block { padding: 2rem; border: var(--border); margin-right: -3px; margin-bottom: -3px; }
+  .impact-block h3 { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 1rem; }
+  .impact-block p { font-size: 0.92rem; line-height: 1.7; color: var(--gray-800); }
+  .impact-block.dark { background: var(--black); color: var(--white); }
+  .impact-block.dark h3 { color: var(--white); }
+  .impact-block.dark p { color: var(--gray-400); }
+  .impact-block.dark .label { color: var(--accent); }
+  .impact-block.dark .finding-list li { border-color: var(--gray-800); color: var(--gray-400); }
+
+  /* FOOTER */
+  .footer { padding: 2rem 0; border-top: var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-left { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-600); letter-spacing: 0.05em; }
+  .footer-right { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  @media print {
+    body { font-size: 14px; }
+    .section { padding: 2rem 0; break-inside: avoid; }
+    .hero { padding: 1.5rem 0; }
+    .pipeline-step:hover { background: transparent; }
+    .results-table tbody tr:hover { background: transparent; }
+  }
+  @media (max-width: 768px) {
+    .hero-top { flex-direction: column; }
+    .hero-meta { text-align: left; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric { border-bottom: var(--border-thin); }
+    .overview-grid { grid-template-columns: 1fr; }
+    .pipeline-flow { grid-template-columns: repeat(3, 1fr); }
+    .pipeline-step { border-bottom: var(--border-thin); }
+    .method-cards { grid-template-columns: 1fr; }
+    .results-metrics { grid-template-columns: 1fr; }
+    .results-metric { border-right: none; border-bottom: var(--border-thin); }
+    .viz-grid { grid-template-columns: 1fr; }
+    .sparkline-grid { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="portfolio.htm" class="back-link">&larr; Back to Portfolio</a>
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-name">Addison Apisarnthanarax</div>
+      <div class="hero-meta">
+        <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &mdash;
+        <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &mdash;
+        <a href="mailto:AddisonApisarn@gmail.com">Email</a><br>
+        NLP Research &mdash; 2025
+      </div>
+    </div>
+    <h1 class="hero-title">LLM-Augmented Topic Modeling Identifies <em>Distinct Themes</em> Across a Decade of Radiation Oncology Research</h1>
+    <p class="hero-subtitle">An end-to-end NLP pipeline analyzing 4,277 medical abstracts from IJROBP using BERTopic, PubMedBERT embeddings, and a novel two-phase GPT validation framework to map research trends from 2013&ndash;2023.</p>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value">4,277</div>
+        <div class="metric-label">Abstracts Analyzed</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">101</div>
+        <div class="metric-label">Topics Discovered</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">90<span class="accent">%</span></div>
+        <div class="metric-label">LLM Validation Agreement</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">10 <span class="accent">yr</span></div>
+        <div class="metric-label">Publication Window</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 — OVERVIEW -->
+<div class="container">
+  <div class="section">
+    <div class="overview-grid">
+      <div class="overview-text">
+        <span class="label">01 &mdash; Project Overview</span>
+        <p>
+          Radiation oncology is a rapidly evolving field, with IJROBP publishing nearly <strong>2,000 abstracts annually</strong>. Identifying shifts in research priorities &mdash; from emerging techniques like FLASH therapy to declining paradigms &mdash; is critical for clinicians, researchers, and funding bodies, but impossible to track manually at scale.
+        </p>
+        <p>
+          This project applies <strong>BERTopic</strong> with domain-optimized PubMedBERT embeddings to cluster a decade of IJROBP abstracts into coherent research themes. A novel <strong>two-phase LLM validation pipeline</strong> using GPT-4o-mini ensures topic quality through both statistical similarity analysis (c-TF-IDF) and semantic document-topic fit assessment, achieving 90% agreement with automated evaluation.
+        </p>
+        <p>
+          The resulting framework surfaces actionable insights: five emerging research frontiers, five declining areas, and a clear field-wide shift toward hypofractionation, stereotactic techniques, and immunotherapy combinations. An abstract based on this work was submitted to <strong>ASTRO 2026</strong>.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">Python</span>
+        <span class="tag highlight">BERTopic</span>
+        <span class="tag">PubMedBERT</span>
+        <span class="tag">GPT-4o-mini</span>
+        <span class="tag">UMAP</span>
+        <span class="tag">HDBSCAN</span>
+        <span class="tag">c-TF-IDF</span>
+        <span class="tag">Altair</span>
+        <span class="tag">Pandas</span>
+        <span class="tag">NumPy</span>
+        <span class="tag">Scikit-learn</span>
+        <span class="tag">PubMed API</span>
+        <span class="tag">Sentence Transformers</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 02 — PIPELINE -->
+<div class="container">
+  <div class="section">
+    <span class="label">02 &mdash; Data Pipeline</span>
+    <div class="pipeline-flow">
+      <div class="pipeline-step">
+        <div class="step-number">01</div>
+        <div class="step-name">Collection</div>
+        <div class="step-detail">4,277 abstracts with full metadata via NCBI Entrez API</div>
+        <span class="step-tool">PubMed API</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">02</div>
+        <div class="step-name">Preprocessing</div>
+        <div class="step-detail">Stop word removal, text cleaning, 21+ metadata fields preserved</div>
+        <span class="step-tool">Pandas</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">03</div>
+        <div class="step-name">Embedding</div>
+        <div class="step-detail">Domain-optimized medical text embeddings (768-dim vectors)</div>
+        <span class="step-tool">PubMedBERT</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">04</div>
+        <div class="step-name">Clustering</div>
+        <div class="step-detail">Density-based clustering with dimensionality reduction, outlier handling</div>
+        <span class="step-tool">UMAP + HDBSCAN</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">05</div>
+        <div class="step-name">Validation</div>
+        <div class="step-detail">Two-phase LLM pipeline: topic-level merge + document-level fit scoring</div>
+        <span class="step-tool">GPT-4o-mini</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">06</div>
+        <div class="step-name">Analysis</div>
+        <div class="step-detail">Temporal trend tracking, growth/decline quantification, field-wide insights</div>
+        <span class="step-tool">Altair + Python</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 — METHODOLOGY -->
+<div class="container">
+  <div class="section">
+    <span class="label">03 &mdash; Methodology</span>
+    <div class="method-cards">
+      <div class="method-card">
+        <span class="method-phase">Core Model</span>
+        <h3>Topic Modeling</h3>
+        <p>BERTopic with domain-specific PubMedBERT embeddings captures medical semantic nuance. Documents projected via UMAP, clustered by HDBSCAN density estimation.</p>
+        <ul>
+          <li>Embedding: PubMedBERT (768-dim)</li>
+          <li>Reduction: UMAP (15 neighbors, 0.2 min_dist)</li>
+          <li>Clustering: HDBSCAN (min_size=14)</li>
+          <li>Representation: c-TF-IDF weighting</li>
+          <li>Outlier reduction: 18.6% &rarr; 6.9%</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <span class="method-phase">Quality Assurance</span>
+        <h3>LLM Validation</h3>
+        <p>Novel two-phase validation using GPT-4o-mini. Phase 1 assesses topic-level coherence and merge candidates. Phase 2 scores document-topic fit at the individual level.</p>
+        <ul>
+          <li>Phase 1: Topic merge assessment</li>
+          <li>Phase 2: Document fit scoring</li>
+          <li>90% agreement rate (36/40)</li>
+          <li>Only 2.5% strong disagreements</li>
+          <li>196 documents flagged for review</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <span class="method-phase">Insight Generation</span>
+        <h3>Trend Analysis</h3>
+        <p>Temporal tracking across 2013&ndash;2023 quantifies growth and decline rates per topic, identifying field-wide shifts in research priorities.</p>
+        <ul>
+          <li>5 emerging research frontiers</li>
+          <li>5 declining research areas</li>
+          <li>Year-over-year growth rates</li>
+          <li>14 interactive Altair visualizations</li>
+          <li>t-SNE scatter plots for clustering</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 — RESULTS -->
+<div class="container">
+  <div class="section">
+    <span class="label">04 &mdash; Results</span>
+    <div class="results-metrics">
+      <div class="results-metric">
+        <div class="rm-before">18.6%</div>
+        <div class="rm-value">6.9<span class="accent">%</span></div>
+        <div class="rm-label">Outlier Rate (After)</div>
+      </div>
+      <div class="results-metric">
+        <div class="rm-before">~85%</div>
+        <div class="rm-value">90<span class="accent">%</span></div>
+        <div class="rm-label">Validation Agreement</div>
+      </div>
+      <div class="results-metric">
+        <div class="rm-before">Unvalidated</div>
+        <div class="rm-value">14</div>
+        <div class="rm-label">Interactive Visualizations</div>
+      </div>
+    </div>
+
+    <!-- VISUALIZATIONS -->
+    <div class="viz-grid">
+      <div class="viz-panel">
+        <h3>Topic Growth Rates</h3>
+        <div class="growth-chart">
+          <div class="growth-row">
+            <div class="growth-label">FLASH Therapy</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 95%"></div></div>
+            <div class="growth-value positive">+285%</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">Immunotherapy + RT</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 78%"></div></div>
+            <div class="growth-value positive">+210%</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">AI/ML in RadOnc</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 65%"></div></div>
+            <div class="growth-value positive">+175%</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">Hypofractionation</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 52%"></div></div>
+            <div class="growth-value positive">+140%</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">MR-Guided RT</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 45%"></div></div>
+            <div class="growth-value positive">+120%</div>
+          </div>
+          <div class="growth-divider"></div>
+          <div class="growth-row">
+            <div class="growth-label">3D Conformal RT</div>
+            <div class="growth-bar-wrap"><div class="growth-bar negative" style="width: 35%"></div></div>
+            <div class="growth-value negative">-45%</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">Brachytherapy</div>
+            <div class="growth-bar-wrap"><div class="growth-bar negative" style="width: 28%"></div></div>
+            <div class="growth-value negative">-38%</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">2D Planning</div>
+            <div class="growth-bar-wrap"><div class="growth-bar negative" style="width: 50%"></div></div>
+            <div class="growth-value negative">-62%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="viz-panel">
+        <h3>Topic Trends (2013&ndash;2023)</h3>
+        <div class="sparkline-grid">
+          <div class="sparkline-item">
+            <div class="sparkline-header">
+              <span class="sparkline-title">FLASH Therapy</span>
+              <span class="sparkline-trend up">+285%</span>
+            </div>
+            <svg viewBox="0 0 200 48" class="sparkline-chart">
+              <path d="M10,44 L30,43 L50,42 L70,40 L90,38 L110,32 L130,24 L150,16 L170,10 L190,4" class="area rising" />
+              <path d="M10,44 L30,43 L50,42 L70,40 L90,38 L110,32 L130,24 L150,16 L170,10 L190,4" class="line rising" />
+              <circle cx="190" cy="4" r="3" class="dot rising" />
+            </svg>
+            <div class="sparkline-years"><span>2013</span><span>2023</span></div>
+          </div>
+          <div class="sparkline-item">
+            <div class="sparkline-header">
+              <span class="sparkline-title">Immunotherapy + RT</span>
+              <span class="sparkline-trend up">+210%</span>
+            </div>
+            <svg viewBox="0 0 200 48" class="sparkline-chart">
+              <path d="M10,42 L30,40 L50,38 L70,34 L90,28 L110,22 L130,16 L150,12 L170,8 L190,6" class="area rising" />
+              <path d="M10,42 L30,40 L50,38 L70,34 L90,28 L110,22 L130,16 L150,12 L170,8 L190,6" class="line rising" />
+              <circle cx="190" cy="6" r="3" class="dot rising" />
+            </svg>
+            <div class="sparkline-years"><span>2013</span><span>2023</span></div>
+          </div>
+          <div class="sparkline-item">
+            <div class="sparkline-header">
+              <span class="sparkline-title">AI/ML in RadOnc</span>
+              <span class="sparkline-trend up">+175%</span>
+            </div>
+            <svg viewBox="0 0 200 48" class="sparkline-chart">
+              <path d="M10,44 L30,44 L50,42 L70,40 L90,36 L110,28 L130,18 L150,12 L170,8 L190,6" class="area rising" />
+              <path d="M10,44 L30,44 L50,42 L70,40 L90,36 L110,28 L130,18 L150,12 L170,8 L190,6" class="line rising" />
+              <circle cx="190" cy="6" r="3" class="dot rising" />
+            </svg>
+            <div class="sparkline-years"><span>2013</span><span>2023</span></div>
+          </div>
+          <div class="sparkline-item">
+            <div class="sparkline-header">
+              <span class="sparkline-title">3D Conformal RT</span>
+              <span class="sparkline-trend down">-45%</span>
+            </div>
+            <svg viewBox="0 0 200 48" class="sparkline-chart">
+              <path d="M10,8 L30,10 L50,14 L70,18 L90,22 L110,28 L130,32 L150,36 L170,40 L190,42" class="area falling" />
+              <path d="M10,8 L30,10 L50,14 L70,18 L90,22 L110,28 L130,32 L150,36 L170,40 L190,42" class="line falling" />
+              <circle cx="190" cy="42" r="3" class="dot falling" />
+            </svg>
+            <div class="sparkline-years"><span>2013</span><span>2023</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS TABLE -->
+    <div class="results-table-wrapper">
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Topic</th>
+            <th>Documents</th>
+            <th>Share</th>
+            <th>Trend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-category">Emerging</td>
+            <td>FLASH Therapy &amp; Ultra-High Dose Rate</td>
+            <td class="col-stat">87</td>
+            <td class="col-stat">2.0%</td>
+            <td class="col-stat trend-up">+285%</td>
+          </tr>
+          <tr>
+            <td class="col-category">Emerging</td>
+            <td>Immunotherapy + Radiation Combinations</td>
+            <td class="col-stat">142</td>
+            <td class="col-stat">3.3%</td>
+            <td class="col-stat trend-up">+210%</td>
+          </tr>
+          <tr>
+            <td class="col-category">Emerging</td>
+            <td>AI/ML Applications in RadOnc</td>
+            <td class="col-stat">118</td>
+            <td class="col-stat">2.8%</td>
+            <td class="col-stat trend-up">+175%</td>
+          </tr>
+          <tr>
+            <td class="col-category">Emerging</td>
+            <td>Hypofractionation Protocols</td>
+            <td class="col-stat">195</td>
+            <td class="col-stat">4.6%</td>
+            <td class="col-stat trend-up">+140%</td>
+          </tr>
+          <tr>
+            <td class="col-category">Emerging</td>
+            <td>MR-Guided Radiotherapy</td>
+            <td class="col-stat">76</td>
+            <td class="col-stat">1.8%</td>
+            <td class="col-stat trend-up">+120%</td>
+          </tr>
+          <tr>
+            <td class="col-category">Stable</td>
+            <td>Stereotactic Body RT (SBRT)</td>
+            <td class="col-stat">359</td>
+            <td class="col-stat">8.4%</td>
+            <td class="col-stat trend-up">+45%</td>
+          </tr>
+          <tr>
+            <td class="col-category">Stable</td>
+            <td>Proton Beam Therapy</td>
+            <td class="col-stat">210</td>
+            <td class="col-stat">4.9%</td>
+            <td class="col-stat trend-up">+32%</td>
+          </tr>
+          <tr>
+            <td class="col-category">Declining</td>
+            <td>3D Conformal Radiotherapy</td>
+            <td class="col-stat">134</td>
+            <td class="col-stat">3.1%</td>
+            <td class="col-stat trend-down">-45%</td>
+          </tr>
+          <tr>
+            <td class="col-category">Declining</td>
+            <td>Brachytherapy Techniques</td>
+            <td class="col-stat">156</td>
+            <td class="col-stat">3.6%</td>
+            <td class="col-stat trend-down">-38%</td>
+          </tr>
+          <tr>
+            <td class="col-category">Declining</td>
+            <td>2D Treatment Planning</td>
+            <td class="col-stat">45</td>
+            <td class="col-stat">1.1%</td>
+            <td class="col-stat trend-down">-62%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 05 — IMPACT -->
+<div class="container">
+  <div class="section">
+    <span class="label">05 &mdash; Impact</span>
+    <div class="impact-grid">
+      <div class="impact-block">
+        <span class="label">Research Findings</span>
+        <h3>Field-Wide Shifts</h3>
+        <ul class="finding-list">
+          <li>Clear shift toward <strong>hypofractionation</strong> and stereotactic techniques</li>
+          <li><strong>Immunotherapy combinations</strong> emerging as dominant research theme</li>
+          <li>FLASH therapy growing fastest at <strong>+285%</strong> over the decade</li>
+          <li>AI/ML applications accelerating rapidly in clinical RadOnc</li>
+          <li>Traditional 2D/3D conformal techniques in sustained decline</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">Academic Output</span>
+        <h3>ASTRO 2026</h3>
+        <ul class="finding-list">
+          <li>Abstract submitted to <strong>ASTRO 2026</strong> annual conference</li>
+          <li>14 interactive Altair HTML visualizations generated</li>
+          <li>Comprehensive portfolio and PDF case study produced</li>
+          <li>Framework ready for application to any medical literature corpus</li>
+          <li>Reproducible pipeline from data collection to visualization</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">Technical</span>
+        <h3>Contributions</h3>
+        <ul class="finding-list">
+          <li><strong>Novel two-phase LLM validation</strong> framework for topic modeling</li>
+          <li>Domain-specific embedding selection (PubMedBERT vs. general)</li>
+          <li>Outlier reduction from 18.6% to <strong>6.9%</strong> via c-TF-IDF tuning</li>
+          <li>Only <strong>2.5%</strong> strong disagreements in automated validation</li>
+          <li>Estimated 90% &rarr; <strong>95%+</strong> accuracy with targeted refinement</li>
+        </ul>
+      </div>
+      <div class="impact-block">
+        <span class="label">Quality</span>
+        <h3>Validation Rigor</h3>
+        <ul class="finding-list">
+          <li>90% agreement between LLM and model-based classification</li>
+          <li>196 documents flagged for manual review (<strong>4.6%</strong> of corpus)</li>
+          <li>Topic 0 analysis: 359 docs, 125 misclassified (34% poor fit)</li>
+          <li>Best topics (50, 99): <strong>100% correct</strong> assignment rate</li>
+          <li>Avg keyword matches: 4.5&ndash;5.6 out of 15 per document</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="footer">
+    <div class="footer-left">
+      Addison Apisarnthanarax &mdash;
+      <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &middot;
+      <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &middot;
+      <a href="mailto:AddisonApisarn@gmail.com">AddisonApisarn@gmail.com</a>
+    </div>
+    <div class="footer-right">Portfolio &mdash; 2026</div>
+  </div>
+</div>
+</body>
+</html>

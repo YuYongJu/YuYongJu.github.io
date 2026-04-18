@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addison Apisarnthanarax — Aurelius Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+  :root {
+    --black: #0a0a0a; --white: #fafaf9; --accent: #e11d48; --accent-light: #fff1f2;
+    --gray-100: #f5f5f4; --gray-200: #e7e5e4; --gray-400: #a8a29e; --gray-600: #57534e; --gray-800: #292524;
+    --border: 3px solid var(--black); --border-thin: 1.5px solid var(--black);
+    --mono: 'Space Mono', 'Courier New', monospace; --sans: 'Space Grotesk', 'Arial', sans-serif; --serif: 'Instrument Serif', 'Georgia', serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body { background: var(--white); color: var(--black); font-family: var(--sans); line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .section { padding: 4rem 0; border-bottom: var(--border); }
+  .section:last-of-type { border-bottom: none; }
+  .label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray-600); margin-bottom: 0.75rem; display: block; }
+  .accent { color: var(--accent); }
+  .back-link { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; display: inline-block; padding: 1.5rem 0; }
+  .hero { padding: 3rem 0 2rem; border-bottom: var(--border); }
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; gap: 2rem; flex-wrap: wrap; }
+  .hero-name { font-family: var(--mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.2em; border: var(--border); padding: 0.5rem 1rem; display: inline-block; }
+  .hero-meta { font-family: var(--mono); font-size: 0.7rem; text-align: right; color: var(--gray-600); line-height: 1.8; }
+  .hero-meta a { font-weight: 400; }
+  .hero-title { font-family: var(--serif); font-size: clamp(2.5rem, 5.5vw, 4.2rem); line-height: 1.08; font-weight: 400; margin-bottom: 1.5rem; max-width: 900px; letter-spacing: -0.02em; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-subtitle { font-family: var(--mono); font-size: 0.8rem; color: var(--gray-600); letter-spacing: 0.05em; max-width: 700px; line-height: 1.7; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: var(--border); margin-top: 2.5rem; }
+  .metric { padding: 1.5rem 1rem; border-right: var(--border-thin); }
+  .metric:last-child { border-right: none; }
+  .metric-value { font-family: var(--serif); font-size: 2.8rem; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+  .metric-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-600); }
+  .overview-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .overview-text { font-size: 1.05rem; line-height: 1.75; color: var(--gray-800); }
+  .overview-text p { margin-bottom: 1.25rem; }
+  .overview-text strong { color: var(--black); font-weight: 600; }
+  .tags-box { border: var(--border); padding: 1.5rem; align-self: start; }
+  .tags-box .label { margin-bottom: 1rem; }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.65rem; border: 1.5px solid var(--black); margin: 0 0.4rem 0.5rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag.highlight { background: var(--black); color: var(--white); }
+  /* PIPELINE FUNNEL */
+  .funnel { border: var(--border); padding: 2rem; }
+  .funnel-row { display: grid; grid-template-columns: 180px 1fr 140px; gap: 1.5rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--gray-200); }
+  .funnel-row:last-child { border-bottom: none; }
+  .funnel-stage { font-family: var(--sans); font-weight: 700; font-size: 1rem; }
+  .funnel-stage .stage-tier { display: block; font-family: var(--mono); font-size: 0.6rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.2rem; }
+  .funnel-bar { height: 40px; background: var(--gray-100); border: var(--border-thin); position: relative; overflow: hidden; }
+  .funnel-fill { height: 100%; display: flex; align-items: center; padding: 0 0.75rem; font-family: var(--mono); font-size: 0.7rem; color: var(--white); }
+  .funnel-fill.f1 { width: 100%; background: var(--gray-800); }
+  .funnel-fill.f2 { width: 18%; background: var(--gray-600); }
+  .funnel-fill.f3 { width: 4%; background: var(--accent); }
+  .funnel-fill.f4 { width: 1%; background: var(--accent); min-width: 50px; }
+  .funnel-vol { font-family: var(--mono); font-size: 0.78rem; color: var(--gray-600); text-align: right; }
+  .funnel-vol .vol-num { font-family: var(--serif); font-size: 1.4rem; color: var(--accent); display: block; }
+  /* LAYER CARDS */
+  .layer-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .layer-card { border: var(--border); padding: 1.75rem 1.5rem; margin-right: -3px; margin-bottom: -3px; position: relative; }
+  .layer-card .layer-num { font-family: var(--serif); font-size: 3rem; color: var(--accent); line-height: 1; position: absolute; top: 1rem; right: 1.5rem; opacity: 0.2; }
+  .layer-card .layer-tier { font-family: var(--mono); font-size: 0.6rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; display: block; }
+  .layer-card h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.6rem; }
+  .layer-card p { font-size: 0.85rem; line-height: 1.6; color: var(--gray-800); margin-bottom: 0.75rem; }
+  .layer-card ul { list-style: none; }
+  .layer-card ul li { font-family: var(--mono); font-size: 0.68rem; padding: 0.3rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); }
+  .layer-card ul li:first-child { border-top: none; }
+  /* COMPETITIVE MATRIX */
+  .pos-matrix { width: 100%; border-collapse: collapse; border: var(--border); margin-top: 1rem; }
+  .pos-matrix th, .pos-matrix td { padding: 0.85rem 1rem; border-bottom: var(--border-thin); border-right: var(--border-thin); font-size: 0.82rem; vertical-align: middle; text-align: center; }
+  .pos-matrix th:last-child, .pos-matrix td:last-child { border-right: none; }
+  .pos-matrix th { background: var(--black); color: var(--white); font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .pos-matrix td:first-child { text-align: left; font-weight: 700; font-family: var(--sans); background: var(--gray-100); }
+  .pos-matrix .check { color: var(--accent); font-weight: 700; font-size: 1rem; }
+  .pos-matrix .miss { color: var(--gray-400); font-weight: 700; font-size: 1rem; }
+  .pos-matrix .partial { color: #b45309; font-weight: 700; font-size: 0.85rem; font-family: var(--mono); }
+  /* QUERY EXAMPLES */
+  .query-list { border: var(--border); padding: 0; overflow: hidden; margin-top: 1rem; }
+  .query-row { padding: 1rem 1.25rem; border-bottom: 1px solid var(--gray-200); display: grid; grid-template-columns: 24px 1fr; gap: 1rem; align-items: start; }
+  .query-row:last-child { border-bottom: none; }
+  .query-row:hover { background: var(--accent-light); }
+  .query-arrow { color: var(--accent); font-weight: 700; }
+  .query-text { font-family: var(--serif); font-style: italic; font-size: 0.95rem; color: var(--gray-800); line-height: 1.5; }
+  /* IMPACT */
+  .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .impact-block { padding: 2rem; border: var(--border); margin-right: -3px; margin-bottom: -3px; }
+  .impact-block h3 { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 1rem; }
+  .impact-block.dark { background: var(--black); color: var(--white); }
+  .impact-block.dark h3 { color: var(--white); }
+  .impact-block.dark .label { color: var(--accent); }
+  .finding-list { list-style: none; }
+  .finding-list li { font-size: 0.88rem; padding: 0.5rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); line-height: 1.5; }
+  .impact-block.dark .finding-list li { border-color: var(--gray-800); color: var(--gray-400); }
+  .finding-list li::before { content: '\2192'; margin-right: 0.5rem; color: var(--accent); font-weight: 700; }
+  .footer { padding: 2rem 0; border-top: var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-left { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-600); letter-spacing: 0.05em; }
+  .footer-right { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.1em; }
+  @media (max-width: 768px) {
+    .hero-top { flex-direction: column; }
+    .hero-meta { text-align: left; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric { border-bottom: var(--border-thin); }
+    .overview-grid { grid-template-columns: 1fr; }
+    .layer-cards { grid-template-columns: 1fr; }
+    .funnel-row { grid-template-columns: 1fr; }
+    .pos-matrix { font-size: 0.7rem; }
+    .impact-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="index.html" class="back-link">&larr; Back to Portfolio</a>
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-name">Addison Apisarnthanarax</div>
+      <div class="hero-meta">
+        <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &mdash;
+        <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &mdash;
+        <a href="mailto:AddisonApisarn@gmail.com">Email</a><br>
+        Personal Knowledge Layer &mdash; 2026
+      </div>
+    </div>
+    <h1 class="hero-title">Passive Knowledge Graph for <em>Agent-Velocity Work</em></h1>
+    <p class="hero-subtitle">A passively-maintained personal knowledge layer that watches what you do on your computer, extracts structured knowledge with an LLM, and assembles it into a queryable graph &mdash; without you ever tagging, filing, or writing a note.</p>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value">3</div>
+        <div class="metric-label">Pipeline Layers</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">3</div>
+        <div class="metric-label">Storage Tiers</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">Local-First</div>
+        <div class="metric-label">Privacy Posture</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">BYOK</div>
+        <div class="metric-label">LLM Backend</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 — OVERVIEW -->
+<div class="container">
+  <div class="section">
+    <div class="overview-grid">
+      <div class="overview-text">
+        <span class="label">01 &mdash; Project Overview</span>
+        <p>
+          Aurelius watches what happens on your computer &mdash; focused windows, visible text, selected text, active URLs, open documents &mdash; and uses an LLM to elicit <strong>structured knowledge items</strong> from that activity. Entity resolution merges duplicates, Leiden clustering groups related items into themes, and the result is a queryable graph that grows continuously without user effort.
+        </p>
+        <p>
+          The target user is the person being <strong>out-produced by their own tools</strong>. In 2026, that's anyone working at agent-velocity: builders driving Claude Code who ship eight commits, four research docs, and a trait definition before lunch; researchers spawning parallel investigations faster than they can write up any single one. The volume of new context exceeds the rate at which any manual filing system can keep up.
+        </p>
+        <p>
+          The competitive frame isn't "biological memory" &mdash; nobody relies on that. It's the manual chain of <strong>capture-tool &rarr; graph-tool &rarr; agent-tool</strong>. Each link works individually; the seams are where velocity dies. Aurelius collapses the chain into a single pipeline with no seams.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">Tauri 2.x</span>
+        <span class="tag highlight">Rust</span>
+        <span class="tag highlight">Python sidecar</span>
+        <span class="tag">Anthropic SDK</span>
+        <span class="tag">Ollama</span>
+        <span class="tag">scikit-network</span>
+        <span class="tag">Leiden clustering</span>
+        <span class="tag">Pydantic v2</span>
+        <span class="tag">SQLite</span>
+        <span class="tag">PyObjC EventKit</span>
+        <span class="tag">MCP server</span>
+        <span class="tag">PyInstaller</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 02 — PIPELINE FUNNEL -->
+<div class="container">
+  <div class="section">
+    <span class="label">02 &mdash; Knowledge Volume Funnel</span>
+    <p style="font-size: 0.95rem; color: var(--gray-800); max-width: 700px; margin-bottom: 1rem;">
+      Each stage compresses the raw signal: ugly high-volume observations become navigable low-volume answers. Bar widths show relative volume at each stage.
+    </p>
+    <div class="funnel">
+      <div class="funnel-row">
+        <div class="funnel-stage">
+          Raw Observations
+          <span class="stage-tier">Tier 1 &middot; ingest</span>
+        </div>
+        <div class="funnel-bar">
+          <div class="funnel-fill f1">Accessibility events, focused windows, URLs, selected text</div>
+        </div>
+        <div class="funnel-vol">
+          <span class="vol-num">~50K</span>
+          per day
+        </div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-stage">
+          Knowledge Items
+          <span class="stage-tier">Tier 2 &middot; elicit</span>
+        </div>
+        <div class="funnel-bar">
+          <div class="funnel-fill f2">Atomic, typed, timestamped facts with source links</div>
+        </div>
+        <div class="funnel-vol">
+          <span class="vol-num">~500</span>
+          per day
+        </div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-stage">
+          Entity Graph
+          <span class="stage-tier">Tier 2 &middot; maintain</span>
+        </div>
+        <div class="funnel-bar">
+          <div class="funnel-fill f3">Resolved entities, Leiden clusters, theme membership</div>
+        </div>
+        <div class="funnel-vol">
+          <span class="vol-num">~80</span>
+          themes
+        </div>
+      </div>
+      <div class="funnel-row">
+        <div class="funnel-stage">
+          Query Answers
+          <span class="stage-tier">Tier 3 &middot; serve</span>
+        </div>
+        <div class="funnel-bar">
+          <div class="funnel-fill f4">NL</div>
+        </div>
+        <div class="funnel-vol">
+          <span class="vol-num">1</span>
+          per ask
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 — THREE LAYERS -->
+<div class="container">
+  <div class="section">
+    <span class="label">03 &mdash; Three-Layer Architecture</span>
+    <div class="layer-cards">
+      <div class="layer-card">
+        <div class="layer-num">01</div>
+        <span class="layer-tier">Tier 1</span>
+        <h3>Ingest</h3>
+        <p>A Rust desktop shell sits on the user's Mac and captures raw accessibility events. High-volume, messy, low-signal on its own &mdash; the surveillance-camera footage of personal computing.</p>
+        <ul>
+          <li>Tauri 2 native shell</li>
+          <li>macOS Accessibility API</li>
+          <li>EventKit (calendar)</li>
+          <li>NotificationCenter (banners)</li>
+        </ul>
+      </div>
+      <div class="layer-card">
+        <div class="layer-num">02</div>
+        <span class="layer-tier">Tier 2</span>
+        <h3>Elicit</h3>
+        <p>A Python sidecar feeds observation batches to Claude Sonnet (or Ollama for local) with an extraction prompt that produces atomic, typed, timestamped knowledge items linked back to source. Entity resolution merges duplicates; Leiden clustering surfaces themes.</p>
+        <ul>
+          <li>Anthropic SDK (frontier path)</li>
+          <li>Ollama (local-first path)</li>
+          <li>Pydantic v2 schema validation</li>
+          <li>scikit-network Leiden clustering</li>
+        </ul>
+      </div>
+      <div class="layer-card">
+        <div class="layer-num">03</div>
+        <span class="layer-tier">Tier 3</span>
+        <h3>Maintain &amp; Query</h3>
+        <p>Items decay, get contradicted, get superseded. The maintenance layer reconciles conflicts and prunes stale items. A fast-lookup cache serves natural-language queries against the graph &mdash; and an MCP server exposes Aurelius as a tool to Claude desktop and Claude Code.</p>
+        <ul>
+          <li>SQLite shadow layer</li>
+          <li>NLI write-back validation</li>
+          <li>MCP server for Claude integration</li>
+          <li>BYOK abstraction (Claude / OpenAI / Ollama)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 — NORTH STAR QUERIES -->
+<div class="container">
+  <div class="section">
+    <span class="label">04 &mdash; North Star Questions</span>
+    <p style="font-size: 0.95rem; color: var(--gray-800); max-width: 700px;">
+      Six months in, can you ask your computer questions like these and get answers better than trying to remember, grepping your vault, or asking a long-context LLM? If yes, the pipeline is working. If no, something is broken upstream of the symptom.
+    </p>
+    <div class="query-list">
+      <div class="query-row">
+        <div class="query-arrow">&rarr;</div>
+        <div class="query-text">"What did I learn about Rust trait objects this month?"</div>
+      </div>
+      <div class="query-row">
+        <div class="query-arrow">&rarr;</div>
+        <div class="query-text">"What was the last decision I made about Aurelius's clustering layer, and why?"</div>
+      </div>
+      <div class="query-row">
+        <div class="query-arrow">&rarr;</div>
+        <div class="query-text">"Who is Sarah and what are we working on together?"</div>
+      </div>
+      <div class="query-row">
+        <div class="query-arrow">&rarr;</div>
+        <div class="query-text">"What did I commit to for the investor call next week?"</div>
+      </div>
+      <div class="query-row">
+        <div class="query-arrow">&rarr;</div>
+        <div class="query-text">"Which projects am I behind on, based on what I told people I'd ship?"</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 05 — COMPETITIVE -->
+<div class="container">
+  <div class="section">
+    <span class="label">05 &mdash; Competitive Position</span>
+    <p style="font-size: 0.95rem; color: var(--gray-800); max-width: 700px;">
+      Existing tools either capture only what you type into them, or query one corpus well but can't join across sources. Agent-velocity questions are exactly the cross-source joins those tools can't do.
+    </p>
+    <table class="pos-matrix">
+      <thead>
+        <tr>
+          <th>Tool</th>
+          <th>Captures<br>passively</th>
+          <th>Cross-source<br>join</th>
+          <th>Continuous<br>maintenance</th>
+          <th>Local-first<br>privacy</th>
+          <th>Agent-callable<br>(MCP)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Obsidian + manual notes</td>
+          <td class="miss">&times;</td>
+          <td class="partial">manual</td>
+          <td class="miss">&times;</td>
+          <td class="check">&check;</td>
+          <td class="miss">&times;</td>
+        </tr>
+        <tr>
+          <td>Mem / Notion AI</td>
+          <td class="miss">&times;</td>
+          <td class="miss">&times;</td>
+          <td class="partial">limited</td>
+          <td class="miss">&times;</td>
+          <td class="miss">&times;</td>
+        </tr>
+        <tr>
+          <td>ChatGPT / Claude memory</td>
+          <td class="miss">&times;</td>
+          <td class="miss">&times;</td>
+          <td class="miss">&times;</td>
+          <td class="miss">&times;</td>
+          <td class="partial">native</td>
+        </tr>
+        <tr>
+          <td>GitNexus / repo-scoped Graph RAG</td>
+          <td class="miss">&times;</td>
+          <td class="miss">per-corpus</td>
+          <td class="check">&check;</td>
+          <td class="check">&check;</td>
+          <td class="check">&check;</td>
+        </tr>
+        <tr>
+          <td><strong>Aurelius</strong></td>
+          <td class="check">&check;</td>
+          <td class="check">&check;</td>
+          <td class="check">&check;</td>
+          <td class="check">&check;</td>
+          <td class="check">&check;</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 06 — IMPACT -->
+<div class="container">
+  <div class="section">
+    <span class="label">06 &mdash; Build Discipline</span>
+    <div class="impact-grid">
+      <div class="impact-block">
+        <span class="label">Validation Strategy</span>
+        <h3>Gated Build</h3>
+        <ul class="finding-list">
+          <li>Three explicit gates with quantified success criteria</li>
+          <li>Gate 1: 500+ knowledge items, 20+ clusters, ER error &lt; 15%</li>
+          <li>Gate 2: 50% relevance on elicited questions, 60% answer rate</li>
+          <li>Gate 3: 30% gap detection rate, staleness detection working</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">Architecture Posture</span>
+        <h3>Spec-Driven Development</h3>
+        <ul class="finding-list">
+          <li>Spec first, code second &mdash; every feature defined before built</li>
+          <li>North star doc is upstream of architecture docs</li>
+          <li>Pin oracles before implementation &mdash; tests written first</li>
+          <li>No speculative features outside the spec</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">Privacy &amp; Choice</span>
+        <h3>Local-First, BYOK</h3>
+        <ul class="finding-list">
+          <li>Capture stays on the local machine via Tauri shell</li>
+          <li>Frontier path: Anthropic SDK with prompt caching</li>
+          <li>Local path: Ollama (Qwen3 8B default), zero API cost</li>
+          <li>Model-free tier works without any LLM dependency</li>
+        </ul>
+      </div>
+      <div class="impact-block">
+        <span class="label">Status</span>
+        <h3>Gate 1 Validation</h3>
+        <ul class="finding-list">
+          <li>Architecture audit complete (31 items resolved)</li>
+          <li>Tauri shell + Python sidecar wire protocol shipping</li>
+          <li>MCP server integration with Claude Code in Phase 16</li>
+          <li>Calendar + notification capture in Phase 18</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="footer">
+    <div class="footer-left">
+      Addison Apisarnthanarax &mdash;
+      <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &middot;
+      <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &middot;
+      <a href="mailto:AddisonApisarn@gmail.com">AddisonApisarn@gmail.com</a>
+    </div>
+    <div class="footer-right">Portfolio &mdash; 2026</div>
+  </div>
+</div>
+</body>
+</html>

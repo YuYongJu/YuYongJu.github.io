@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addison Apisarnthanarax — EasySEC Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+  :root {
+    --black: #0a0a0a; --white: #fafaf9; --accent: #e11d48; --accent-light: #fff1f2;
+    --gray-100: #f5f5f4; --gray-200: #e7e5e4; --gray-400: #a8a29e; --gray-600: #57534e; --gray-800: #292524;
+    --border: 3px solid var(--black); --border-thin: 1.5px solid var(--black);
+    --mono: 'Space Mono', 'Courier New', monospace; --sans: 'Space Grotesk', 'Arial', sans-serif; --serif: 'Instrument Serif', 'Georgia', serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body { background: var(--white); color: var(--black); font-family: var(--sans); line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .section { padding: 4rem 0; border-bottom: var(--border); }
+  .section:last-of-type { border-bottom: none; }
+  .label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray-600); margin-bottom: 0.75rem; display: block; }
+  .accent { color: var(--accent); }
+  .back-link { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; display: inline-block; padding: 1.5rem 0; }
+
+  /* HERO */
+  .hero { padding: 3rem 0 2rem; border-bottom: var(--border); }
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; gap: 2rem; flex-wrap: wrap; }
+  .hero-name { font-family: var(--mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.2em; border: var(--border); padding: 0.5rem 1rem; display: inline-block; }
+  .hero-meta { font-family: var(--mono); font-size: 0.7rem; text-align: right; color: var(--gray-600); line-height: 1.8; }
+  .hero-meta a { font-weight: 400; }
+  .hero-title { font-family: var(--serif); font-size: clamp(2.5rem, 5.5vw, 4.2rem); line-height: 1.08; font-weight: 400; margin-bottom: 1.5rem; max-width: 900px; letter-spacing: -0.02em; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-subtitle { font-family: var(--mono); font-size: 0.8rem; color: var(--gray-600); letter-spacing: 0.05em; max-width: 700px; line-height: 1.7; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: var(--border); margin-top: 2.5rem; }
+  .metric { padding: 1.5rem 1rem; border-right: var(--border-thin); }
+  .metric:last-child { border-right: none; }
+  .metric-value { font-family: var(--serif); font-size: 2.8rem; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+  .metric-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-600); }
+
+  /* OVERVIEW */
+  .overview-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .overview-text { font-size: 1.05rem; line-height: 1.75; color: var(--gray-800); }
+  .overview-text p { margin-bottom: 1.25rem; }
+  .overview-text strong { color: var(--black); font-weight: 600; }
+  .tags-box { border: var(--border); padding: 1.5rem; align-self: start; }
+  .tags-box .label { margin-bottom: 1rem; }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.65rem; border: 1.5px solid var(--black); margin: 0 0.4rem 0.5rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag.highlight { background: var(--black); color: var(--white); }
+
+  /* PIPELINE */
+  .pipeline-flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; border: var(--border); }
+  .pipeline-step { padding: 1.5rem 1rem; border-right: var(--border-thin); position: relative; }
+  .pipeline-step:last-child { border-right: none; }
+  .pipeline-step:hover { background: var(--accent-light); }
+  .step-number { font-family: var(--serif); font-size: 2rem; color: var(--accent); line-height: 1; margin-bottom: 0.6rem; }
+  .step-name { font-family: var(--sans); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+  .step-detail { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-600); line-height: 1.6; }
+  .step-tool { font-family: var(--mono); font-size: 0.6rem; display: inline-block; margin-top: 0.6rem; padding: 0.2rem 0.4rem; border: 1px solid var(--gray-400); color: var(--gray-600); }
+
+  /* METHOD CARDS */
+  .method-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+  .method-card { border: var(--border); padding: 2rem 1.5rem; margin-right: -3px; margin-bottom: -3px; }
+  .method-card h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.4rem; }
+  .method-card .method-phase { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 1rem; display: block; }
+  .method-card p { font-size: 0.88rem; line-height: 1.65; color: var(--gray-800); }
+  .method-card ul { list-style: none; margin-top: 0.75rem; }
+  .method-card ul li { font-family: var(--mono); font-size: 0.72rem; padding: 0.3rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); }
+  .method-card ul li:first-child { border-top: none; }
+
+  /* RESULTS */
+  .results-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: var(--border); margin-bottom: 2.5rem; }
+  .results-metric { padding: 1.5rem; border-right: var(--border-thin); text-align: center; }
+  .results-metric:last-child { border-right: none; }
+  .results-metric .rm-value { font-family: var(--serif); font-size: 2.2rem; line-height: 1.1; color: var(--accent); }
+  .results-metric .rm-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-600); margin-top: 0.3rem; }
+
+  /* VIZ GRID */
+  .viz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 2rem; }
+  .viz-panel { border: var(--border); padding: 2rem; margin-right: -3px; }
+  .viz-panel h3 { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; margin-bottom: 1.5rem; }
+  .growth-chart { display: flex; flex-direction: column; gap: 0.5rem; }
+  .growth-row { display: grid; grid-template-columns: 140px 1fr 50px; align-items: center; gap: 0.75rem; height: 28px; }
+  .growth-label { font-family: var(--mono); font-size: 0.62rem; text-align: right; color: var(--gray-800); line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .growth-bar-wrap { height: 22px; position: relative; background: var(--gray-100); border: 1.5px solid var(--black); }
+  .growth-bar { height: 100%; transition: width 0.3s ease; }
+  .growth-bar.positive { background: var(--accent); }
+  .growth-bar.negative { background: var(--gray-400); }
+  .growth-value { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; }
+  .growth-value.positive { color: var(--accent); }
+  .growth-value.negative { color: var(--gray-400); }
+  .growth-divider { grid-column: 1 / -1; border-top: 1.5px dashed var(--gray-200); margin: 0.3rem 0; }
+  .comparison-row { display: grid; grid-template-columns: 1fr 80px 1fr 80px; align-items: center; gap: 0; border-bottom: 1px solid var(--gray-200); padding: 0.75rem 0; }
+  .comparison-label { font-family: var(--sans); font-size: 0.82rem; font-weight: 500; }
+  .comparison-val { font-family: var(--mono); font-size: 0.78rem; font-weight: 700; text-align: right; padding-right: 1rem; }
+  .comparison-val.bad { color: var(--gray-400); }
+  .comparison-val.good { color: var(--accent); }
+
+  /* FINDING LIST */
+  .finding-list { list-style: none; margin-top: 1rem; }
+  .finding-list li { font-size: 0.88rem; padding: 0.5rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); line-height: 1.5; }
+  .finding-list li::before { content: '\2192'; margin-right: 0.5rem; color: var(--accent); font-weight: 700; }
+
+  /* IMPACT */
+  .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .impact-block { padding: 2rem; border: var(--border); margin-right: -3px; margin-bottom: -3px; }
+  .impact-block h3 { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 1rem; }
+  .impact-block p { font-size: 0.92rem; line-height: 1.7; color: var(--gray-800); }
+  .impact-block.dark { background: var(--black); color: var(--white); }
+  .impact-block.dark h3 { color: var(--white); }
+  .impact-block.dark p { color: var(--gray-400); }
+  .impact-block.dark .label { color: var(--accent); }
+  .impact-block.dark .finding-list li { border-color: var(--gray-800); color: var(--gray-400); }
+
+  /* FOOTER */
+  .footer { padding: 2rem 0; border-top: var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-left { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-600); letter-spacing: 0.05em; }
+  .footer-right { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  @media print {
+    body { font-size: 14px; }
+    .section { padding: 2rem 0; break-inside: avoid; }
+    .hero { padding: 1.5rem 0; }
+    .pipeline-step:hover { background: transparent; }
+  }
+  @media (max-width: 768px) {
+    .hero-top { flex-direction: column; }
+    .hero-meta { text-align: left; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric { border-bottom: var(--border-thin); }
+    .overview-grid { grid-template-columns: 1fr; }
+    .pipeline-flow { grid-template-columns: repeat(3, 1fr); }
+    .pipeline-step { border-bottom: var(--border-thin); }
+    .method-cards { grid-template-columns: 1fr; }
+    .results-metrics { grid-template-columns: repeat(2, 1fr); }
+    .results-metric { border-bottom: var(--border-thin); }
+    .impact-grid { grid-template-columns: 1fr; }
+    .viz-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="portfolio.htm" class="back-link">&larr; Back to Portfolio</a>
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-name">Addison Apisarnthanarax</div>
+      <div class="hero-meta">
+        <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &mdash;
+        <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &mdash;
+        <a href="mailto:AddisonApisarn@gmail.com">Email</a><br>
+        Full-Stack Platform &mdash; 2024
+      </div>
+    </div>
+    <h1 class="hero-title">AI-Powered SEC Filing <em>Analytics Platform</em></h1>
+    <p class="hero-subtitle">The first SEC analytics platform where every answer is verifiable in one click. Retrieval-Augmented Generation with XBRL cross-validation, hybrid semantic search, and citation-backed responses for financial analysts.</p>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value">50<span class="accent">K+</span></div>
+        <div class="metric-label">Filings Ingested</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">0.11<span class="accent">%</span></div>
+        <div class="metric-label">XBRL Error Rate</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">&lt;100<span class="accent">ms</span></div>
+        <div class="metric-label">Search Latency</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">175<span class="accent">pt</span></div>
+        <div class="metric-label">Spec Audit</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 — OVERVIEW -->
+<div class="container">
+  <div class="section">
+    <div class="overview-grid">
+      <div class="overview-text">
+        <span class="label">01 &mdash; Project Overview</span>
+        <p>
+          Financial analysts spend hours manually searching SEC filings for specific data points, often dealing with inconsistent formatting and unreliable AI-generated numbers. EasySEC solves this with a <strong>5-stage query pipeline</strong> that classifies incoming queries, retrieves relevant filing passages through hybrid search, cross-validates numbers against XBRL structured data, and generates citation-backed responses.
+        </p>
+        <p>
+          The platform classifies queries into <strong>5 types</strong> (NUMERIC_EXACT, NUMERIC_CALC, COMPARISON, TEXT_SEARCH, SYNTHESIS) and routes them through <strong>3 execution paths</strong> (DETERMINISTIC for exact lookups, RETRIEVAL for semantic search, MIXED for hybrid). XBRL cross-validation reduces financial scaling errors <strong>74x compared to plain text extraction</strong>, achieving a 0.11% error rate.
+        </p>
+        <p>
+          Built as a full-stack application with React frontend, FastAPI backend, PostgreSQL with pgvector for vector storage, OpenSearch for BM25, and FAISS for semantic indexing. The system includes a Knowledge Graph with entity/relation extraction, Semantic Diff using the Hungarian algorithm, and cross-encoder reranking for result quality.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">Python</span>
+        <span class="tag highlight">React</span>
+        <span class="tag highlight">FastAPI</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">pgvector</span>
+        <span class="tag">FAISS</span>
+        <span class="tag">OpenSearch</span>
+        <span class="tag">Sentence-Transformers</span>
+        <span class="tag">BART-large-CNN</span>
+        <span class="tag">Cross-Encoder</span>
+        <span class="tag">XBRL</span>
+        <span class="tag">Docker</span>
+        <span class="tag">AWS S3</span>
+        <span class="tag">Supabase</span>
+        <span class="tag">SEC EDGAR</span>
+        <span class="tag">BM25</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 02 — PIPELINE -->
+<div class="container">
+  <div class="section">
+    <span class="label">02 &mdash; Query Pipeline</span>
+    <div class="pipeline-flow">
+      <div class="pipeline-step">
+        <div class="step-number">01</div>
+        <div class="step-name">Ingest</div>
+        <div class="step-detail">50K+ SEC filings from EDGAR with XBRL structured data extraction and metadata parsing</div>
+        <span class="step-tool">SEC EDGAR API</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">02</div>
+        <div class="step-name">Embed</div>
+        <div class="step-detail">Sentence-Transformer embeddings stored in pgvector and FAISS for dual-index retrieval</div>
+        <span class="step-tool">MiniLM-L6-v2</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">03</div>
+        <div class="step-name">Classify</div>
+        <div class="step-detail">Rule-based query classifier routes to DETERMINISTIC, RETRIEVAL, or MIXED path in &lt;5ms</div>
+        <span class="step-tool">FastAPI</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">04</div>
+        <div class="step-name">Retrieve</div>
+        <div class="step-detail">Hybrid BM25 + semantic search fused via Reciprocal Rank Fusion for optimal recall</div>
+        <span class="step-tool">OpenSearch + FAISS</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">05</div>
+        <div class="step-name">Rerank</div>
+        <div class="step-detail">Cross-encoder reranking with XBRL cross-validation ensures numeric accuracy</div>
+        <span class="step-tool">Cross-Encoder</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">06</div>
+        <div class="step-name">Generate</div>
+        <div class="step-detail">Citation-backed RAG responses with PageIndex navigator for source verification</div>
+        <span class="step-tool">BART + RAG</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 — ARCHITECTURE -->
+<div class="container">
+  <div class="section">
+    <span class="label">03 &mdash; Architecture</span>
+    <div class="method-cards">
+      <div class="method-card">
+        <span class="method-phase">Path A</span>
+        <h3>Deterministic</h3>
+        <p>For NUMERIC_EXACT queries. Bypasses semantic search entirely &mdash; routes directly to XBRL structured data for precise number extraction with zero ambiguity.</p>
+        <ul>
+          <li>Direct XBRL data lookup</li>
+          <li>Zero-ambiguity numeric extraction</li>
+          <li>Sub-5ms classification routing</li>
+          <li>0.11% scaling error rate</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <span class="method-phase">Path B</span>
+        <h3>Retrieval</h3>
+        <p>For TEXT_SEARCH and SYNTHESIS queries. Full hybrid search pipeline with BM25 + semantic fusion, cross-encoder reranking, and RAG response generation.</p>
+        <ul>
+          <li>Hybrid BM25 + semantic search</li>
+          <li>Reciprocal Rank Fusion</li>
+          <li>Cross-encoder reranking</li>
+          <li>PageIndex navigation</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <span class="method-phase">Path C</span>
+        <h3>Mixed</h3>
+        <p>For NUMERIC_CALC and COMPARISON queries. Combines XBRL deterministic data with semantic context retrieval for calculations requiring both numbers and narrative.</p>
+        <ul>
+          <li>XBRL + semantic fusion</li>
+          <li>Knowledge Graph traversal</li>
+          <li>Entity/relation extraction</li>
+          <li>Semantic Diff (Hungarian algo)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VISUALIZATIONS -->
+<div class="container">
+  <div class="section">
+    <span class="label">Data Visualizations</span>
+    <div class="viz-grid">
+      <div class="viz-panel">
+        <h3>XBRL Accuracy Impact</h3>
+        <div class="growth-chart">
+          <div class="growth-row">
+            <div class="growth-label">With XBRL</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 99.89%"></div></div>
+            <div class="growth-value positive">99.89%</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">Without XBRL (LLM)</div>
+            <div class="growth-bar-wrap"><div class="growth-bar negative" style="width: 17%"></div></div>
+            <div class="growth-value negative">17%</div>
+          </div>
+          <div class="growth-divider"></div>
+          <div class="growth-row">
+            <div class="growth-label">Error Reduction</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 100%"></div></div>
+            <div class="growth-value positive">74x</div>
+          </div>
+        </div>
+      </div>
+      <div class="viz-panel">
+        <h3>Query Pipeline Latency</h3>
+        <div class="growth-chart">
+          <div class="growth-row">
+            <div class="growth-label">Classifier</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 5%"></div></div>
+            <div class="growth-value positive">&lt;5ms</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">Semantic Query</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 20%"></div></div>
+            <div class="growth-value positive">&lt;100ms</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">Reranking</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 40%"></div></div>
+            <div class="growth-value positive">~200ms</div>
+          </div>
+          <div class="growth-row">
+            <div class="growth-label">RAG Generation</div>
+            <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 70%"></div></div>
+            <div class="growth-value positive">~500ms</div>
+          </div>
+          <div class="growth-divider"></div>
+          <div class="growth-row">
+            <div class="growth-label">Document Fetch</div>
+            <div class="growth-bar-wrap"><div class="growth-bar negative" style="width: 100%"></div></div>
+            <div class="growth-value negative">2-5s</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 — RESULTS -->
+<div class="container">
+  <div class="section">
+    <span class="label">04 &mdash; Results</span>
+    <div class="results-metrics">
+      <div class="results-metric">
+        <div class="rm-value">74<span class="accent">x</span></div>
+        <div class="rm-label">Error Reduction vs. Plain Text</div>
+      </div>
+      <div class="results-metric">
+        <div class="rm-value">68<span class="accent">%</span></div>
+        <div class="rm-label">175-Point Audit Compliance</div>
+      </div>
+      <div class="results-metric">
+        <div class="rm-value">5</div>
+        <div class="rm-label">Query Types Classified</div>
+      </div>
+      <div class="results-metric">
+        <div class="rm-value">5</div>
+        <div class="rm-label">Development Sprints</div>
+      </div>
+    </div>
+
+    <ul class="finding-list">
+      <li>XBRL cross-validation reduces financial scaling errors <strong>74x</strong> compared to plain text extraction</li>
+      <li>LLMs achieve only <strong>17% accuracy</strong> on financial number taxonomy without XBRL (FinTagging Benchmark, 2025)</li>
+      <li>175-point specification audit achieved <strong>68% full compliance</strong></li>
+      <li>Knowledge Graph with entity/relation extraction and <strong>graph traversal</strong> for complex queries</li>
+      <li>Semantic Diff engine using <strong>Hungarian algorithm</strong> for filing change detection</li>
+      <li>Query search latency <strong>&lt;100ms</strong>, rule-based classifier <strong>&lt;5ms</strong></li>
+      <li><strong>50,000+ filings</strong> ingested and indexed from SEC EDGAR</li>
+    </ul>
+  </div>
+</div>
+
+<!-- 05 — IMPACT -->
+<div class="container">
+  <div class="section">
+    <span class="label">05 &mdash; Impact</span>
+    <div class="impact-grid">
+      <div class="impact-block">
+        <span class="label">Engineering</span>
+        <h3>Technical Achievements</h3>
+        <ul class="finding-list">
+          <li>5-stage pipeline with 3 execution paths and 5 query types</li>
+          <li>Hybrid retrieval: BM25 + semantic + Reciprocal Rank Fusion</li>
+          <li>Cross-encoder reranking as conditional Tier 2 path</li>
+          <li>Knowledge Graph with entity/relation extraction</li>
+          <li>Scannable RAG with PageIndex Navigator</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">Market Context</span>
+        <h3>Business Opportunity</h3>
+        <ul class="finding-list">
+          <li>$38B AI in Financial Services market (2025)</li>
+          <li>Projected $190B by 2030 (CAGR 30.6%)</li>
+          <li>14-slide investor pitch deck with competitive analysis</li>
+          <li>SaaS tier model: Free to $10K/mo Enterprise</li>
+          <li>5 user interviews with SEC filing professionals</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">System Design</span>
+        <h3>Architecture</h3>
+        <ul class="finding-list">
+          <li>React (Vite) frontend + FastAPI backend</li>
+          <li>PostgreSQL (pgvector) + OpenSearch + FAISS</li>
+          <li>Docker Compose orchestration</li>
+          <li>AWS S3 for document storage</li>
+          <li>Supabase authentication</li>
+        </ul>
+      </div>
+      <div class="impact-block">
+        <span class="label">Discovery</span>
+        <h3>Product Validation</h3>
+        <ul class="finding-list">
+          <li>5 user interviews with financial analysts</li>
+          <li>Competitive positioning vs. ChatGPT, AlphaSense, Bloomberg</li>
+          <li>Three revenue horizons modeled to $10M+ ARR</li>
+          <li>5 complete sprints: Foundation through Production</li>
+          <li>All-in-one citation-backed response format</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="footer">
+    <div class="footer-left">
+      Addison Apisarnthanarax &mdash;
+      <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &middot;
+      <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &middot;
+      <a href="mailto:AddisonApisarn@gmail.com">AddisonApisarn@gmail.com</a>
+    </div>
+    <div class="footer-right">Portfolio &mdash; 2026</div>
+  </div>
+</div>
+</body>
+</html>

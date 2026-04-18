@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addison Apisarnthanarax — PSAI-Bench Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+  :root {
+    --black: #0a0a0a; --white: #fafaf9; --accent: #e11d48; --accent-light: #fff1f2;
+    --gray-100: #f5f5f4; --gray-200: #e7e5e4; --gray-400: #a8a29e; --gray-600: #57534e; --gray-800: #292524;
+    --border: 3px solid var(--black); --border-thin: 1.5px solid var(--black);
+    --mono: 'Space Mono', 'Courier New', monospace; --sans: 'Space Grotesk', 'Arial', sans-serif; --serif: 'Instrument Serif', 'Georgia', serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body { background: var(--white); color: var(--black); font-family: var(--sans); line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .section { padding: 4rem 0; border-bottom: var(--border); }
+  .section:last-of-type { border-bottom: none; }
+  .label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray-600); margin-bottom: 0.75rem; display: block; }
+  .accent { color: var(--accent); }
+  .back-link { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; display: inline-block; padding: 1.5rem 0; }
+  .hero { padding: 3rem 0 2rem; border-bottom: var(--border); }
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; gap: 2rem; flex-wrap: wrap; }
+  .hero-name { font-family: var(--mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.2em; border: var(--border); padding: 0.5rem 1rem; display: inline-block; }
+  .hero-meta { font-family: var(--mono); font-size: 0.7rem; text-align: right; color: var(--gray-600); line-height: 1.8; }
+  .hero-meta a { font-weight: 400; }
+  .hero-title { font-family: var(--serif); font-size: clamp(2.5rem, 5.5vw, 4.2rem); line-height: 1.08; font-weight: 400; margin-bottom: 1.5rem; max-width: 900px; letter-spacing: -0.02em; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-subtitle { font-family: var(--mono); font-size: 0.8rem; color: var(--gray-600); letter-spacing: 0.05em; max-width: 700px; line-height: 1.7; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: var(--border); margin-top: 2.5rem; }
+  .metric { padding: 1.5rem 1rem; border-right: var(--border-thin); }
+  .metric:last-child { border-right: none; }
+  .metric-value { font-family: var(--serif); font-size: 2.8rem; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+  .metric-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-600); }
+  .overview-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .overview-text { font-size: 1.05rem; line-height: 1.75; color: var(--gray-800); }
+  .overview-text p { margin-bottom: 1.25rem; }
+  .overview-text strong { color: var(--black); font-weight: 600; }
+  .tags-box { border: var(--border); padding: 1.5rem; align-self: start; }
+  .tags-box .label { margin-bottom: 1rem; }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.65rem; border: 1.5px solid var(--black); margin: 0 0.4rem 0.5rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag.highlight { background: var(--black); color: var(--white); }
+  /* TRACK BAR CHART */
+  .track-chart { border: var(--border); padding: 2rem; }
+  .track-row { display: grid; grid-template-columns: 200px 1fr 100px; gap: 1.5rem; align-items: center; padding: 1.25rem 0; border-bottom: 1px solid var(--gray-200); }
+  .track-row:last-child { border-bottom: none; }
+  .track-name { font-family: var(--sans); font-weight: 700; font-size: 1rem; }
+  .track-name .track-input { display: block; font-family: var(--mono); font-size: 0.62rem; color: var(--gray-600); font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.2rem; }
+  .track-bar { height: 36px; background: var(--gray-100); border: var(--border-thin); position: relative; overflow: hidden; }
+  .track-fill { height: 100%; background: var(--accent); display: flex; align-items: center; padding-left: 0.75rem; color: var(--white); font-family: var(--mono); font-size: 0.7rem; }
+  .track-count { font-family: var(--serif); font-size: 1.6rem; text-align: right; color: var(--accent); }
+  /* CONTEXT MATRIX */
+  .matrix-section { margin-top: 2rem; }
+  .matrix-section .matrix-intro { font-family: var(--mono); font-size: 0.75rem; color: var(--gray-600); margin-bottom: 1rem; }
+  .matrix { width: 100%; border-collapse: collapse; border: var(--border); }
+  .matrix th, .matrix td { padding: 0.85rem; border: var(--border-thin); font-size: 0.78rem; text-align: center; }
+  .matrix th { background: var(--black); color: var(--white); font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .matrix th:first-child, .matrix td:first-child { text-align: left; font-family: var(--mono); font-size: 0.7rem; background: var(--gray-100); font-weight: 700; }
+  .matrix .verdict-threat { background: #fef2f2; color: var(--accent); font-weight: 700; font-family: var(--mono); }
+  .matrix .verdict-suspicious { background: #fffbeb; color: #b45309; font-weight: 700; font-family: var(--mono); }
+  .matrix .verdict-benign { background: #f0fdf4; color: #166534; font-weight: 700; font-family: var(--mono); }
+  /* METRIC CARDS */
+  .metric-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+  .metric-defn { border: var(--border); padding: 1.5rem; margin-right: -3px; margin-bottom: -3px; }
+  .metric-defn .mn-name { font-family: var(--serif); font-size: 1.5rem; color: var(--accent); margin-bottom: 0.25rem; }
+  .metric-defn .mn-acronym { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-600); margin-bottom: 0.75rem; }
+  .metric-defn p { font-size: 0.82rem; line-height: 1.55; color: var(--gray-800); }
+  /* EVAL CARDS */
+  .eval-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .eval-card { border: var(--border); padding: 1.5rem; margin-right: -3px; margin-bottom: -3px; }
+  .eval-card .eval-model { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.5rem; }
+  .eval-card h4 { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; margin-bottom: 0.5rem; }
+  .eval-card p { font-size: 0.82rem; line-height: 1.55; color: var(--gray-800); }
+  /* IMPACT */
+  .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .impact-block { padding: 2rem; border: var(--border); margin-right: -3px; margin-bottom: -3px; }
+  .impact-block h3 { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 1rem; }
+  .impact-block.dark { background: var(--black); color: var(--white); }
+  .impact-block.dark h3 { color: var(--white); }
+  .impact-block.dark .label { color: var(--accent); }
+  .finding-list { list-style: none; }
+  .finding-list li { font-size: 0.88rem; padding: 0.5rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); line-height: 1.5; }
+  .impact-block.dark .finding-list li { border-color: var(--gray-800); color: var(--gray-400); }
+  .finding-list li::before { content: '\2192'; margin-right: 0.5rem; color: var(--accent); font-weight: 700; }
+  .footer { padding: 2rem 0; border-top: var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-left { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-600); letter-spacing: 0.05em; }
+  .footer-right { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.1em; }
+  @media (max-width: 768px) {
+    .hero-top { flex-direction: column; }
+    .hero-meta { text-align: left; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric { border-bottom: var(--border-thin); }
+    .overview-grid { grid-template-columns: 1fr; }
+    .track-row { grid-template-columns: 1fr; gap: 0.5rem; }
+    .metric-cards, .eval-cards { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: 1fr; }
+    .matrix { font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="index.html" class="back-link">&larr; Back to Portfolio</a>
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-name">Addison Apisarnthanarax</div>
+      <div class="hero-meta">
+        <a href="https://github.com/YuYongJu/psai-bench" target="_blank">GitHub</a> &mdash;
+        <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &mdash;
+        <a href="mailto:AddisonApisarn@gmail.com">Email</a><br>
+        Open-Source Benchmark &mdash; 2026
+      </div>
+    </div>
+    <h1 class="hero-title">First Industry Benchmark for <em>Physical Security AI Triage</em></h1>
+    <p class="hero-subtitle">An open-source benchmark for evaluating any AI system on physical security alert triage. Generate realistic scenarios with context-dependent ground truth, run your own system, and score the outputs across calibrated metrics.</p>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value">11.9<span class="accent">K</span></div>
+        <div class="metric-label">Total Scenarios</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">3</div>
+        <div class="metric-label">Eval Tracks</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">5</div>
+        <div class="metric-label">Calibrated Metrics</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">Apache 2.0</div>
+        <div class="metric-label">License</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 — OVERVIEW -->
+<div class="container">
+  <div class="section">
+    <div class="overview-grid">
+      <div class="overview-text">
+        <span class="label">01 &mdash; Project Overview</span>
+        <p>
+          PSAI-Bench is the first open-source benchmark designed specifically to evaluate AI systems on <strong>physical security alert triage</strong> &mdash; the task of looking at a camera-driven alert and deciding whether it's a real threat, suspicious activity worth a closer look, or a benign false alarm. Existing AI benchmarks measure language ability or vision capability in isolation; PSAI-Bench measures whether a system can actually reason across context the way a security operator does.
+        </p>
+        <p>
+          The v2.0 design uses <strong>context-dependent ground truth</strong>: the same description text resolves to THREAT, SUSPICIOUS, or BENIGN depending on zone type, sensitivity level, time of day, and device reliability. This kills the most common failure mode of v1.0 evaluation: <strong>single-field leakage</strong>, where a clever model could predict the verdict from description text alone with near-perfect accuracy. Real triage doesn't work that way.
+        </p>
+        <p>
+          The benchmark is system-agnostic. <strong>Bring your own system</strong> &mdash; LLM, vision model, rule engine, hybrid &mdash; produce verdicts in the required JSON schema, and PSAI-Bench scores them against the ground truth. Built-in evaluators for GPT-4o, Claude, and Gemini ship as reference integrations.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">Python 3.10+</span>
+        <span class="tag highlight">Click CLI</span>
+        <span class="tag">UCF Crime</span>
+        <span class="tag">Caltech</span>
+        <span class="tag">Pydantic</span>
+        <span class="tag">pytest</span>
+        <span class="tag">GitHub Actions</span>
+        <span class="tag">Apache 2.0</span>
+        <span class="tag">PyPI</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 02 — TRACK DISTRIBUTION CHART -->
+<div class="container">
+  <div class="section">
+    <span class="label">02 &mdash; Three Evaluation Tracks</span>
+    <p style="font-size: 0.95rem; color: var(--gray-800); max-width: 700px; margin-bottom: 1rem;">
+      Three tracks with increasing perceptual requirements. Bar widths show scenario distribution &mdash; the metadata track is largest because pure structured-context reasoning is the floor every system must clear before perception capabilities can add value.
+    </p>
+    <div class="track-chart">
+      <div class="track-row">
+        <div class="track-name">
+          Metadata Track
+          <span class="track-input">Alert text + zone + device + weather + time</span>
+        </div>
+        <div class="track-bar">
+          <div class="track-fill" style="width: 100%;">Pure reasoning over structured context</div>
+        </div>
+        <div class="track-count">8,000</div>
+      </div>
+      <div class="track-row">
+        <div class="track-name">
+          Visual Track
+          <span class="track-input">Metadata + video clip URI</span>
+        </div>
+        <div class="track-bar">
+          <div class="track-fill" style="width: 36.25%;">Does video add triage value?</div>
+        </div>
+        <div class="track-count">2,900</div>
+      </div>
+      <div class="track-row">
+        <div class="track-name">
+          Multi-Sensor Track
+          <span class="track-input">Camera + PIR + badge + vibration + thermal</span>
+        </div>
+        <div class="track-bar">
+          <div class="track-fill" style="width: 12.5%;">Sensor fusion reasoning</div>
+        </div>
+        <div class="track-count">1,000</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 — CONTEXT MATRIX -->
+<div class="container">
+  <div class="section">
+    <span class="label">03 &mdash; Context-Dependent Ground Truth</span>
+    <p style="font-size: 0.95rem; color: var(--gray-800); max-width: 700px;">
+      The same alert description maps to different verdicts depending on the surrounding context. A system that classifies on description alone will be confidently wrong on the majority of scenarios &mdash; which is the entire point of the benchmark.
+    </p>
+    <div class="matrix-section">
+      <div class="matrix-intro">Description: "Person detected in restricted area" &mdash; verdict varies by zone &times; time</div>
+      <table class="matrix">
+        <thead>
+          <tr>
+            <th>Zone Type</th>
+            <th>02:00 (low activity)</th>
+            <th>09:00 (work hours)</th>
+            <th>14:00 (peak hours)</th>
+            <th>22:00 (closing)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>High-sensitivity (vault, server)</td>
+            <td class="verdict-threat">THREAT</td>
+            <td class="verdict-suspicious">SUSPICIOUS</td>
+            <td class="verdict-suspicious">SUSPICIOUS</td>
+            <td class="verdict-threat">THREAT</td>
+          </tr>
+          <tr>
+            <td>Restricted (back-of-house)</td>
+            <td class="verdict-threat">THREAT</td>
+            <td class="verdict-benign">BENIGN</td>
+            <td class="verdict-benign">BENIGN</td>
+            <td class="verdict-suspicious">SUSPICIOUS</td>
+          </tr>
+          <tr>
+            <td>Public-adjacent (lobby corridor)</td>
+            <td class="verdict-suspicious">SUSPICIOUS</td>
+            <td class="verdict-benign">BENIGN</td>
+            <td class="verdict-benign">BENIGN</td>
+            <td class="verdict-benign">BENIGN</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 04 — METRICS -->
+<div class="container">
+  <div class="section">
+    <span class="label">04 &mdash; Calibrated Metrics</span>
+    <p style="font-size: 0.95rem; color: var(--gray-800); max-width: 700px; margin-bottom: 1.5rem;">
+      Threat detection alone is a vanity metric &mdash; it rewards models that flag everything. PSAI-Bench scores each system on five dimensions so the trade-offs are visible.
+    </p>
+    <div class="metric-cards">
+      <div class="metric-defn">
+        <div class="mn-name">TDR</div>
+        <div class="mn-acronym">Threat Detection Rate</div>
+        <p>Fraction of actual threats correctly classified as THREAT or SUSPICIOUS. Recall on the high-stakes class.</p>
+      </div>
+      <div class="metric-defn">
+        <div class="mn-name">FASR</div>
+        <div class="mn-acronym">False Alarm Suppression</div>
+        <p>Fraction of benign alerts correctly classified as BENIGN. The dollar metric &mdash; this is what operators pay to stop seeing.</p>
+      </div>
+      <div class="metric-defn">
+        <div class="mn-name">DEC</div>
+        <div class="mn-acronym">Decisiveness</div>
+        <p>Fraction of verdicts that commit to THREAT or BENIGN rather than hedging on SUSPICIOUS. Penalizes "I don't know" abuse.</p>
+      </div>
+      <div class="metric-defn">
+        <div class="mn-name">ECE</div>
+        <div class="mn-acronym">Calibration Error</div>
+        <p>How well the system's confidence scores match its actual accuracy. Lower is better &mdash; required for downstream decisioning.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 05 — REFERENCE EVALUATORS -->
+<div class="container">
+  <div class="section">
+    <span class="label">05 &mdash; Reference Evaluators</span>
+    <p style="font-size: 0.95rem; color: var(--gray-800); max-width: 700px; margin-bottom: 1.5rem;">
+      Built-in evaluators ship as reference integrations &mdash; example wiring for connecting frontier LLMs to the benchmark. They are not intended as the production workflow.
+    </p>
+    <div class="eval-cards">
+      <div class="eval-card">
+        <div class="eval-model">OpenAI</div>
+        <h4>GPT-4o</h4>
+        <p>Direct API integration via Chat Completions. JSON-mode output enforces the required verdict schema. First frontier-LLM evaluation completed on Metadata Track.</p>
+      </div>
+      <div class="eval-card">
+        <div class="eval-model">Anthropic</div>
+        <h4>Claude</h4>
+        <p>Native tool-use integration. Tool schema mirrors the required output JSON. Supports prompt caching for repeat-scenario batches.</p>
+      </div>
+      <div class="eval-card">
+        <div class="eval-model">Google</div>
+        <h4>Gemini</h4>
+        <p>Structured output via Pydantic schema integration. Handles the visual track multimodal input format directly.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 06 — IMPACT -->
+<div class="container">
+  <div class="section">
+    <span class="label">06 &mdash; Why This Matters</span>
+    <div class="impact-grid">
+      <div class="impact-block">
+        <span class="label">For the Field</span>
+        <h3>The Missing Yardstick</h3>
+        <ul class="finding-list">
+          <li>No prior public benchmark for physical security AI triage</li>
+          <li>Vendors compete on demos, not measurable performance</li>
+          <li>Open-source under Apache 2.0 to standardize comparison</li>
+          <li>Built on UCF Crime + Caltech &mdash; reproducible foundations</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">For Buyers</span>
+        <h3>Procurement Tooling</h3>
+        <ul class="finding-list">
+          <li>Run any vendor's system through the same scenarios</li>
+          <li>Compare TDR / FASR / Calibration on identical ground truth</li>
+          <li>Surface trade-offs vendors hide in marketing</li>
+          <li>Cuts pilot evaluation cycles from months to days</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">For Builders</span>
+        <h3>Distribution &amp; Credibility</h3>
+        <ul class="finding-list">
+          <li>Establishes benchmark authority in a defining domain</li>
+          <li>Drives inbound from researchers and procurement teams</li>
+          <li>Open-source stewardship as a category-defining act</li>
+          <li>Companion to Panoptris &mdash; we built the benchmark we needed</li>
+        </ul>
+      </div>
+      <div class="impact-block">
+        <span class="label">Status</span>
+        <h3>v2.0 In Validation</h3>
+        <ul class="finding-list">
+          <li>v2.0 scenario generator complete (context-dependent ground truth)</li>
+          <li>Scoring CLI complete: generate, score, evaluate, compare</li>
+          <li>v1.0 results retired &mdash; single-field leakage detected</li>
+          <li>v2.0 reference evaluations publishing once validated</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="footer">
+    <div class="footer-left">
+      Addison Apisarnthanarax &mdash;
+      <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &middot;
+      <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &middot;
+      <a href="mailto:AddisonApisarn@gmail.com">AddisonApisarn@gmail.com</a>
+    </div>
+    <div class="footer-right">Portfolio &mdash; 2026</div>
+  </div>
+</div>
+</body>
+</html>

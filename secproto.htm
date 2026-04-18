@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addison Apisarnthanarax — SECProto</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+  :root {
+    --black: #0a0a0a; --white: #fafaf9; --accent: #e11d48; --accent-light: #fff1f2;
+    --gray-100: #f5f5f4; --gray-200: #e7e5e4; --gray-400: #a8a29e; --gray-600: #57534e; --gray-800: #292524;
+    --border: 3px solid var(--black); --border-thin: 1.5px solid var(--black);
+    --mono: 'Space Mono', 'Courier New', monospace; --sans: 'Space Grotesk', 'Arial', sans-serif; --serif: 'Instrument Serif', 'Georgia', serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body { background: var(--white); color: var(--black); font-family: var(--sans); line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .section { padding: 4rem 0; border-bottom: var(--border); }
+  .section:last-of-type { border-bottom: none; }
+  .label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray-600); margin-bottom: 0.75rem; display: block; }
+  .accent { color: var(--accent); }
+  .back-link { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; display: inline-block; padding: 1.5rem 0; }
+  .hero { padding: 3rem 0 2rem; border-bottom: var(--border); }
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; gap: 2rem; flex-wrap: wrap; }
+  .hero-name { font-family: var(--mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.2em; border: var(--border); padding: 0.5rem 1rem; display: inline-block; }
+  .hero-meta { font-family: var(--mono); font-size: 0.7rem; text-align: right; color: var(--gray-600); line-height: 1.8; }
+  .hero-meta a { font-weight: 400; }
+  .hero-title { font-family: var(--serif); font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.08; font-weight: 400; margin-bottom: 1.5rem; max-width: 900px; letter-spacing: -0.02em; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-subtitle { font-family: var(--mono); font-size: 0.8rem; color: var(--gray-600); letter-spacing: 0.05em; max-width: 700px; line-height: 1.7; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: var(--border); margin-top: 2.5rem; }
+  .metric { padding: 1.5rem 1rem; border-right: var(--border-thin); }
+  .metric:last-child { border-right: none; }
+  .metric-value { font-family: var(--serif); font-size: 2.8rem; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+  .metric-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-600); }
+  .overview-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .overview-text { font-size: 1.05rem; line-height: 1.75; color: var(--gray-800); }
+  .overview-text p { margin-bottom: 1.25rem; }
+  .overview-text strong { color: var(--black); font-weight: 600; }
+  .tags-box { border: var(--border); padding: 1.5rem; align-self: start; }
+  .tags-box .label { margin-bottom: 1rem; }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.65rem; border: 1.5px solid var(--black); margin: 0 0.4rem 0.5rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag.highlight { background: var(--black); color: var(--white); }
+  .growth-chart { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.5rem; }
+  .growth-row { display: grid; grid-template-columns: 140px 1fr 50px; align-items: center; gap: 0.75rem; height: 28px; }
+  .growth-label { font-family: var(--mono); font-size: 0.62rem; text-align: right; color: var(--gray-800); line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .growth-bar-wrap { height: 22px; position: relative; background: var(--gray-100); border: 1.5px solid var(--black); }
+  .growth-bar { height: 100%; transition: width 0.3s ease; background: var(--accent); }
+  .growth-value { font-family: var(--mono); font-size: 0.7rem; font-weight: 700; color: var(--accent); }
+  .finding-list { list-style: none; margin-top: 1rem; }
+  .finding-list li { font-size: 0.88rem; padding: 0.5rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); line-height: 1.5; }
+  .finding-list li::before { content: '\2192'; margin-right: 0.5rem; color: var(--accent); font-weight: 700; }
+  .footer { padding: 2rem 0; border-top: var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-left { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-600); letter-spacing: 0.05em; }
+  .footer-right { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.1em; }
+  @media print { body { font-size: 14px; } .section { padding: 2rem 0; break-inside: avoid; } .hero { padding: 1.5rem 0; } }
+  @media (max-width: 768px) { .hero-top { flex-direction: column; } .hero-meta { text-align: left; } .metrics { grid-template-columns: repeat(2, 1fr); } .metric { border-bottom: var(--border-thin); } .overview-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="portfolio.htm" class="back-link">&larr; Back to Portfolio</a>
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-name">Addison Apisarnthanarax</div>
+      <div class="hero-meta">
+        <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &mdash;
+        <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &mdash;
+        <a href="mailto:AddisonApisarn@gmail.com">Email</a><br>
+        Prototype &mdash; 2024
+      </div>
+    </div>
+    <h1 class="hero-title">SECProto &mdash; SEC Document <em>Analyzer MVP</em></h1>
+    <p class="hero-subtitle">A lean MVP Python system for AI-powered SEC filing analysis using Hugging Face models and FAISS vector search. The prototype that evolved into the full EasySEC platform.</p>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value">13</div>
+        <div class="metric-label">Modules</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">3,333</div>
+        <div class="metric-label">Lines of Code</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">&lt;100<span class="accent">ms</span></div>
+        <div class="metric-label">Query Latency</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">20<span class="accent">%</span></div>
+        <div class="metric-label">Faster (Cached)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <div class="overview-grid">
+      <div class="overview-text">
+        <span class="label">01 &mdash; Project Overview</span>
+        <p>
+          SECProto was the rapid-iteration prototype that validated the core concept behind EasySEC. Starting as a <strong>5-module, 1,080-line system</strong>, it grew through iterative development into a <strong>13-module, 3,333-line platform</strong> with 14 features and 15 tests &mdash; proving the viability of AI-powered SEC filing analysis.
+        </p>
+        <p>
+          The system uses <strong>FAISS vector search</strong> for semantic document retrieval, <strong>Sentence-Transformers</strong> (all-MiniLM-L6-v2) for embedding generation, and <strong>BART-large-CNN</strong> for abstractive summarization. Documents are fetched directly from SEC EDGAR, parsed with BeautifulSoup, and indexed for sub-100ms query response times.
+        </p>
+        <p>
+          Clean modular architecture kept every module under 500 lines (largest: 310), making the codebase maintainable as it scaled. This discipline directly informed the architecture of the production EasySEC platform.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">FAISS</span>
+        <span class="tag highlight">Python</span>
+        <span class="tag">Sentence-Transformers</span>
+        <span class="tag">BART-large-CNN</span>
+        <span class="tag">SEC EDGAR</span>
+        <span class="tag">BeautifulSoup</span>
+        <span class="tag">PyTorch</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <span class="label">02 &mdash; Growth Metrics</span>
+    <div class="growth-chart">
+      <div class="growth-row">
+        <div class="growth-label">Modules</div>
+        <div class="growth-bar-wrap"><div class="growth-bar" style="width: 80%"></div></div>
+        <div class="growth-value">+160%</div>
+      </div>
+      <div class="growth-row">
+        <div class="growth-label">Lines of Code</div>
+        <div class="growth-bar-wrap"><div class="growth-bar" style="width: 100%"></div></div>
+        <div class="growth-value">+208%</div>
+      </div>
+      <div class="growth-row">
+        <div class="growth-label">Features</div>
+        <div class="growth-bar-wrap"><div class="growth-bar" style="width: 96%"></div></div>
+        <div class="growth-value">+250%</div>
+      </div>
+      <div class="growth-row">
+        <div class="growth-label">Tests</div>
+        <div class="growth-bar-wrap"><div class="growth-bar" style="width: 72%"></div></div>
+        <div class="growth-value">+150%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <span class="label">03 &mdash; Performance Benchmarks</span>
+    <div class="growth-chart">
+      <div class="growth-row">
+        <div class="growth-label">Semantic Query</div>
+        <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 6%"></div></div>
+        <div class="growth-value positive">&lt;100ms</div>
+      </div>
+      <div class="growth-row">
+        <div class="growth-label">Document Parse</div>
+        <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 10%"></div></div>
+        <div class="growth-value positive">&lt;1s</div>
+      </div>
+      <div class="growth-row">
+        <div class="growth-label">Summarization</div>
+        <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 30%"></div></div>
+        <div class="growth-value positive">2-5s</div>
+      </div>
+      <div class="growth-row">
+        <div class="growth-label">Document Fetch</div>
+        <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 30%"></div></div>
+        <div class="growth-value positive">2-5s</div>
+      </div>
+      <div class="growth-row">
+        <div class="growth-label">Embedding Build</div>
+        <div class="growth-bar-wrap"><div class="growth-bar negative" style="width: 60%"></div></div>
+        <div class="growth-value negative">5-10s</div>
+      </div>
+      <div style="grid-column: 1 / -1; border-top: 1.5px dashed var(--gray-200); margin: 0.5rem 0;"></div>
+      <div class="growth-row">
+        <div class="growth-label">Full Pipeline</div>
+        <div class="growth-bar-wrap"><div class="growth-bar negative" style="width: 80%"></div></div>
+        <div class="growth-value negative">~15s</div>
+      </div>
+      <div class="growth-row">
+        <div class="growth-label">Cached Pipeline</div>
+        <div class="growth-bar-wrap"><div class="growth-bar positive" style="width: 65%"></div></div>
+        <div class="growth-value positive">~12s</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="section">
+    <span class="label">04 &mdash; Key Results</span>
+    <ul class="finding-list">
+      <li>Grew from <strong>5 to 13 modules</strong>, 1,080 to 3,333 lines, 4 to 14 features, 6 to 15 tests</li>
+      <li>Performance: ~15s &rarr; ~12s cached (<strong>20% faster</strong>) with optimized embedding cache</li>
+      <li>Every module under <strong>500 lines</strong> (largest: 310 lines) for maintainability</li>
+      <li>Fetch: 2-5s, Parse: &lt;1s, Embeddings: 5-10s, Query: <strong>&lt;100ms</strong>, Summarize: 2-5s</li>
+      <li>Clean architecture directly informed the <strong>production EasySEC</strong> platform design</li>
+      <li>Validated core concept of AI-powered SEC filing analysis with semantic search</li>
+    </ul>
+  </div>
+</div>
+
+<div class="container">
+  <div class="footer">
+    <div class="footer-left">
+      Addison Apisarnthanarax &mdash;
+      <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &middot;
+      <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &middot;
+      <a href="mailto:AddisonApisarn@gmail.com">AddisonApisarn@gmail.com</a>
+    </div>
+    <div class="footer-right">Portfolio &mdash; 2026</div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addison Apisarnthanarax — Project Portfolio</title>
+<style>
+  /* ============================================
+     NEO-BRUTALIST EDITORIAL PORTFOLIO
+     ============================================ */
+
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+
+  :root {
+    --black: #0a0a0a;
+    --white: #fafaf9;
+    --accent: #e11d48;
+    --accent-light: #fff1f2;
+    --gray-100: #f5f5f4;
+    --gray-200: #e7e5e4;
+    --gray-400: #a8a29e;
+    --gray-600: #57534e;
+    --gray-800: #292524;
+    --border: 3px solid var(--black);
+    --border-thin: 1.5px solid var(--black);
+    --mono: 'Space Mono', 'Courier New', monospace;
+    --sans: 'Space Grotesk', 'Arial', sans-serif;
+    --serif: 'Instrument Serif', 'Georgia', serif;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* ---- UTILITY ---- */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section {
+    padding: 4rem 0;
+    border-bottom: var(--border);
+  }
+
+  .section:last-of-type {
+    border-bottom: none;
+  }
+
+  .label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gray-600);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .accent {
+    color: var(--accent);
+  }
+
+  /* ============================================
+     HERO
+     ============================================ */
+  .hero {
+    padding: 3rem 0 2rem;
+    border-bottom: var(--border);
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2.5rem;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-name {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    border: var(--border);
+    padding: 0.5rem 1rem;
+    display: inline-block;
+  }
+
+  .hero-meta {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    text-align: right;
+    color: var(--gray-600);
+    line-height: 1.8;
+  }
+
+  .hero-meta a {
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+    line-height: 1.08;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    max-width: 900px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-subtitle {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    letter-spacing: 0.05em;
+    max-width: 700px;
+    line-height: 1.7;
+  }
+
+  /* ---- METRIC STRIP ---- */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: var(--border);
+    margin-top: 2.5rem;
+  }
+
+  .metric {
+    padding: 1.5rem 1rem;
+    border-right: var(--border-thin);
+  }
+
+  .metric:last-child {
+    border-right: none;
+  }
+
+  .metric-value {
+    font-family: var(--serif);
+    font-size: 2.8rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.3rem;
+  }
+
+  .metric-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gray-600);
+  }
+
+  /* ============================================
+     PROJECT OVERVIEW GRID
+     ============================================ */
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .project-card {
+    border: var(--border);
+    padding: 2rem 1.5rem;
+    margin-right: -3px;
+    margin-bottom: -3px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .project-card:hover {
+    background: var(--accent-light);
+    text-decoration: none;
+  }
+
+  .project-card .card-type {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+
+  .project-card h3 {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+    line-height: 1.2;
+  }
+
+  .project-card .card-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--gray-800);
+    margin-bottom: 1rem;
+  }
+
+  .project-card .card-metric {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.2rem;
+  }
+
+  .project-card .card-metric-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray-600);
+    margin-bottom: 1rem;
+  }
+
+  .project-card .card-tags {
+    margin-top: 0.5rem;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    padding: 0.35rem 0.65rem;
+    border: 1.5px solid var(--black);
+    margin: 0 0.4rem 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tag.highlight {
+    background: var(--black);
+    color: var(--white);
+  }
+
+  .tag.sm {
+    font-size: 0.6rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  /* ============================================
+     FLAGSHIP PROJECT SECTIONS
+     ============================================ */
+  .project-section {
+    padding: 4rem 0;
+    border-bottom: var(--border);
+  }
+
+  .project-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .project-header-text h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .project-header-text h2 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .project-header-text p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--gray-800);
+  }
+
+  .project-header-text p strong {
+    color: var(--black);
+    font-weight: 600;
+  }
+
+  .tags-box {
+    border: var(--border);
+    padding: 1.5rem;
+    align-self: start;
+  }
+
+  .tags-box .label {
+    margin-bottom: 1rem;
+  }
+
+  /* ---- PROJECT METRICS ---- */
+  .project-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: var(--border);
+    margin-bottom: 2.5rem;
+  }
+
+  .project-metric {
+    padding: 1.5rem 1rem;
+    border-right: var(--border-thin);
+    text-align: center;
+  }
+
+  .project-metric:last-child {
+    border-right: none;
+  }
+
+  .project-metric .pm-value {
+    font-family: var(--serif);
+    font-size: 2.2rem;
+    line-height: 1.1;
+    color: var(--accent);
+    letter-spacing: -0.03em;
+  }
+
+  .project-metric .pm-label {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gray-600);
+    margin-top: 0.3rem;
+  }
+
+  /* ---- PIPELINE ---- */
+  .pipeline-flow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border: var(--border);
+    margin-bottom: 2.5rem;
+  }
+
+  .pipeline-flow.cols-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .pipeline-flow.cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .pipeline-step {
+    padding: 1.5rem 1rem;
+    border-right: var(--border-thin);
+    position: relative;
+  }
+
+  .pipeline-step:last-child {
+    border-right: none;
+  }
+
+  .pipeline-step:hover {
+    background: var(--accent-light);
+  }
+
+  .step-number {
+    font-family: var(--serif);
+    font-size: 2rem;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.6rem;
+  }
+
+  .step-name {
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-detail {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--gray-600);
+    line-height: 1.6;
+  }
+
+  .step-tool {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    display: inline-block;
+    margin-top: 0.6rem;
+    padding: 0.2rem 0.4rem;
+    border: 1px solid var(--gray-400);
+    color: var(--gray-600);
+  }
+
+  /* ---- FINDING LIST ---- */
+  .finding-list {
+    list-style: none;
+    margin-top: 1rem;
+  }
+
+  .finding-list li {
+    font-size: 0.88rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--gray-200);
+    color: var(--gray-800);
+    line-height: 1.5;
+  }
+
+  .finding-list li::before {
+    content: '\2192';
+    margin-right: 0.5rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ---- IMPACT GRID ---- */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .impact-block {
+    padding: 2rem;
+    border: var(--border);
+    margin-right: -3px;
+    margin-bottom: -3px;
+  }
+
+  .impact-block h3 {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+  }
+
+  .impact-block p {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--gray-800);
+  }
+
+  .impact-block.dark {
+    background: var(--black);
+    color: var(--white);
+  }
+
+  .impact-block.dark h3 {
+    color: var(--white);
+  }
+
+  .impact-block.dark p {
+    color: var(--gray-400);
+  }
+
+  .impact-block.dark .label {
+    color: var(--accent);
+  }
+
+  .impact-block.dark .finding-list li {
+    border-color: var(--gray-800);
+    color: var(--gray-400);
+  }
+
+  /* ---- SECONDARY STRIP ---- */
+  .secondary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .secondary-card {
+    border: var(--border);
+    padding: 1.5rem 1.2rem;
+    margin-right: -3px;
+    margin-bottom: -3px;
+  }
+
+  .secondary-card .card-type {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .secondary-card h4 {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+    line-height: 1.2;
+  }
+
+  .secondary-card p {
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--gray-600);
+    margin-bottom: 0.8rem;
+  }
+
+  /* ---- CTA LINK ---- */
+  .case-study-link {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+    padding: 0.5rem 1rem;
+    margin-top: 1.5rem;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .case-study-link:hover {
+    background: var(--accent);
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  /* ============================================
+     FOOTER
+     ============================================ */
+  .footer {
+    padding: 2rem 0;
+    border-top: var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-left {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--gray-600);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-right {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ============================================
+     PRINT STYLES
+     ============================================ */
+  @media print {
+    body { font-size: 14px; }
+    .section, .project-section { padding: 2rem 0; break-inside: avoid; }
+    .hero { padding: 1.5rem 0; }
+    .metrics { margin-top: 1.5rem; }
+    .pipeline-step:hover { background: transparent; }
+    .project-card:hover { background: transparent; }
+    .case-study-link { border-color: var(--black); color: var(--black); }
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 768px) {
+    .hero-top { flex-direction: column; }
+    .hero-meta { text-align: left; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric { border-bottom: var(--border-thin); }
+    .project-grid { grid-template-columns: 1fr; }
+    .project-header { grid-template-columns: 1fr; }
+    .project-metrics { grid-template-columns: repeat(2, 1fr); }
+    .project-metric { border-bottom: var(--border-thin); }
+    .pipeline-flow, .pipeline-flow.cols-6, .pipeline-flow.cols-4 { grid-template-columns: repeat(2, 1fr); }
+    .pipeline-step { border-bottom: var(--border-thin); }
+    .impact-grid { grid-template-columns: 1fr; }
+    .secondary-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     HERO
+     ============================================ -->
+<div class="container">
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-name">Addison Apisarnthanarax</div>
+      <div class="hero-meta">
+        <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &mdash;
+        <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &mdash;
+        <a href="mailto:AddisonApisarn@gmail.com">Email</a><br>
+        Project Portfolio &mdash; 2026
+      </div>
+    </div>
+
+    <h1 class="hero-title">
+      Founder &amp; Builder &mdash; <em>AI Systems &middot; ML &middot; Full-Stack</em>
+    </h1>
+
+    <p class="hero-subtitle">
+      Building production-grade AI systems, ML pipelines, and full-stack applications &mdash; from physical security AI for remote critical infrastructure to industry benchmarks, drone simulators, and personal knowledge graphs.
+    </p>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value">13<span class="accent">+</span></div>
+        <div class="metric-label">Projects Built</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">455<span class="accent">K</span></div>
+        <div class="metric-label">LOC TypeScript</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">2</div>
+        <div class="metric-label">OSS Releases</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">1</div>
+        <div class="metric-label">Active Startup</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     01 — PROJECT OVERVIEW GRID
+     ============================================ -->
+<div class="container">
+  <div class="section">
+    <span class="label">01 &mdash; Project Overview</span>
+    <div class="project-grid">
+
+      <a href="panoptris.htm" class="project-card" style="grid-column: 1 / -1; background: var(--accent-light);">
+        <span class="card-type">Active Startup &middot; Flagship</span>
+        <h3>Panoptris</h3>
+        <p class="card-desc">Physical security AI for remote critical infrastructure &mdash; solar farms, substations, cell towers. Camera-first, drone-ready. v12.0 production hardened with multi-tenant architecture and 4-tier safety model.</p>
+        <div class="card-metric">455<span class="accent">K</span></div>
+        <div class="card-metric-label">Lines of TypeScript &middot; 17 milestones &middot; 156+ phases</div>
+        <div class="card-tags">
+          <span class="tag sm">Next.js 16</span>
+          <span class="tag sm">TypeScript</span>
+          <span class="tag sm">Claude API</span>
+          <span class="tag sm">Vercel AI SDK</span>
+          <span class="tag sm">tRPC</span>
+          <span class="tag sm">Prisma</span>
+          <span class="tag sm">MQTT</span>
+          <span class="tag sm">MAVLink</span>
+        </div>
+      </a>
+
+      <a href="psai-bench.htm" class="project-card">
+        <span class="card-type">Open-Source Benchmark</span>
+        <h3>PSAI-Bench</h3>
+        <p class="card-desc">First industry benchmark for physical security AI triage. Context-dependent ground truth across 3 evaluation tracks. Apache 2.0.</p>
+        <div class="card-metric">11.9<span class="accent">K</span></div>
+        <div class="card-metric-label">Total Scenarios</div>
+        <div class="card-tags">
+          <span class="tag sm">Python</span>
+          <span class="tag sm">Click CLI</span>
+          <span class="tag sm">UCF Crime</span>
+          <span class="tag sm">Apache 2.0</span>
+        </div>
+      </a>
+
+      <a href="aurelius.htm" class="project-card">
+        <span class="card-type">R&amp;D &middot; Knowledge Layer</span>
+        <h3>Aurelius</h3>
+        <p class="card-desc">Passive personal knowledge graph for agent-velocity work. Tauri shell, Python sidecar, Leiden clustering, MCP server, BYOK.</p>
+        <div class="card-metric">3</div>
+        <div class="card-metric-label">Pipeline Layers &middot; Local-First</div>
+        <div class="card-tags">
+          <span class="tag sm">Tauri 2</span>
+          <span class="tag sm">Rust</span>
+          <span class="tag sm">Python</span>
+          <span class="tag sm">Anthropic SDK</span>
+          <span class="tag sm">Ollama</span>
+        </div>
+      </a>
+
+      <a href="dji-cloud-simulator.htm" class="project-card">
+        <span class="card-type">Open-Source Tool</span>
+        <h3>DJI Cloud Simulator</h3>
+        <p class="card-desc">Spec-accurate MQTT simulator for DJI Cloud API. Realistic telemetry, HMS alarms, mission events without physical drone hardware. MIT licensed.</p>
+        <div class="card-metric">4</div>
+        <div class="card-metric-label">Built-In Scenarios &middot; npx run</div>
+        <div class="card-tags">
+          <span class="tag sm">Node.js 22</span>
+          <span class="tag sm">mqtt.js</span>
+          <span class="tag sm">npm provenance</span>
+          <span class="tag sm">MIT</span>
+        </div>
+      </a>
+
+      <a href="sentrix.htm" class="project-card">
+        <span class="card-type">Defense / Drone &middot; Precursor</span>
+        <h3>Sentrix</h3>
+        <p class="card-desc">AI drone surveillance &amp; inspection platform with autonomous decision engine and graduated autonomy levels. Earlier military-positioned project that informed Panoptris.</p>
+        <div class="card-metric">5</div>
+        <div class="card-metric-label">Autonomy Levels</div>
+        <div class="card-tags">
+          <span class="tag sm">Next.js</span>
+          <span class="tag sm">TypeScript</span>
+          <span class="tag sm">tRPC</span>
+          <span class="tag sm">Claude SDK</span>
+        </div>
+      </a>
+
+      <a href="#easysec" class="project-card">
+        <span class="card-type">Full-Stack Platform</span>
+        <h3>EasySEC</h3>
+        <p class="card-desc">AI-powered SEC filing analytics with RAG, XBRL cross-validation, and semantic search.</p>
+        <div class="card-metric">50<span class="accent">K+</span></div>
+        <div class="card-metric-label">Filings Ingested</div>
+        <div class="card-tags">
+          <span class="tag sm">Python</span>
+          <span class="tag sm">React</span>
+          <span class="tag sm">FastAPI</span>
+          <span class="tag sm">RAG</span>
+          <span class="tag sm">FAISS</span>
+        </div>
+      </a>
+
+      <a href="#pubmed" class="project-card">
+        <span class="card-type">NLP Research</span>
+        <h3>PubMed Topic Modeling</h3>
+        <p class="card-desc">BERTopic clustering of 4,277 radiation oncology abstracts with LLM validation.</p>
+        <div class="card-metric">90<span class="accent">%</span></div>
+        <div class="card-metric-label">Validation Agreement</div>
+        <div class="card-tags">
+          <span class="tag sm">BERTopic</span>
+          <span class="tag sm">GPT-4o</span>
+          <span class="tag sm">UMAP</span>
+          <span class="tag sm">HDBSCAN</span>
+          <span class="tag sm">Altair</span>
+        </div>
+      </a>
+
+      <a href="#sec-classifier" class="project-card">
+        <span class="card-type">ML Classification</span>
+        <h3>SEC Business Classifier</h3>
+        <p class="card-desc">Fine-tuned RoBERTa for SEC business description classification across sectors.</p>
+        <div class="card-metric">100<span class="accent">%</span></div>
+        <div class="card-metric-label">Validation Accuracy</div>
+        <div class="card-tags">
+          <span class="tag sm">RoBERTa</span>
+          <span class="tag sm">PyTorch</span>
+          <span class="tag sm">PostgreSQL</span>
+          <span class="tag sm">Scikit-learn</span>
+        </div>
+      </a>
+
+      <a href="#music-emotion" class="project-card" style="grid-column: 1 / -1;">
+        <span class="card-type">Multimodal ML</span>
+        <h3>Emotion-Based Music Recommender</h3>
+        <p class="card-desc">Analyzes video content with Google Cloud Video Intelligence and recommends emotionally matching music from Spotify using a trained Keras neural network.</p>
+        <div class="card-metric">3</div>
+        <div class="card-metric-label">APIs Integrated</div>
+        <div class="card-tags">
+          <span class="tag sm">TensorFlow</span>
+          <span class="tag sm">Keras</span>
+          <span class="tag sm">Google Cloud</span>
+          <span class="tag sm">Spotify API</span>
+          <span class="tag sm">Scikit-learn</span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     02 — EASYSEC
+     ============================================ -->
+<div class="container" id="easysec">
+  <div class="project-section">
+    <span class="label">02 &mdash; EasySEC</span>
+    <div class="project-header">
+      <div class="project-header-text">
+        <h2>AI-Powered SEC Filing <em>Analytics Platform</em></h2>
+        <p>
+          A full-stack, enterprise-grade platform providing <strong>verified, citation-backed answers</strong> to financial analyst queries using Retrieval-Augmented Generation, XBRL cross-validation, and hybrid semantic search. Every answer is traceable to its source filing in one click. Positioned as a competitor to AlphaSense and Bloomberg for SEC-specific analysis.
+        </p>
+        <p>
+          Features a <strong>5-stage query pipeline</strong> with query classification into 5 types (NUMERIC_EXACT, NUMERIC_CALC, COMPARISON, TEXT_SEARCH, SYNTHESIS), three execution paths (DETERMINISTIC, RETRIEVAL, MIXED), knowledge graph traversal, and cross-encoder reranking.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">Python</span>
+        <span class="tag highlight">React</span>
+        <span class="tag">FastAPI</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">pgvector</span>
+        <span class="tag">FAISS</span>
+        <span class="tag">OpenSearch</span>
+        <span class="tag">Sentence-Transformers</span>
+        <span class="tag">BART-large-CNN</span>
+        <span class="tag">XBRL</span>
+        <span class="tag">Docker</span>
+        <span class="tag">AWS S3</span>
+        <span class="tag">SEC EDGAR</span>
+      </div>
+    </div>
+
+    <div class="project-metrics">
+      <div class="project-metric">
+        <div class="pm-value">50<span class="accent">K+</span></div>
+        <div class="pm-label">Filings Ingested</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">0.11<span class="accent">%</span></div>
+        <div class="pm-label">XBRL Error Rate</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">&lt;100<span class="accent">ms</span></div>
+        <div class="pm-label">Search Latency</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">175<span class="accent">pt</span></div>
+        <div class="pm-label">Spec Audit</div>
+      </div>
+    </div>
+
+    <div class="pipeline-flow cols-6">
+      <div class="pipeline-step">
+        <div class="step-number">01</div>
+        <div class="step-name">Ingest</div>
+        <div class="step-detail">50K+ SEC filings from EDGAR with XBRL structured data extraction</div>
+        <span class="step-tool">SEC EDGAR API</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">02</div>
+        <div class="step-name">Embed</div>
+        <div class="step-detail">Sentence-Transformer embeddings stored in pgvector + FAISS indices</div>
+        <span class="step-tool">MiniLM-L6-v2</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">03</div>
+        <div class="step-name">Classify</div>
+        <div class="step-detail">Rule-based query classifier routes to optimal execution path in &lt;5ms</div>
+        <span class="step-tool">FastAPI</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">04</div>
+        <div class="step-name">Retrieve</div>
+        <div class="step-detail">Hybrid BM25 + semantic search with Reciprocal Rank Fusion</div>
+        <span class="step-tool">OpenSearch</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">05</div>
+        <div class="step-name">Rerank</div>
+        <div class="step-detail">Cross-encoder reranking with XBRL cross-validation for numeric accuracy</div>
+        <span class="step-tool">Cross-Encoder</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">06</div>
+        <div class="step-name">Generate</div>
+        <div class="step-detail">Citation-backed RAG responses with PageIndex navigation</div>
+        <span class="step-tool">BART + RAG</span>
+      </div>
+    </div>
+
+    <div class="impact-grid">
+      <div class="impact-block">
+        <span class="label">Key Results</span>
+        <h3>Technical Achievements</h3>
+        <ul class="finding-list">
+          <li>XBRL reduces financial scaling errors <strong>74x</strong> vs. plain text extraction</li>
+          <li>175-point specification audit achieved <strong>68% full compliance</strong></li>
+          <li>Knowledge Graph with entity/relation extraction and graph traversal</li>
+          <li>Semantic Diff engine using Hungarian algorithm for change detection</li>
+          <li>5 completed development sprints from foundation to production</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">Market Context</span>
+        <h3>Business Impact</h3>
+        <ul class="finding-list">
+          <li>$38B AI in Financial Services market (2025), projected $190B by 2030</li>
+          <li>LLMs achieve only 17% accuracy on financial number taxonomy without XBRL</li>
+          <li>SaaS tier model from Free to $10K/mo Enterprise</li>
+          <li>14-slide investor pitch deck with competitive positioning</li>
+          <li>5 user interviews with SEC filing professionals conducted</li>
+        </ul>
+      </div>
+    </div>
+
+    <a href="easysec.htm" class="case-study-link">View Full Case Study &rarr;</a>
+  </div>
+</div>
+
+<!-- ============================================
+     03 — SENTRIX
+     ============================================ -->
+<div class="container" id="sentrix">
+  <div class="project-section">
+    <span class="label">03 &mdash; Sentrix</span>
+    <div class="project-header">
+      <div class="project-header-text">
+        <h2>AI-Powered Drone <em>Surveillance &amp; Inspection</em></h2>
+        <p>
+          A drone-agnostic AI platform enabling organizations to plan autonomous missions, process live video through <strong>computer vision pipelines</strong>, generate real-time alerts, and produce actionable inspection reports. Features a proprietary <strong>Autonomous Decision Engine (ADE)</strong> with graduated autonomy levels and policy-based risk scoring for SOC2/ISO 27001 compliance.
+        </p>
+        <p>
+          Built as a hybrid modular monolith with <strong>multi-tenant data isolation</strong>, real-time WebSocket communication, and adapters for DJI, Skydio, and MAVLink drone protocols.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">Next.js 16</span>
+        <span class="tag highlight">TypeScript</span>
+        <span class="tag">React 19</span>
+        <span class="tag">tRPC</span>
+        <span class="tag">Prisma</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Socket.IO</span>
+        <span class="tag">Claude SDK</span>
+        <span class="tag">Tailwind CSS</span>
+        <span class="tag">Zustand</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Vitest</span>
+      </div>
+    </div>
+
+    <div class="project-metrics">
+      <div class="project-metric">
+        <div class="pm-value">5</div>
+        <div class="pm-label">Autonomy Levels</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">12<span class="accent">+</span></div>
+        <div class="pm-label">Data Models</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">6</div>
+        <div class="pm-label">Risk Score Factors</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">50<span class="accent">+</span></div>
+        <div class="pm-label">UI Views</div>
+      </div>
+    </div>
+
+    <div class="pipeline-flow">
+      <div class="pipeline-step">
+        <div class="step-number">01</div>
+        <div class="step-name">Plan</div>
+        <div class="step-detail">Mission control with waypoint planning, scheduling, and fleet assignment</div>
+        <span class="step-tool">Leaflet Maps</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">02</div>
+        <div class="step-name">Fly</div>
+        <div class="step-detail">Hardware-adaptive execution across DJI, Skydio, and MAVLink protocols</div>
+        <span class="step-tool">Drone Adapters</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">03</div>
+        <div class="step-name">Detect</div>
+        <div class="step-detail">Real-time video feed analysis with computer vision detection pipeline</div>
+        <span class="step-tool">Python CV</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">04</div>
+        <div class="step-name">Decide</div>
+        <div class="step-detail">Autonomous Decision Engine with graduated autonomy and risk scoring</div>
+        <span class="step-tool">Claude SDK</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">05</div>
+        <div class="step-name">Report</div>
+        <div class="step-detail">PDF generation, audit trails, compliance logging, and analytics dashboards</div>
+        <span class="step-tool">jsPDF + Recharts</span>
+      </div>
+    </div>
+
+    <div class="impact-grid">
+      <div class="impact-block">
+        <span class="label">Autonomy Levels</span>
+        <h3>Decision Engine</h3>
+        <ul class="finding-list">
+          <li><strong>Observer</strong> &mdash; Monitor and log only, no autonomous actions</li>
+          <li><strong>Advisor</strong> &mdash; Suggest actions, human confirms all decisions</li>
+          <li><strong>Supervised</strong> &mdash; Execute low-risk actions, escalate medium/high</li>
+          <li><strong>Autonomous</strong> &mdash; Full autonomous operation within policy bounds</li>
+          <li><strong>Emergency</strong> &mdash; Override protocols for safety-critical situations</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">Architecture</span>
+        <h3>System Design</h3>
+        <ul class="finding-list">
+          <li>Multi-tenant by default with strict data isolation per organization</li>
+          <li>Risk scoring: Tool Category 30%, Reversibility 15%, Resource Cost 15%</li>
+          <li>Full audit trail for SOC2/ISO 27001 compliance requirements</li>
+          <li>Real-time WebSocket communication for live fleet status</li>
+          <li>Command palette (Cmd+K) for rapid navigation across 50+ views</li>
+        </ul>
+      </div>
+    </div>
+
+    <a href="sentrix.htm" class="case-study-link">View Full Case Study &rarr;</a>
+  </div>
+</div>
+
+<!-- ============================================
+     04 — PUBMED CLUSTERING
+     ============================================ -->
+<div class="container" id="pubmed">
+  <div class="project-section">
+    <span class="label">04 &mdash; PubMed Topic Modeling</span>
+    <div class="project-header">
+      <div class="project-header-text">
+        <h2>LLM-Augmented Topic Modeling in <em>Radiation Oncology</em></h2>
+        <p>
+          An end-to-end NLP pipeline analyzing <strong>4,277 medical abstracts</strong> from the International Journal of Radiation Oncology using BERTopic, PubMedBERT embeddings, and a novel two-phase GPT validation framework. Maps research trends across a full decade (2013&ndash;2023) of radiation oncology literature.
+        </p>
+        <p>
+          Achieved <strong>90% LLM validation agreement</strong> and submitted an abstract to <strong>ASTRO 2026</strong> (American Society for Radiation Oncology). Includes 14 interactive Altair visualizations and a comprehensive validation pipeline.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">BERTopic</span>
+        <span class="tag highlight">Python</span>
+        <span class="tag">PubMedBERT</span>
+        <span class="tag">GPT-4o-mini</span>
+        <span class="tag">UMAP</span>
+        <span class="tag">HDBSCAN</span>
+        <span class="tag">c-TF-IDF</span>
+        <span class="tag">Altair</span>
+        <span class="tag">Pandas</span>
+        <span class="tag">Scikit-learn</span>
+        <span class="tag">PubMed API</span>
+      </div>
+    </div>
+
+    <div class="project-metrics">
+      <div class="project-metric">
+        <div class="pm-value">4,277</div>
+        <div class="pm-label">Abstracts Analyzed</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">101</div>
+        <div class="pm-label">Topics Discovered</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">90<span class="accent">%</span></div>
+        <div class="pm-label">Validation Agreement</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">14</div>
+        <div class="pm-label">Visualizations</div>
+      </div>
+    </div>
+
+    <div class="pipeline-flow cols-6">
+      <div class="pipeline-step">
+        <div class="step-number">01</div>
+        <div class="step-name">Collect</div>
+        <div class="step-detail">4,277 abstracts with full metadata via NCBI Entrez API</div>
+        <span class="step-tool">PubMed API</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">02</div>
+        <div class="step-name">Preprocess</div>
+        <div class="step-detail">Stop word removal, text cleaning, 21+ metadata fields preserved</div>
+        <span class="step-tool">Pandas</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">03</div>
+        <div class="step-name">Embed</div>
+        <div class="step-detail">Domain-optimized 768-dim medical text embeddings</div>
+        <span class="step-tool">PubMedBERT</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">04</div>
+        <div class="step-name">Cluster</div>
+        <div class="step-detail">Density-based clustering with dimensionality reduction</div>
+        <span class="step-tool">UMAP + HDBSCAN</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">05</div>
+        <div class="step-name">Validate</div>
+        <div class="step-detail">Two-phase LLM pipeline: topic merge + document fit scoring</div>
+        <span class="step-tool">GPT-4o-mini</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">06</div>
+        <div class="step-name">Visualize</div>
+        <div class="step-detail">Interactive Altair charts, t-SNE scatter plots, growth timelines</div>
+        <span class="step-tool">Altair</span>
+      </div>
+    </div>
+
+    <div class="impact-grid">
+      <div class="impact-block">
+        <span class="label">Key Results</span>
+        <h3>Research Findings</h3>
+        <ul class="finding-list">
+          <li>Identified 5 emerging frontiers and 5 declining research areas</li>
+          <li>Field-wide shift toward hypofractionation, stereotactic techniques, and immunotherapy</li>
+          <li>Only <strong>2.5%</strong> strong disagreements in LLM validation (1/40 documents)</li>
+          <li>Outlier reduction from 18.6% to 6.9% through c-TF-IDF threshold tuning</li>
+          <li>Estimated accuracy improvement from 90% to 95%+ by addressing 5 worst topics</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">Academic Impact</span>
+        <h3>Publication Pipeline</h3>
+        <ul class="finding-list">
+          <li>Abstract submitted to <strong>ASTRO 2026</strong> annual conference</li>
+          <li>14 interactive Altair HTML visualizations generated</li>
+          <li>Novel two-phase LLM validation framework for topic modeling</li>
+          <li>Comprehensive portfolio and PDF case study produced</li>
+          <li>Framework generalizable to any medical literature corpus</li>
+        </ul>
+      </div>
+    </div>
+
+    <a href="pubmed-clustering.htm" class="case-study-link">View Full Case Study &rarr;</a>
+  </div>
+</div>
+
+<!-- ============================================
+     05 — SEC BUSINESS CLASSIFIER
+     ============================================ -->
+<div class="container" id="sec-classifier">
+  <div class="project-section">
+    <span class="label">05 &mdash; SEC Business Classifier</span>
+    <div class="project-header">
+      <div class="project-header-text">
+        <h2>RoBERTa-Powered SEC <em>Business Classification</em></h2>
+        <p>
+          A production-grade SEC filings analysis system using <strong>fine-tuned RoBERTa models</strong> to classify business descriptions into sectors, industries, and sub-industries. Features a 10-method classification cascade with fallback transparency, SIC/NAICS code crosswalk mapping across 159 codes and 16 sectors, and <strong>60.8% text reduction</strong> through semantic summarization.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">RoBERTa</span>
+        <span class="tag highlight">PyTorch</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Sentence-Transformers</span>
+        <span class="tag">Scikit-learn</span>
+        <span class="tag">SEC EDGAR</span>
+      </div>
+    </div>
+
+    <div class="project-metrics">
+      <div class="project-metric">
+        <div class="pm-value">100<span class="accent">%</span></div>
+        <div class="pm-label">Validation Accuracy</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">880</div>
+        <div class="pm-label">Training Examples</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">159</div>
+        <div class="pm-label">SIC Codes Mapped</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">60.8<span class="accent">%</span></div>
+        <div class="pm-label">Text Reduction</div>
+      </div>
+    </div>
+
+    <ul class="finding-list">
+      <li>Fine-tuned RoBERTa with GPU-accelerated inference for business description classification</li>
+      <li>10 classification methods with 18 rule categories for transparent fallback chains</li>
+      <li>SIC/NAICS crosswalk mapping across 159 codes and 16 sectors</li>
+      <li>0.75 confidence threshold for theme-based fallback with 0.55 dominance ratio for conglomerate detection</li>
+      <li>Semantic summarization achieves 60.8% text reduction while preserving classification signal</li>
+      <li>5-phase development from data collection to production deployment</li>
+    </ul>
+
+    <a href="sec-classifier.htm" class="case-study-link">View Full Case Study &rarr;</a>
+  </div>
+</div>
+
+<!-- ============================================
+     06 — MUSIC EMOTION CLASSIFICATION
+     ============================================ -->
+<div class="container" id="music-emotion">
+  <div class="project-section">
+    <span class="label">06 &mdash; Emotion-Based Music Recommender</span>
+    <div class="project-header">
+      <div class="project-header-text">
+        <h2>Multimodal <em>Video-to-Music</em> Recommendation</h2>
+        <p>
+          An AI system that analyzes video content using <strong>Google Cloud Video Intelligence API</strong>, classifies the emotional content with a trained Keras neural network, and recommends emotionally matching music from Spotify playlists. Bridges three modalities &mdash; visual content, emotion classification, and audio features &mdash; into a unified recommendation pipeline.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">TensorFlow</span>
+        <span class="tag highlight">Keras</span>
+        <span class="tag">Google Cloud</span>
+        <span class="tag">Spotify API</span>
+        <span class="tag">Scikit-learn</span>
+        <span class="tag">Python</span>
+      </div>
+    </div>
+
+    <div class="project-metrics">
+      <div class="project-metric">
+        <div class="pm-value">3</div>
+        <div class="pm-label">APIs Integrated</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">3</div>
+        <div class="pm-label">Modalities Bridged</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">1</div>
+        <div class="pm-label">Trained Model (.h5)</div>
+      </div>
+      <div class="project-metric">
+        <div class="pm-value">4</div>
+        <div class="pm-label">Pipeline Stages</div>
+      </div>
+    </div>
+
+    <div class="pipeline-flow cols-4">
+      <div class="pipeline-step">
+        <div class="step-number">01</div>
+        <div class="step-name">Fetch</div>
+        <div class="step-detail">Retrieve Spotify playlist metadata and audio features</div>
+        <span class="step-tool">Spotify API</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">02</div>
+        <div class="step-name">Analyze</div>
+        <div class="step-detail">Extract labels and scene context from video content</div>
+        <span class="step-tool">Video Intelligence</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">03</div>
+        <div class="step-name">Classify</div>
+        <div class="step-detail">Train emotion classifier on audio features with standardized scaling</div>
+        <span class="step-tool">Keras (.h5)</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">04</div>
+        <div class="step-name">Recommend</div>
+        <div class="step-detail">Match video emotional tone to music tracks by predicted emotion</div>
+        <span class="step-tool">Python</span>
+      </div>
+    </div>
+
+    <a href="music-emotion.htm" class="case-study-link">View Full Case Study &rarr;</a>
+  </div>
+</div>
+
+<!-- ============================================
+     07 — SECONDARY PROJECTS
+     ============================================ -->
+<div class="container">
+  <div class="section">
+    <span class="label">07 &mdash; Additional Projects</span>
+    <div class="secondary-grid">
+
+      <div class="secondary-card">
+        <span class="card-type">Prototype</span>
+        <h4>SECProto</h4>
+        <p>MVP SEC document analyzer using FAISS vector search and BART summarization. Predecessor to EasySEC &mdash; grew from 5 to 13 modules (+160%), 1,080 to 3,333 LOC (+208%).</p>
+        <span class="tag sm">FAISS</span>
+        <span class="tag sm">BART</span>
+        <span class="tag sm">Python</span>
+      </div>
+
+      <div class="secondary-card">
+        <span class="card-type">Computer Vision</span>
+        <h4>AI Video Automation</h4>
+        <p>Multi-source video scraper with Real-ESRGAN AI super resolution for anime content. GPU-accelerated 2x/3x/4x upscaling with category-based organization.</p>
+        <span class="tag sm">Real-ESRGAN</span>
+        <span class="tag sm">PyTorch</span>
+        <span class="tag sm">yt-dlp</span>
+      </div>
+
+      <div class="secondary-card">
+        <span class="card-type">Conversational AI</span>
+        <h4>RasaCall</h4>
+        <p>Rasa-based conversational AI assistant with NLU training data, domain definitions, conversation stories, rules, and full dialogue management pipeline.</p>
+        <span class="tag sm">Rasa</span>
+        <span class="tag sm">NLU</span>
+        <span class="tag sm">Python</span>
+      </div>
+
+      <div class="secondary-card">
+        <span class="card-type">Security</span>
+        <h4>Password Cracking Tool</h4>
+        <p>Educational security tool supporting brute force and dictionary attacks against MD5, SHA-256, and BCrypt hashes. Includes 10K common password dictionary.</p>
+        <span class="tag sm">Python</span>
+        <span class="tag sm">hashlib</span>
+        <span class="tag sm">argparse</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<div class="container">
+  <div class="footer">
+    <div class="footer-left">
+      Addison Apisarnthanarax &mdash;
+      <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &middot;
+      <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &middot;
+      <a href="mailto:AddisonApisarn@gmail.com">AddisonApisarn@gmail.com</a>
+    </div>
+    <div class="footer-right">Portfolio &mdash; 2026</div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addison Apisarnthanarax — DJI Cloud Simulator Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+  :root {
+    --black: #0a0a0a; --white: #fafaf9; --accent: #e11d48; --accent-light: #fff1f2;
+    --gray-100: #f5f5f4; --gray-200: #e7e5e4; --gray-400: #a8a29e; --gray-600: #57534e; --gray-800: #292524;
+    --border: 3px solid var(--black); --border-thin: 1.5px solid var(--black);
+    --mono: 'Space Mono', 'Courier New', monospace; --sans: 'Space Grotesk', 'Arial', sans-serif; --serif: 'Instrument Serif', 'Georgia', serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body { background: var(--white); color: var(--black); font-family: var(--sans); line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .section { padding: 4rem 0; border-bottom: var(--border); }
+  .section:last-of-type { border-bottom: none; }
+  .label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray-600); margin-bottom: 0.75rem; display: block; }
+  .accent { color: var(--accent); }
+  .back-link { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; display: inline-block; padding: 1.5rem 0; }
+  .hero { padding: 3rem 0 2rem; border-bottom: var(--border); }
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; gap: 2rem; flex-wrap: wrap; }
+  .hero-name { font-family: var(--mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.2em; border: var(--border); padding: 0.5rem 1rem; display: inline-block; }
+  .hero-meta { font-family: var(--mono); font-size: 0.7rem; text-align: right; color: var(--gray-600); line-height: 1.8; }
+  .hero-meta a { font-weight: 400; }
+  .hero-title { font-family: var(--serif); font-size: clamp(2.5rem, 5.5vw, 4.2rem); line-height: 1.08; font-weight: 400; margin-bottom: 1.5rem; max-width: 900px; letter-spacing: -0.02em; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-subtitle { font-family: var(--mono); font-size: 0.8rem; color: var(--gray-600); letter-spacing: 0.05em; max-width: 700px; line-height: 1.7; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: var(--border); margin-top: 2.5rem; }
+  .metric { padding: 1.5rem 1rem; border-right: var(--border-thin); }
+  .metric:last-child { border-right: none; }
+  .metric-value { font-family: var(--serif); font-size: 2.8rem; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+  .metric-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-600); }
+  .overview-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .overview-text { font-size: 1.05rem; line-height: 1.75; color: var(--gray-800); }
+  .overview-text p { margin-bottom: 1.25rem; }
+  .overview-text strong { color: var(--black); font-weight: 600; }
+  .tags-box { border: var(--border); padding: 1.5rem; align-self: start; }
+  .tags-box .label { margin-bottom: 1rem; }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.65rem; border: 1.5px solid var(--black); margin: 0 0.4rem 0.5rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag.highlight { background: var(--black); color: var(--white); }
+  /* SCENARIO CARDS */
+  .scenario-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
+  .scenario-card { border: var(--border); padding: 1.5rem; margin-right: -3px; margin-bottom: -3px; }
+  .scenario-card .scn-tag { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.5rem; display: block; }
+  .scenario-card h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+  .scenario-card .scn-cmd { font-family: var(--mono); font-size: 0.7rem; background: var(--black); color: var(--white); padding: 0.5rem 0.75rem; margin-bottom: 0.75rem; overflow-x: auto; white-space: nowrap; }
+  .scenario-card p { font-size: 0.85rem; line-height: 1.6; color: var(--gray-800); }
+  /* MQTT TOPIC FLOW */
+  .mqtt-flow { border: var(--border); padding: 0; overflow: hidden; }
+  .mqtt-row { display: grid; grid-template-columns: 1fr 2.5fr 1fr 2fr; align-items: stretch; border-bottom: 1px solid var(--gray-200); }
+  .mqtt-row:last-child { border-bottom: none; }
+  .mqtt-row > div { padding: 1rem 1.25rem; border-right: 1px solid var(--gray-200); display: flex; align-items: center; }
+  .mqtt-row > div:last-child { border-right: none; }
+  .mqtt-row.header { background: var(--black); color: var(--white); font-family: var(--mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; }
+  .mqtt-row.header > div { border-right-color: var(--gray-800); }
+  .mqtt-topic { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); }
+  .mqtt-qos { font-family: var(--mono); font-size: 0.7rem; }
+  .mqtt-qos.q1 { color: var(--accent); font-weight: 700; }
+  .mqtt-rate { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-600); }
+  .mqtt-content { font-size: 0.78rem; }
+  /* TIMELINE */
+  .timeline { border: var(--border); padding: 1.5rem 2rem; margin-top: 1.5rem; font-family: var(--mono); font-size: 0.75rem; line-height: 2; }
+  .timeline .tl-line { display: grid; grid-template-columns: 90px 110px 1fr; gap: 1rem; padding: 0.35rem 0; border-bottom: 1px dashed var(--gray-200); }
+  .timeline .tl-line:last-child { border-bottom: none; }
+  .timeline .tl-time { color: var(--gray-600); }
+  .timeline .tl-event { font-weight: 700; color: var(--accent); text-transform: uppercase; font-size: 0.62rem; letter-spacing: 0.1em; align-self: center; }
+  .timeline .tl-event.osd { color: var(--gray-800); }
+  .timeline .tl-event.hms { color: var(--accent); }
+  .timeline .tl-event.mission { color: #166534; }
+  .timeline .tl-detail { color: var(--gray-800); font-size: 0.72rem; }
+  /* USE CASES */
+  .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .impact-block { padding: 2rem; border: var(--border); margin-right: -3px; margin-bottom: -3px; }
+  .impact-block h3 { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 1rem; }
+  .impact-block.dark { background: var(--black); color: var(--white); }
+  .impact-block.dark h3 { color: var(--white); }
+  .impact-block.dark .label { color: var(--accent); }
+  .finding-list { list-style: none; }
+  .finding-list li { font-size: 0.88rem; padding: 0.5rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); line-height: 1.5; }
+  .impact-block.dark .finding-list li { border-color: var(--gray-800); color: var(--gray-400); }
+  .finding-list li::before { content: '\2192'; margin-right: 0.5rem; color: var(--accent); font-weight: 700; }
+  .footer { padding: 2rem 0; border-top: var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-left { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-600); letter-spacing: 0.05em; }
+  .footer-right { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.1em; }
+  @media (max-width: 768px) {
+    .hero-top { flex-direction: column; }
+    .hero-meta { text-align: left; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric { border-bottom: var(--border-thin); }
+    .overview-grid { grid-template-columns: 1fr; }
+    .scenario-grid { grid-template-columns: 1fr; }
+    .mqtt-row { grid-template-columns: 1fr; }
+    .mqtt-row > div { border-right: none; border-bottom: 1px solid var(--gray-200); }
+    .timeline .tl-line { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="index.html" class="back-link">&larr; Back to Portfolio</a>
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-name">Addison Apisarnthanarax</div>
+      <div class="hero-meta">
+        <a href="https://github.com/YuYongJu/dji-cloud-simulator" target="_blank">GitHub</a> &mdash;
+        <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &mdash;
+        <a href="mailto:AddisonApisarn@gmail.com">Email</a><br>
+        Open-Source Tool &mdash; 2026
+      </div>
+    </div>
+    <h1 class="hero-title">Spec-Accurate MQTT Simulator for the <em>DJI Cloud API</em></h1>
+    <p class="hero-subtitle">Realistic telemetry, HMS alarms, and mission progress events as if a Matrice 30T drone were connected via DJI Dock 2 &mdash; for integration testing, adapter development, and exploring the DJI Cloud API message format without physical hardware.</p>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value">4</div>
+        <div class="metric-label">Built-In Scenarios</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">30<span class="accent">+</span></div>
+        <div class="metric-label">Telemetry Fields</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">npx</div>
+        <div class="metric-label">Zero-Install Run</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">MIT</div>
+        <div class="metric-label">License</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 — OVERVIEW -->
+<div class="container">
+  <div class="section">
+    <div class="overview-grid">
+      <div class="overview-text">
+        <span class="label">01 &mdash; Project Overview</span>
+        <p>
+          DJI Cloud Simulator is a single-file, zero-build MQTT publisher that emits the exact wire-format messages a real DJI Dock 2 + Matrice 30T setup would emit &mdash; OSD telemetry, HMS alarms, mission progress events, device lifecycle transitions &mdash; against any MQTT broker. It exists because writing integrations against the DJI Cloud API without physical hardware is otherwise impossible: developers either buy a $30K+ dock or guess at the message format from incomplete docs.
+        </p>
+        <p>
+          The simulator is <strong>spec-accurate</strong>, not "close enough." Topic structure, QoS levels, payload schemas, nested status/progress/ext fields, and timing intervals all match the live DJI Cloud API. Adapter code that handles the simulator handles a real drone &mdash; verified against production deployments at Panoptris.
+        </p>
+        <p>
+          Open-sourced by Panoptris under MIT. Run with one command: <code>npx github:YuYongJu/dji-cloud-simulator</code>. No clone, no install, no config file required for the default patrol scenario.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">Node.js 22 LTS</span>
+        <span class="tag highlight">mqtt.js 5</span>
+        <span class="tag">node:test</span>
+        <span class="tag">ESLint 9</span>
+        <span class="tag">GitHub Actions</span>
+        <span class="tag">npm trusted publishing</span>
+        <span class="tag">npm provenance</span>
+        <span class="tag">MIT License</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 02 — SCENARIOS -->
+<div class="container">
+  <div class="section">
+    <span class="label">02 &mdash; Built-In Scenarios</span>
+    <p style="font-size: 0.95rem; color: var(--gray-800); max-width: 700px; margin-bottom: 1.5rem;">
+      Each scenario exercises a different surface of the DJI Cloud API contract. Run with <code>--scenario &lt;name&gt;</code>.
+    </p>
+    <div class="scenario-grid">
+      <div class="scenario-card">
+        <span class="scn-tag">Default</span>
+        <h3>patrol</h3>
+        <div class="scn-cmd">npx dji-cloud-simulator</div>
+        <p>Continuous patrol loop. OSD every 2s, dock telemetry every 10s, HMS alarms every 40s. Runs until Ctrl+C. The smoke test for any DJI Cloud adapter.</p>
+      </div>
+      <div class="scenario-card">
+        <span class="scn-tag">Lifecycle</span>
+        <h3>mission</h3>
+        <div class="scn-cmd">--scenario mission</div>
+        <p>Full mission flight: takeoff, four waypoints, landing. Publishes <code>flighttask_progress</code> events with nested status, progress, and ext fields matching the live spec.</p>
+      </div>
+      <div class="scenario-card">
+        <span class="scn-tag">Alarming</span>
+        <h3>hms-alarm</h3>
+        <div class="scn-cmd">--scenario hms-alarm</div>
+        <p>Five HMS alarm bursts with escalating cell imbalance. Compass interference fires first; battery imbalance joins once voltage differential exceeds the 200 mV threshold &mdash; matching real failure progression.</p>
+      </div>
+      <div class="scenario-card">
+        <span class="scn-tag">Edge Case</span>
+        <h3>offline</h3>
+        <div class="scn-cmd">--scenario offline</div>
+        <p>Device comes online, sends one OSD frame, then disconnects. Tests how your adapter handles device lifecycle transitions and stale-connection detection.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 — MQTT TOPIC FLOW -->
+<div class="container">
+  <div class="section">
+    <span class="label">03 &mdash; MQTT Wire Format</span>
+    <p style="font-size: 0.95rem; color: var(--gray-800); max-width: 700px; margin-bottom: 1.5rem;">
+      The simulator publishes to the same topics, with the same QoS, at the same rates as a real DJI Dock. Topic placeholders <code>{gatewaySn}</code> and <code>{deviceSn}</code> resolve to the configured serials.
+    </p>
+    <div class="mqtt-flow">
+      <div class="mqtt-row header">
+        <div>QoS</div>
+        <div>Topic</div>
+        <div>Rate</div>
+        <div>Content</div>
+      </div>
+      <div class="mqtt-row">
+        <div class="mqtt-qos q1">QoS 1</div>
+        <div class="mqtt-topic">sys/product/{gatewaySn}/status</div>
+        <div class="mqtt-rate">on event</div>
+        <div class="mqtt-content">Device online/offline via update_topo</div>
+      </div>
+      <div class="mqtt-row">
+        <div class="mqtt-qos">QoS 0</div>
+        <div class="mqtt-topic">thing/product/{deviceSn}/osd</div>
+        <div class="mqtt-rate">0.5 Hz</div>
+        <div class="mqtt-content">Aircraft telemetry, 30+ fields</div>
+      </div>
+      <div class="mqtt-row">
+        <div class="mqtt-qos">QoS 0</div>
+        <div class="mqtt-topic">thing/product/{gatewaySn}/osd</div>
+        <div class="mqtt-rate">0.1 Hz</div>
+        <div class="mqtt-content">Dock telemetry</div>
+      </div>
+      <div class="mqtt-row">
+        <div class="mqtt-qos">QoS 0</div>
+        <div class="mqtt-topic">thing/product/{deviceSn}/state</div>
+        <div class="mqtt-rate">on change</div>
+        <div class="mqtt-content">Firmware version and state transitions</div>
+      </div>
+      <div class="mqtt-row">
+        <div class="mqtt-qos q1">QoS 1</div>
+        <div class="mqtt-topic">thing/product/{gatewaySn}/events</div>
+        <div class="mqtt-rate">on event</div>
+        <div class="mqtt-content">HMS alarms, mission progress</div>
+      </div>
+      <div class="mqtt-row">
+        <div class="mqtt-qos q1">QoS 1</div>
+        <div class="mqtt-topic">thing/product/{gatewaySn}/services_reply</div>
+        <div class="mqtt-rate">on inbound</div>
+        <div class="mqtt-content">Auto-ack for inbound commands</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 — SAMPLE TIMELINE -->
+<div class="container">
+  <div class="section">
+    <span class="label">04 &mdash; Sample HMS-Alarm Timeline</span>
+    <p style="font-size: 0.95rem; color: var(--gray-800); max-width: 700px;">
+      Excerpt from the <code>hms-alarm</code> scenario showing escalating compass + battery faults over a 40-second window. Voltage differential crosses the 200 mV threshold at 0:32 &mdash; battery alarm fires, joining the existing compass alarm.
+    </p>
+    <div class="timeline">
+      <div class="tl-line">
+        <div class="tl-time">+00:00</div>
+        <div class="tl-event">Status</div>
+        <div class="tl-detail">update_topo &mdash; device online &middot; firmware v04.00.0700</div>
+      </div>
+      <div class="tl-line">
+        <div class="tl-time">+00:02</div>
+        <div class="tl-event osd">OSD</div>
+        <div class="tl-detail">battery 95% &middot; alt 80m &middot; voltage_diff 12 mV &middot; mode patrol</div>
+      </div>
+      <div class="tl-line">
+        <div class="tl-time">+00:08</div>
+        <div class="tl-event hms">HMS</div>
+        <div class="tl-detail">code 0x16100001 &middot; level 1 &middot; compass interference detected</div>
+      </div>
+      <div class="tl-line">
+        <div class="tl-time">+00:16</div>
+        <div class="tl-event osd">OSD</div>
+        <div class="tl-detail">battery 92% &middot; voltage_diff 87 mV &middot; mode patrol</div>
+      </div>
+      <div class="tl-line">
+        <div class="tl-time">+00:24</div>
+        <div class="tl-event hms">HMS</div>
+        <div class="tl-detail">code 0x16100001 &middot; level 2 &middot; compass interference escalated</div>
+      </div>
+      <div class="tl-line">
+        <div class="tl-time">+00:32</div>
+        <div class="tl-event hms">HMS</div>
+        <div class="tl-detail">code 0x16100086 &middot; level 2 &middot; battery cell imbalance &middot; imminent: true</div>
+      </div>
+      <div class="tl-line">
+        <div class="tl-time">+00:34</div>
+        <div class="tl-event osd">OSD</div>
+        <div class="tl-detail">battery 90% &middot; voltage_diff 218 mV &middot; mode return-to-home</div>
+      </div>
+      <div class="tl-line">
+        <div class="tl-time">+00:40</div>
+        <div class="tl-event mission">MISSION</div>
+        <div class="tl-detail">flighttask_progress &middot; status: returning &middot; progress: 12%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 05 — IMPACT -->
+<div class="container">
+  <div class="section">
+    <span class="label">05 &mdash; Why It Exists</span>
+    <div class="impact-grid">
+      <div class="impact-block">
+        <span class="label">For Developers</span>
+        <h3>Hardware-Free Iteration</h3>
+        <ul class="finding-list">
+          <li>Build DJI Cloud adapters without a $30K+ dock</li>
+          <li>Reproduce HMS alarm sequences for adapter unit tests</li>
+          <li>Single command via npx &mdash; no clone, no install</li>
+          <li>JSON config for custom waypoints, intervals, alarm codes</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">For Panoptris</span>
+        <h3>CI Without Hardware</h3>
+        <ul class="finding-list">
+          <li>Drone integration tests run in GitHub Actions</li>
+          <li>Regression coverage for the MQTT adapter pipeline</li>
+          <li>Mission lifecycle tests don't need a physical dock</li>
+          <li>Open-sourcing benefits the broader DJI dev community</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">Engineering Choices</span>
+        <h3>Disciplined Minimalism</h3>
+        <ul class="finding-list">
+          <li>Single dependency (mqtt.js) &mdash; small attack surface</li>
+          <li>Native node:test runner &mdash; no Vitest/Jest overhead</li>
+          <li>ESLint flat config v9 &mdash; LTS stability</li>
+          <li>Allowlist publish via files field &mdash; nothing leaks</li>
+        </ul>
+      </div>
+      <div class="impact-block">
+        <span class="label">Supply Chain</span>
+        <h3>Modern Publish Posture</h3>
+        <ul class="finding-list">
+          <li>npm trusted publishing (OIDC) &mdash; no long-lived tokens</li>
+          <li>npm provenance attestation on every release</li>
+          <li>CI matrix across Node 18, 20, 22 LTS</li>
+          <li>Pre-publish dry-run validation in CI</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="footer">
+    <div class="footer-left">
+      Addison Apisarnthanarax &mdash;
+      <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &middot;
+      <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &middot;
+      <a href="mailto:AddisonApisarn@gmail.com">AddisonApisarn@gmail.com</a>
+    </div>
+    <div class="footer-right">Portfolio &mdash; 2026</div>
+  </div>
+</div>
+</body>
+</html>

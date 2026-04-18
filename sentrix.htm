@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addison Apisarnthanarax — Sentrix Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+  :root {
+    --black: #0a0a0a; --white: #fafaf9; --accent: #e11d48; --accent-light: #fff1f2;
+    --gray-100: #f5f5f4; --gray-200: #e7e5e4; --gray-400: #a8a29e; --gray-600: #57534e; --gray-800: #292524;
+    --border: 3px solid var(--black); --border-thin: 1.5px solid var(--black);
+    --mono: 'Space Mono', 'Courier New', monospace; --sans: 'Space Grotesk', 'Arial', sans-serif; --serif: 'Instrument Serif', 'Georgia', serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+  body { background: var(--white); color: var(--black); font-family: var(--sans); line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+  .section { padding: 4rem 0; border-bottom: var(--border); }
+  .section:last-of-type { border-bottom: none; }
+  .label { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--gray-600); margin-bottom: 0.75rem; display: block; }
+  .accent { color: var(--accent); }
+  .back-link { font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; display: inline-block; padding: 1.5rem 0; }
+
+  /* HERO */
+  .hero { padding: 3rem 0 2rem; border-bottom: var(--border); }
+  .hero-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2.5rem; gap: 2rem; flex-wrap: wrap; }
+  .hero-name { font-family: var(--mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.2em; border: var(--border); padding: 0.5rem 1rem; display: inline-block; }
+  .hero-meta { font-family: var(--mono); font-size: 0.7rem; text-align: right; color: var(--gray-600); line-height: 1.8; }
+  .hero-meta a { font-weight: 400; }
+  .hero-title { font-family: var(--serif); font-size: clamp(2.5rem, 5.5vw, 4.2rem); line-height: 1.08; font-weight: 400; margin-bottom: 1.5rem; max-width: 900px; letter-spacing: -0.02em; }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-subtitle { font-family: var(--mono); font-size: 0.8rem; color: var(--gray-600); letter-spacing: 0.05em; max-width: 700px; line-height: 1.7; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: var(--border); margin-top: 2.5rem; }
+  .metric { padding: 1.5rem 1rem; border-right: var(--border-thin); }
+  .metric:last-child { border-right: none; }
+  .metric-value { font-family: var(--serif); font-size: 2.8rem; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+  .metric-label { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-600); }
+
+  /* OVERVIEW */
+  .overview-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .overview-text { font-size: 1.05rem; line-height: 1.75; color: var(--gray-800); }
+  .overview-text p { margin-bottom: 1.25rem; }
+  .overview-text strong { color: var(--black); font-weight: 600; }
+  .tags-box { border: var(--border); padding: 1.5rem; align-self: start; }
+  .tags-box .label { margin-bottom: 1rem; }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; padding: 0.35rem 0.65rem; border: 1.5px solid var(--black); margin: 0 0.4rem 0.5rem 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .tag.highlight { background: var(--black); color: var(--white); }
+
+  /* PIPELINE */
+  .pipeline-flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border: var(--border); }
+  .pipeline-step { padding: 1.5rem 1rem; border-right: var(--border-thin); position: relative; }
+  .pipeline-step:last-child { border-right: none; }
+  .pipeline-step:hover { background: var(--accent-light); }
+  .step-number { font-family: var(--serif); font-size: 2rem; color: var(--accent); line-height: 1; margin-bottom: 0.6rem; }
+  .step-name { font-family: var(--sans); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+  .step-detail { font-family: var(--mono); font-size: 0.62rem; color: var(--gray-600); line-height: 1.6; }
+  .step-tool { font-family: var(--mono); font-size: 0.6rem; display: inline-block; margin-top: 0.6rem; padding: 0.2rem 0.4rem; border: 1px solid var(--gray-400); color: var(--gray-600); }
+
+  /* METHOD CARDS */
+  .method-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+  .method-card { border: var(--border); padding: 2rem 1.5rem; margin-right: -3px; margin-bottom: -3px; }
+  .method-card h3 { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.4rem; }
+  .method-card .method-phase { font-family: var(--mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 1rem; display: block; }
+  .method-card p { font-size: 0.88rem; line-height: 1.65; color: var(--gray-800); }
+  .method-card ul { list-style: none; margin-top: 0.75rem; }
+  .method-card ul li { font-family: var(--mono); font-size: 0.72rem; padding: 0.3rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); }
+  .method-card ul li:first-child { border-top: none; }
+
+  /* RESULTS */
+  .results-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: var(--border); margin-bottom: 2.5rem; }
+  .results-metric { padding: 1.5rem; border-right: var(--border-thin); text-align: center; }
+  .results-metric:last-child { border-right: none; }
+  .results-metric .rm-value { font-family: var(--serif); font-size: 2.2rem; line-height: 1.1; color: var(--accent); }
+  .results-metric .rm-label { font-family: var(--mono); font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-600); margin-top: 0.3rem; }
+
+  /* AUTONOMY LEVELS */
+  .level-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border: var(--border); margin-bottom: 2.5rem; }
+  .level-card { padding: 1.5rem 1rem; border-right: var(--border-thin); }
+  .level-card:last-child { border-right: none; }
+  .level-card:hover { background: var(--accent-light); }
+  .level-num { font-family: var(--serif); font-size: 1.8rem; color: var(--accent); line-height: 1; margin-bottom: 0.4rem; }
+  .level-name { font-family: var(--sans); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; }
+  .level-desc { font-family: var(--mono); font-size: 0.6rem; color: var(--gray-600); line-height: 1.5; }
+
+  /* FINDING LIST */
+  .finding-list { list-style: none; margin-top: 1rem; }
+  .finding-list li { font-size: 0.88rem; padding: 0.5rem 0; border-top: 1px solid var(--gray-200); color: var(--gray-800); line-height: 1.5; }
+  .finding-list li::before { content: '\2192'; margin-right: 0.5rem; color: var(--accent); font-weight: 700; }
+
+  /* IMPACT */
+  .impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .impact-block { padding: 2rem; border: var(--border); margin-right: -3px; margin-bottom: -3px; }
+  .impact-block h3 { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 1rem; }
+  .impact-block p { font-size: 0.92rem; line-height: 1.7; color: var(--gray-800); }
+  .impact-block.dark { background: var(--black); color: var(--white); }
+  .impact-block.dark h3 { color: var(--white); }
+  .impact-block.dark p { color: var(--gray-400); }
+  .impact-block.dark .label { color: var(--accent); }
+  .impact-block.dark .finding-list li { border-color: var(--gray-800); color: var(--gray-400); }
+
+  /* RISK STRIP */
+  .risk-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; border: var(--border); margin-top: 2rem; }
+  .risk-factor { padding: 1rem 0.8rem; border-right: var(--border-thin); text-align: center; }
+  .risk-factor:last-child { border-right: none; }
+  .risk-factor .rf-value { font-family: var(--serif); font-size: 1.6rem; color: var(--accent); line-height: 1; margin-bottom: 0.2rem; }
+  .risk-factor .rf-label { font-family: var(--mono); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-600); }
+
+  /* FOOTER */
+  .footer { padding: 2rem 0; border-top: var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-left { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-600); letter-spacing: 0.05em; }
+  .footer-right { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-400); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  @media print {
+    body { font-size: 14px; }
+    .section { padding: 2rem 0; break-inside: avoid; }
+    .hero { padding: 1.5rem 0; }
+    .pipeline-step:hover, .level-card:hover { background: transparent; }
+  }
+  @media (max-width: 768px) {
+    .hero-top { flex-direction: column; }
+    .hero-meta { text-align: left; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric { border-bottom: var(--border-thin); }
+    .overview-grid { grid-template-columns: 1fr; }
+    .pipeline-flow { grid-template-columns: repeat(2, 1fr); }
+    .pipeline-step { border-bottom: var(--border-thin); }
+    .method-cards { grid-template-columns: 1fr; }
+    .results-metrics { grid-template-columns: 1fr; }
+    .results-metric { border-right: none; border-bottom: var(--border-thin); }
+    .level-strip { grid-template-columns: repeat(2, 1fr); }
+    .level-card { border-bottom: var(--border-thin); }
+    .risk-strip { grid-template-columns: repeat(3, 1fr); }
+    .risk-factor { border-bottom: var(--border-thin); }
+    .impact-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="portfolio.htm" class="back-link">&larr; Back to Portfolio</a>
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-name">Addison Apisarnthanarax</div>
+      <div class="hero-meta">
+        <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &mdash;
+        <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &mdash;
+        <a href="mailto:AddisonApisarn@gmail.com">Email</a><br>
+        Full-Stack Platform &mdash; 2025
+      </div>
+    </div>
+    <h1 class="hero-title">AI-Powered Drone <em>Surveillance &amp; Inspection</em></h1>
+    <p class="hero-subtitle">A drone-agnostic AI platform with autonomous decision-making, real-time computer vision, and policy-based risk scoring &mdash; built for enterprise-grade surveillance and inspection operations.</p>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-value">5</div>
+        <div class="metric-label">Autonomy Levels</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">12<span class="accent">+</span></div>
+        <div class="metric-label">Data Models</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">6</div>
+        <div class="metric-label">Risk Score Factors</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">50<span class="accent">+</span></div>
+        <div class="metric-label">UI Views</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 01 — OVERVIEW -->
+<div class="container">
+  <div class="section">
+    <div class="overview-grid">
+      <div class="overview-text">
+        <span class="label">01 &mdash; Project Overview</span>
+        <p>
+          Sentrix enables organizations to plan autonomous drone missions, process live and recorded video feeds through <strong>computer vision pipelines</strong>, generate real-time alerts on detected anomalies, and produce actionable inspection reports. The platform is <strong>drone-agnostic</strong> with hardware adapters for DJI, Skydio, and MAVLink protocols.
+        </p>
+        <p>
+          At its core is the <strong>Autonomous Decision Engine (ADE)</strong> &mdash; a proprietary system with 5 graduated autonomy levels that governs what actions the AI can take autonomously vs. what requires human approval. A <strong>6-factor risk scoring engine</strong> evaluates every proposed action in real-time, weighing tool category, reversibility, resource cost, operational context, time of day, and action frequency.
+        </p>
+        <p>
+          Built as a <strong>hybrid modular monolith</strong> (Next.js app + Python Vision AI service) with multi-tenant data isolation, real-time WebSocket communication, full audit trails for SOC2/ISO 27001 compliance, and 50+ UI views covering dashboards, maps, fleet management, camera feeds, analytics, and enterprise administration.
+        </p>
+      </div>
+      <div class="tags-box">
+        <span class="label">Tech Stack</span>
+        <span class="tag highlight">Next.js 16</span>
+        <span class="tag highlight">TypeScript</span>
+        <span class="tag highlight">React 19</span>
+        <span class="tag">tRPC</span>
+        <span class="tag">Prisma</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Socket.IO</span>
+        <span class="tag">Claude SDK</span>
+        <span class="tag">Tailwind CSS 4</span>
+        <span class="tag">Zustand</span>
+        <span class="tag">Recharts</span>
+        <span class="tag">Leaflet</span>
+        <span class="tag">NextAuth v5</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Caddy</span>
+        <span class="tag">Vitest</span>
+        <span class="tag">jsPDF</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 02 — PIPELINE -->
+<div class="container">
+  <div class="section">
+    <span class="label">02 &mdash; Mission Pipeline</span>
+    <div class="pipeline-flow">
+      <div class="pipeline-step">
+        <div class="step-number">01</div>
+        <div class="step-name">Plan</div>
+        <div class="step-detail">Mission control with waypoint planning, scheduling, geofencing, and fleet assignment</div>
+        <span class="step-tool">Leaflet Maps</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">02</div>
+        <div class="step-name">Fly</div>
+        <div class="step-detail">Hardware-adaptive execution across DJI, Skydio, and MAVLink drone protocols</div>
+        <span class="step-tool">Drone Adapters</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">03</div>
+        <div class="step-name">Detect</div>
+        <div class="step-detail">Real-time video feed analysis with computer vision detection pipeline</div>
+        <span class="step-tool">Python CV</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">04</div>
+        <div class="step-name">Decide</div>
+        <div class="step-detail">Autonomous Decision Engine evaluates actions through 6-factor risk scoring</div>
+        <span class="step-tool">Claude SDK</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-number">05</div>
+        <div class="step-name">Report</div>
+        <div class="step-detail">PDF generation, audit trails, compliance logging, and analytics dashboards</div>
+        <span class="step-tool">jsPDF + Recharts</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 03 — ARCHITECTURE -->
+<div class="container">
+  <div class="section">
+    <span class="label">03 &mdash; Architecture</span>
+    <div class="method-cards">
+      <div class="method-card">
+        <span class="method-phase">Core System</span>
+        <h3>Autonomy Levels</h3>
+        <p>5 graduated levels governing AI decision authority, from passive monitoring to emergency override protocols.</p>
+        <ul>
+          <li>L1: Observer &mdash; monitor only</li>
+          <li>L2: Advisor &mdash; suggest, human confirms</li>
+          <li>L3: Supervised &mdash; auto low-risk</li>
+          <li>L4: Autonomous &mdash; full auto</li>
+          <li>L5: Emergency &mdash; safety override</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <span class="method-phase">Decision Engine</span>
+        <h3>Risk Scoring</h3>
+        <p>Every proposed AI action is evaluated in real-time against 6 weighted factors before execution or escalation.</p>
+        <ul>
+          <li>Tool Category: 30% weight</li>
+          <li>Reversibility: 15% weight</li>
+          <li>Resource Cost: 15% weight</li>
+          <li>Operational Context: 15% weight</li>
+          <li>Time of Day: 10% weight</li>
+          <li>Action Frequency: 15% weight</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <span class="method-phase">Infrastructure</span>
+        <h3>Multi-Tenant</h3>
+        <p>Strict data isolation per organization with full audit trails for enterprise compliance requirements.</p>
+        <ul>
+          <li>Tenant &rarr; User &rarr; Drone hierarchy</li>
+          <li>Mission &rarr; Detection &rarr; Alert flow</li>
+          <li>SOC2/ISO 27001 audit trails</li>
+          <li>Agent reasoning chain logging</li>
+          <li>12+ Prisma data models</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="risk-strip">
+      <div class="risk-factor">
+        <div class="rf-value">30<span class="accent">%</span></div>
+        <div class="rf-label">Tool Category</div>
+      </div>
+      <div class="risk-factor">
+        <div class="rf-value">15<span class="accent">%</span></div>
+        <div class="rf-label">Reversibility</div>
+      </div>
+      <div class="risk-factor">
+        <div class="rf-value">15<span class="accent">%</span></div>
+        <div class="rf-label">Resource Cost</div>
+      </div>
+      <div class="risk-factor">
+        <div class="rf-value">15<span class="accent">%</span></div>
+        <div class="rf-label">Ops Context</div>
+      </div>
+      <div class="risk-factor">
+        <div class="rf-value">10<span class="accent">%</span></div>
+        <div class="rf-label">Time of Day</div>
+      </div>
+      <div class="risk-factor">
+        <div class="rf-value">15<span class="accent">%</span></div>
+        <div class="rf-label">Action Freq</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 — AUTONOMY DETAIL -->
+<div class="container">
+  <div class="section">
+    <span class="label">04 &mdash; Autonomy Levels</span>
+    <div class="level-strip">
+      <div class="level-card">
+        <div class="level-num">L1</div>
+        <div class="level-name">Observer</div>
+        <div class="level-desc">Monitor and log only. No autonomous actions taken. All detections recorded for human review.</div>
+      </div>
+      <div class="level-card">
+        <div class="level-num">L2</div>
+        <div class="level-name">Advisor</div>
+        <div class="level-desc">Suggest actions with reasoning. Human operator must confirm every decision before execution.</div>
+      </div>
+      <div class="level-card">
+        <div class="level-num">L3</div>
+        <div class="level-name">Supervised</div>
+        <div class="level-desc">Execute low-risk actions autonomously. Medium and high-risk actions escalated to human operator.</div>
+      </div>
+      <div class="level-card">
+        <div class="level-num">L4</div>
+        <div class="level-name">Autonomous</div>
+        <div class="level-desc">Full autonomous operation within policy bounds. Actions logged and auditable in real-time.</div>
+      </div>
+      <div class="level-card">
+        <div class="level-num">L5</div>
+        <div class="level-name">Emergency</div>
+        <div class="level-desc">Override normal protocols for safety-critical situations. Immediate action with post-event review.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 05 — IMPACT -->
+<div class="container">
+  <div class="section">
+    <span class="label">05 &mdash; Impact</span>
+    <div class="impact-grid">
+      <div class="impact-block">
+        <span class="label">Compliance</span>
+        <h3>Enterprise Ready</h3>
+        <ul class="finding-list">
+          <li>Full audit trail for <strong>SOC2/ISO 27001</strong> compliance</li>
+          <li>Agent reasoning chain logging for decision transparency</li>
+          <li>Multi-tenant data isolation per organization</li>
+          <li>Role-based access control with NextAuth v5</li>
+          <li>Incident reports and compliance entry tracking</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">Engineering</span>
+        <h3>Technical Scale</h3>
+        <ul class="finding-list">
+          <li>50+ UI views: dashboards, maps, fleet, cameras, analytics</li>
+          <li>Real-time WebSocket communication for live fleet status</li>
+          <li>Command palette (Cmd+K) for rapid navigation</li>
+          <li>PDF report generation via jsPDF</li>
+          <li>Comprehensive test suite with Vitest + Testing Library</li>
+        </ul>
+      </div>
+      <div class="impact-block dark">
+        <span class="label">Frontend</span>
+        <h3>Modern Stack</h3>
+        <ul class="finding-list">
+          <li>Next.js 16 with React 19 and TypeScript</li>
+          <li>Tailwind CSS 4 with Zustand state management</li>
+          <li>Recharts for analytics visualizations</li>
+          <li>Leaflet for interactive mission maps</li>
+          <li>Lucide icons with consistent design system</li>
+        </ul>
+      </div>
+      <div class="impact-block">
+        <span class="label">Backend</span>
+        <h3>System Design</h3>
+        <ul class="finding-list">
+          <li>tRPC for end-to-end type-safe API layer</li>
+          <li>Prisma ORM with 12+ relational data models</li>
+          <li>Socket.IO for bi-directional real-time events</li>
+          <li>Docker + Caddy for containerized deployment</li>
+          <li>Anthropic Claude SDK for agentic AI chat</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="footer">
+    <div class="footer-left">
+      Addison Apisarnthanarax &mdash;
+      <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &middot;
+      <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &middot;
+      <a href="mailto:AddisonApisarn@gmail.com">AddisonApisarn@gmail.com</a>
+    </div>
+    <div class="footer-right">Portfolio &mdash; 2026</div>
+  </div>
+</div>
+</body>
+</html>
