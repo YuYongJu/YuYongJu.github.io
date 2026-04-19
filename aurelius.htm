@@ -46,16 +46,20 @@
   .tag.highlight { background: var(--black); color: var(--white); }
   /* PIPELINE FUNNEL */
   .funnel { border: var(--border); padding: 2rem; }
-  .funnel-row { display: grid; grid-template-columns: 180px 1fr 140px; gap: 1.5rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--gray-200); }
+  .funnel-row { display: grid; grid-template-columns: 280px 1fr 140px; gap: 1.5rem; align-items: center; padding: 1.25rem 0; border-bottom: 1px solid var(--gray-200); }
   .funnel-row:last-child { border-bottom: none; }
-  .funnel-stage { font-family: var(--sans); font-weight: 700; font-size: 1rem; }
-  .funnel-stage .stage-tier { display: block; font-family: var(--mono); font-size: 0.6rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.2rem; }
-  .funnel-bar { height: 40px; background: var(--gray-100); border: var(--border-thin); position: relative; overflow: hidden; }
-  .funnel-fill { height: 100%; display: flex; align-items: center; padding: 0 0.75rem; font-family: var(--mono); font-size: 0.7rem; color: var(--white); }
+  .funnel-stage { font-family: var(--sans); }
+  .funnel-stage .stage-name { font-weight: 700; font-size: 1rem; display: block; line-height: 1.2; }
+  .funnel-stage .stage-tier { display: block; font-family: var(--mono); font-size: 0.62rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.2rem; }
+  .funnel-stage .stage-desc { display: block; font-size: 0.78rem; color: var(--gray-600); line-height: 1.45; margin-top: 0.5rem; }
+  .funnel-bar { height: 40px; background: var(--gray-100); border: var(--border-thin); position: relative; }
+  .funnel-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding: 0 0.6rem; font-family: var(--mono); font-size: 0.7rem; color: var(--white); font-weight: 700; min-width: 44px; }
   .funnel-fill.f1 { width: 100%; background: var(--gray-800); }
   .funnel-fill.f2 { width: 18%; background: var(--gray-600); }
-  .funnel-fill.f3 { width: 4%; background: var(--accent); }
-  .funnel-fill.f4 { width: 1%; background: var(--accent); min-width: 50px; }
+  .funnel-fill.f3 { width: 4%; background: var(--accent); padding: 0; justify-content: flex-start; }
+  .funnel-fill.f3 .pct-label { position: absolute; left: calc(4% + 8px); color: var(--accent); font-family: var(--mono); font-size: 0.7rem; font-weight: 700; }
+  .funnel-fill.f4 { width: 1%; background: var(--accent); padding: 0; }
+  .funnel-fill.f4 .pct-label { position: absolute; left: calc(1% + 8px); color: var(--accent); font-family: var(--mono); font-size: 0.7rem; font-weight: 700; }
   .funnel-vol { font-family: var(--mono); font-size: 0.78rem; color: var(--gray-600); text-align: right; }
   .funnel-vol .vol-num { font-family: var(--serif); font-size: 1.4rem; color: var(--accent); display: block; }
   /* LAYER CARDS */
@@ -199,11 +203,12 @@
     <div class="funnel">
       <div class="funnel-row">
         <div class="funnel-stage">
-          Raw Observations
+          <span class="stage-name">Raw Observations</span>
           <span class="stage-tier">Tier 1 &middot; ingest</span>
+          <span class="stage-desc">Accessibility events, focused windows, URLs, selected text</span>
         </div>
         <div class="funnel-bar">
-          <div class="funnel-fill f1">Accessibility events, focused windows, URLs, selected text</div>
+          <div class="funnel-fill f1">100%</div>
         </div>
         <div class="funnel-vol">
           <span class="vol-num">~50K</span>
@@ -212,11 +217,12 @@
       </div>
       <div class="funnel-row">
         <div class="funnel-stage">
-          Knowledge Items
+          <span class="stage-name">Knowledge Items</span>
           <span class="stage-tier">Tier 2 &middot; elicit</span>
+          <span class="stage-desc">Atomic, typed, timestamped facts with source links</span>
         </div>
         <div class="funnel-bar">
-          <div class="funnel-fill f2">Atomic, typed, timestamped facts with source links</div>
+          <div class="funnel-fill f2">18%</div>
         </div>
         <div class="funnel-vol">
           <span class="vol-num">~500</span>
@@ -225,11 +231,13 @@
       </div>
       <div class="funnel-row">
         <div class="funnel-stage">
-          Entity Graph
+          <span class="stage-name">Entity Graph</span>
           <span class="stage-tier">Tier 2 &middot; maintain</span>
+          <span class="stage-desc">Resolved entities, Leiden clusters, theme membership</span>
         </div>
         <div class="funnel-bar">
-          <div class="funnel-fill f3">Resolved entities, Leiden clusters, theme membership</div>
+          <div class="funnel-fill f3"></div>
+          <span class="pct-label">4%</span>
         </div>
         <div class="funnel-vol">
           <span class="vol-num">~80</span>
@@ -238,11 +246,13 @@
       </div>
       <div class="funnel-row">
         <div class="funnel-stage">
-          Query Answers
+          <span class="stage-name">Query Answers</span>
           <span class="stage-tier">Tier 3 &middot; serve</span>
+          <span class="stage-desc">Natural-language answer assembled from graph at query time</span>
         </div>
         <div class="funnel-bar">
-          <div class="funnel-fill f4">NL</div>
+          <div class="funnel-fill f4"></div>
+          <span class="pct-label">&lt;1%</span>
         </div>
         <div class="funnel-vol">
           <span class="vol-num">1</span>
