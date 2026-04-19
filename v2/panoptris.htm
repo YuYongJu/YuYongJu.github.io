@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PNX-12 / WATCHTOWER — Panoptris Dossier</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --void: #0a0d12;
+    --void-2: #0e1218;
+    --panel: #131820;
+    --panel-2: #1a2030;
+    --line: #2a3140;
+    --line-bright: #3a4256;
+    --ink: #f5e8d0;
+    --ink-2: #c8c3b3;
+    --ink-mute: #6e7588;
+    --ink-dim: #4a5163;
+    --amber: #d4a017;
+    --green: #6fdb8b;
+
+    /* PNX-12 faction: thermal surveillance */
+    --pnx: #FF6B35;
+    --pnx-glow: rgba(255, 107, 53, 0.18);
+    --pnx-deep: #4a1a08;
+    --pnx-faded: #6b2c14;
+    --alert: #ff3434;
+    --threat-bg: #2a0d0d;
+    --susp-bg: #2a1d08;
+    --benign-bg: #0d2014;
+
+    --display: 'Chakra Petch', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', 'Space Mono', monospace;
+    --body: 'Inter', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+  body {
+    background: var(--void);
+    color: var(--ink);
+    font-family: var(--body);
+    line-height: 1.55;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse 70% 60% at 80% 0%, rgba(255,107,53,0.06), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 0% 100%, rgba(255,107,53,0.03), transparent 60%);
+    background-attachment: fixed;
+  }
+  ::selection { background: var(--pnx); color: var(--void); }
+  a { color: inherit; text-decoration: none; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,107,53,0.012) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,107,53,0.012) 1px, transparent 1px);
+    background-size: 80px 80px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Status bar */
+  .statusbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10, 13, 18, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    padding: 0.6rem 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 0.7rem;
+    color: var(--ink-2); letter-spacing: 0.1em;
+  }
+  .statusbar-left, .statusbar-right { display: flex; gap: 1.5rem; align-items: center; }
+  .pip { width: 6px; height: 6px; border-radius: 50%; background: var(--pnx); box-shadow: 0 0 10px var(--pnx); animation: pulse 1.6s ease-in-out infinite; }
+  .pip.green { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .status-pip { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .status-label { color: var(--ink-mute); }
+  .status-val { color: var(--ink); font-weight: 500; }
+  .status-val.threat { color: var(--pnx); }
+  .back-link { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-2); letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .back-link:hover { color: var(--pnx); }
+
+  /* HERO — mission briefing */
+  .hero {
+    position: relative;
+    padding: 6rem 2rem 4rem;
+    z-index: 10;
+  }
+  .hero-inner { max-width: 1200px; margin: 0 auto; }
+
+  .codename-block {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--pnx);
+    background: var(--pnx-glow);
+    font-family: var(--mono); font-size: 0.7rem;
+    color: var(--pnx); letter-spacing: 0.25em;
+    margin-bottom: 1.5rem;
+  }
+  .codename-block .pip { animation-duration: 1.2s; }
+
+  .hero-title {
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(3.5rem, 8vw, 6.5rem);
+    line-height: 0.92; letter-spacing: -0.015em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    color: var(--ink);
+    position: relative;
+  }
+  .hero-title .pnx-accent { color: var(--pnx); }
+  .hero-subtitle {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    line-height: 1.4; letter-spacing: 0.01em;
+    color: var(--ink-2);
+    max-width: 780px;
+    margin-bottom: 2.5rem;
+  }
+  .hero-mission {
+    border-left: 3px solid var(--pnx);
+    padding: 0.5rem 0 0.5rem 1.5rem;
+    font-family: var(--mono); font-size: 0.85rem;
+    color: var(--ink-2); letter-spacing: 0.04em;
+    max-width: 720px;
+    margin-bottom: 3rem;
+  }
+  .hero-mission .label { display: block; color: var(--pnx); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.4rem; }
+
+  /* KEY-VALUE BRIEFING TABLE */
+  .briefing {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .brief {
+    background: var(--void-2);
+    padding: 1.5rem 1.25rem;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .brief:hover { background: var(--panel); }
+  .brief-key { font-family: var(--mono); font-size: 0.6rem; color: var(--ink-dim); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.6rem; }
+  .brief-val { font-family: var(--display); font-size: 2.4rem; font-weight: 600; line-height: 1; color: var(--ink); letter-spacing: -0.02em; }
+  .brief-val .unit { font-size: 1.1rem; color: var(--pnx); margin-left: 0.2rem; font-weight: 400; }
+  .brief-meta { font-family: var(--mono); font-size: 0.62rem; color: var(--ink-mute); letter-spacing: 0.1em; margin-top: 0.4rem; }
+
+  /* SECTION */
+  .section { padding: 5rem 2rem; position: relative; z-index: 10; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 2.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+  .section-num { font-family: var(--mono); font-size: 0.75rem; color: var(--pnx); letter-spacing: 0.2em; }
+  .section-title { font-family: var(--display); font-weight: 600; font-size: 1.4rem; letter-spacing: 0.05em; text-transform: uppercase; }
+  .section-meta { margin-left: auto; font-family: var(--mono); font-size: 0.65rem; color: var(--ink-dim); letter-spacing: 0.15em; }
+  .section-lede { font-family: var(--display); font-size: 1.15rem; font-weight: 300; color: var(--ink-2); line-height: 1.55; max-width: 780px; margin-bottom: 2rem; }
+
+  /* OVERVIEW BODY */
+  .overview-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; align-items: start; }
+  .overview-text { font-size: 1rem; line-height: 1.8; color: var(--ink-2); }
+  .overview-text p { margin-bottom: 1.25rem; }
+  .overview-text strong { color: var(--ink); font-weight: 500; }
+  .overview-text .pnx-text { color: var(--pnx); font-family: var(--mono); font-size: 0.9em; }
+
+  .stack-panel {
+    border: 1px solid var(--line);
+    background: var(--void-2);
+    padding: 1.5rem;
+    position: relative;
+  }
+  .stack-panel::before, .stack-panel::after { content: ''; position: absolute; width: 14px; height: 14px; border-color: var(--pnx); }
+  .stack-panel::before { top: -2px; left: -2px; border-top: 2px solid; border-left: 2px solid; }
+  .stack-panel::after { bottom: -2px; right: -2px; border-bottom: 2px solid; border-right: 2px solid; }
+  .stack-head { font-family: var(--mono); font-size: 0.65rem; color: var(--pnx); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--line); }
+  .stack-tag { display: inline-block; font-family: var(--mono); font-size: 0.65rem; padding: 0.3rem 0.55rem; border: 1px solid var(--line-bright); color: var(--ink-2); margin: 0 0.35rem 0.4rem 0; letter-spacing: 0.06em; }
+  .stack-tag.primary { border-color: var(--pnx); color: var(--pnx); }
+
+  /* PRECURSOR CALLOUT */
+  .precursor {
+    border: 1px solid var(--line);
+    background: linear-gradient(135deg, var(--void-2), transparent);
+    padding: 1.5rem 2rem;
+    margin-top: 2rem;
+    position: relative;
+  }
+  .precursor::before { content: 'CLASSIFIED // LEGACY OPS'; position: absolute; top: -8px; left: 1rem; padding: 0 0.5rem; background: var(--void); font-family: var(--mono); font-size: 0.55rem; color: var(--ink-dim); letter-spacing: 0.25em; }
+  .precursor h4 { font-family: var(--mono); font-size: 0.7rem; color: var(--pnx); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.6rem; }
+  .precursor p { font-size: 0.92rem; line-height: 1.65; color: var(--ink-2); }
+  .precursor a { color: var(--pnx); border-bottom: 1px dashed var(--pnx); }
+
+  /* PIPELINE — 4 stage */
+  .pipeline {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .stage {
+    background: var(--void-2);
+    padding: 1.75rem 1.25rem;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .stage:hover { background: var(--panel); }
+  .stage-num { font-family: var(--mono); font-size: 0.65rem; color: var(--pnx); letter-spacing: 0.2em; margin-bottom: 0.6rem; }
+  .stage-name { font-family: var(--display); font-size: 1.4rem; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 0.6rem; color: var(--ink); }
+  .stage-desc { font-family: var(--body); font-size: 0.88rem; line-height: 1.55; color: var(--ink-2); }
+  .stage::after { content: '\2192'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%); color: var(--pnx); font-size: 1.2rem; opacity: 0.4; }
+  .stage:last-child::after { display: none; }
+
+  /* CROSS-SYSTEM REASONING DIAGRAM */
+  .reasoning {
+    display: grid; grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 1.5rem; align-items: center;
+  }
+  .stream-list, .out-list { display: flex; flex-direction: column; gap: 0.5rem; }
+  .stream {
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--line);
+    background: var(--void-2);
+    font-family: var(--mono); font-size: 0.78rem;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: border-color 0.2s, padding 0.2s;
+  }
+  .stream:hover { border-color: var(--pnx); padding-left: 1.25rem; }
+  .stream .stream-tag { font-size: 0.6rem; color: var(--ink-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+  .stream .stream-pip { width: 5px; height: 5px; border-radius: 50%; background: var(--pnx); margin-right: 0.5rem; box-shadow: 0 0 6px var(--pnx); }
+
+  .core {
+    padding: 2.5rem 1rem;
+    border: 1px solid var(--pnx);
+    background: linear-gradient(135deg, var(--pnx-glow), transparent);
+    text-align: center;
+    position: relative;
+  }
+  .core::before, .core::after { content: ''; position: absolute; width: 18px; height: 18px; border-color: var(--pnx); }
+  .core::before { top: -2px; left: -2px; border-top: 2px solid; border-left: 2px solid; }
+  .core::after { bottom: -2px; right: -2px; border-bottom: 2px solid; border-right: 2px solid; }
+  .core-label { font-family: var(--mono); font-size: 0.6rem; color: var(--pnx); letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .core-name { font-family: var(--display); font-size: 1.5rem; font-weight: 600; line-height: 1.15; text-transform: uppercase; color: var(--ink); }
+
+  .out {
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--line);
+    background: var(--void-2);
+    font-family: var(--mono); font-size: 0.75rem;
+    color: var(--ink-2);
+    border-left-width: 3px;
+  }
+  .out.threat { border-left-color: var(--alert); }
+  .out.susp { border-left-color: var(--amber); }
+  .out.benign { border-left-color: var(--green); }
+  .out .verdict { font-family: var(--display); font-weight: 600; letter-spacing: 0.1em; margin-right: 0.5rem; text-transform: uppercase; }
+  .out.threat .verdict { color: var(--alert); }
+  .out.susp .verdict { color: var(--amber); }
+  .out.benign .verdict { color: var(--green); }
+
+  /* SAFETY TIER STACK */
+  .tier-stack { display: flex; flex-direction: column; gap: 0.5rem; }
+  .tier {
+    display: grid; grid-template-columns: 1fr 220px; gap: 1.5rem; align-items: center;
+  }
+  .tier-bar {
+    height: 56px;
+    border: 1px solid var(--line);
+    background: var(--void-2);
+    display: flex; align-items: center; padding: 0 1.5rem;
+    font-family: var(--mono); font-size: 0.78rem;
+    color: var(--ink-2);
+    letter-spacing: 0.05em;
+    position: relative;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .tier-bar:hover { background: var(--panel); border-color: var(--pnx); }
+  .tier-bar .tier-num { font-family: var(--display); font-weight: 700; font-size: 1.4rem; color: var(--pnx); margin-right: 1rem; line-height: 1; }
+  .tier-1 .tier-bar { width: 92%; }
+  .tier-2 .tier-bar { width: 70%; }
+  .tier-3 .tier-bar { width: 42%; background: linear-gradient(90deg, var(--pnx-deep), var(--void-2)); }
+  .tier-4 .tier-bar { width: 16%; background: var(--pnx); border-color: var(--pnx); color: var(--void); }
+  .tier-4 .tier-bar .tier-num { color: var(--void); }
+  .tier-meta { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-mute); letter-spacing: 0.06em; }
+  .tier-meta .pct { color: var(--pnx); }
+
+  /* COMPETITIVE TABLE */
+  .comp {
+    width: 100%; border-collapse: collapse;
+    border: 1px solid var(--line);
+    background: var(--void-2);
+    font-size: 0.85rem;
+  }
+  .comp th, .comp td { padding: 1rem 1.25rem; text-align: left; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); vertical-align: top; }
+  .comp th:last-child, .comp td:last-child { border-right: none; }
+  .comp th { background: var(--panel); font-family: var(--mono); font-size: 0.65rem; color: var(--pnx); letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; }
+  .comp tr:hover td { background: var(--panel); }
+  .comp td:first-child { font-family: var(--display); font-weight: 600; font-size: 1rem; color: var(--ink); letter-spacing: 0.02em; }
+  .comp .stage-pill { display: inline-block; font-family: var(--mono); font-size: 0.65rem; color: var(--ink-mute); letter-spacing: 0.05em; }
+
+  /* IMPACT GRID */
+  .impact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+  .impact { background: var(--void-2); padding: 2rem 1.75rem; position: relative; transition: background 0.2s; }
+  .impact:hover { background: var(--panel); }
+  .impact.dark { background: var(--panel); }
+  .impact-label { font-family: var(--mono); font-size: 0.6rem; color: var(--pnx); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.6rem; }
+  .impact h3 { font-family: var(--display); font-size: 1.5rem; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 1rem; color: var(--ink); }
+  .impact ul { list-style: none; }
+  .impact li { font-size: 0.88rem; line-height: 1.55; padding: 0.5rem 0; border-top: 1px dashed var(--line); color: var(--ink-2); display: flex; gap: 0.75rem; }
+  .impact li:first-child { border-top: none; }
+  .impact li::before { content: '\25B8'; color: var(--pnx); flex-shrink: 0; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 4rem;
+    padding: 2rem;
+    border-top: 1px solid var(--line);
+    background: var(--void-2);
+    font-family: var(--mono); font-size: 0.65rem;
+    color: var(--ink-dim); letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer .pnx-text { color: var(--pnx); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .briefing { grid-template-columns: repeat(2, 1fr); }
+    .pipeline { grid-template-columns: repeat(2, 1fr); }
+    .stage:nth-child(2)::after { display: none; }
+    .reasoning { grid-template-columns: 1fr; gap: 1rem; }
+    .overview-grid { grid-template-columns: 1fr; }
+    .impact-grid { grid-template-columns: 1fr; }
+    .tier { grid-template-columns: 1fr; gap: 0.5rem; }
+    .tier-1 .tier-bar, .tier-2 .tier-bar, .tier-3 .tier-bar, .tier-4 .tier-bar { width: 100%; }
+    .comp { display: block; overflow-x: auto; white-space: nowrap; }
+  }
+  @media (max-width: 600px) {
+    .section { padding: 3rem 1rem; }
+    .hero { padding: 4rem 1rem 2rem; }
+    .statusbar-right { display: none; }
+  }
+
+  @media print {
+    body::before { display: none; }
+    .statusbar { position: static; }
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <div class="statusbar-left">
+    <a class="back-link" href="index.html">&larr; ROSTER</a>
+    <span class="status-pip"><span class="pip"></span><span class="status-label">DOSSIER</span> <span class="status-val threat">PNX-12</span></span>
+    <span class="status-pip"><span class="status-label">CALLSIGN</span> <span class="status-val">WATCHTOWER</span></span>
+  </div>
+  <div class="statusbar-right">
+    <span><span class="status-label">CLASSIFICATION</span> <span class="status-val">PUBLIC</span></span>
+    <span><span class="status-label">STATUS</span> <span class="status-val threat">SHIPPING / v12.0</span></span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="codename-block">
+      <span class="pip"></span>
+      OPERATOR &middot; CLASS-S &middot; FLAGSHIP
+    </div>
+    <h1 class="hero-title">Watch the watchers <span class="pnx-accent">that nobody's watching.</span></h1>
+    <p class="hero-subtitle">An AI reasoning layer that sits on top of existing cameras, sensors, and access control at remote critical infrastructure sites &mdash; triaging alerts, filtering false alarms through cross-system correlation, and orchestrating response autonomously.</p>
+    <div class="hero-mission">
+      <span class="label">// MISSION</span>
+      Solar farms losing copper. Substations triggering at 4am. Cell towers no one's watching. The humans hired to monitor are 96% wrong. Replace the monitoring center with reasoning that knows when to act, when to escalate, and when to stay quiet.
+    </div>
+    <div class="briefing">
+      <div class="brief">
+        <div class="brief-key">CODEBASE</div>
+        <div class="brief-val">455<span class="unit">K</span></div>
+        <div class="brief-meta">LINES OF TYPESCRIPT</div>
+      </div>
+      <div class="brief">
+        <div class="brief-key">MILESTONES</div>
+        <div class="brief-val">17</div>
+        <div class="brief-meta">SHIPPED TO PRODUCTION</div>
+      </div>
+      <div class="brief">
+        <div class="brief-key">PHASES</div>
+        <div class="brief-val">156<span class="unit">+</span></div>
+        <div class="brief-meta">EXECUTED &middot; DOCUMENTED</div>
+      </div>
+      <div class="brief">
+        <div class="brief-key">REQUIREMENTS</div>
+        <div class="brief-val">194<span class="unit">+</span></div>
+        <div class="brief-meta">VERIFIED END-TO-END</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 — OVERVIEW -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">// 01</span>
+      <span class="section-title">SITUATION REPORT</span>
+      <span class="section-meta">CLEARANCE: PUBLIC</span>
+    </div>
+    <div class="overview-grid">
+      <div class="overview-text">
+        <p>Panoptris is the <strong>AI reasoning layer</strong> that sits on top of existing cameras, sensors, and access control at remote critical infrastructure &mdash; solar farms, substations, cell towers, pipelines. It triages alerts, filters false alarms through cross-system correlation, and orchestrates the entire response chain: audio deterrents, notification routing, escalation, drone dispatch when docks are present.</p>
+        <p>The positioning is <strong>camera-first, drone-ready</strong>. Lead with intelligence on the cameras already deployed; drone dispatch is the built-in upgrade path as dock adoption grows. Unlike point solutions, Panoptris reasons across <span class="pnx-text">five context streams simultaneously</span> &mdash; camera feed, access control, zone history, organizational policy, expected activity &mdash; before classifying.</p>
+        <p>Architecture is a <strong>4-tier decision model</strong> with structural separation enforced in code: the LLM is never in the safety-critical path. Multi-tenant from day one, full audit trails for SOC 2 / ISO 27001, research-backed pipeline verified end-to-end in <span class="pnx-text">v12.0 production hardening</span> (March 2026).</p>
+      </div>
+      <div class="stack-panel">
+        <div class="stack-head">// SYSTEM STACK</div>
+        <span class="stack-tag primary">NEXT.JS 16</span>
+        <span class="stack-tag primary">TYPESCRIPT</span>
+        <span class="stack-tag primary">CLAUDE API</span>
+        <span class="stack-tag">tRPC</span>
+        <span class="stack-tag">PRISMA</span>
+        <span class="stack-tag">POSTGRESQL</span>
+        <span class="stack-tag">SOCKET.IO</span>
+        <span class="stack-tag">VERCEL AI SDK v6</span>
+        <span class="stack-tag">@AI-SDK/ANTHROPIC</span>
+        <span class="stack-tag">MQTT (DJI CLOUD)</span>
+        <span class="stack-tag">MAVLINK</span>
+        <span class="stack-tag">CRONER</span>
+        <span class="stack-tag">ZUSTAND</span>
+        <span class="stack-tag">PLAYWRIGHT</span>
+        <span class="stack-tag">VITEST</span>
+        <span class="stack-tag">DOCKER</span>
+      </div>
+    </div>
+
+    <div class="precursor">
+      <h4>// PRECURSOR &middot; SX-09 &middot; SENTRIX</h4>
+      <p>Panoptris began as <a href="../sentrix.htm">Sentrix</a>, an earlier exploration of drone-agnostic surveillance with autonomous decisioning. Risk scoring, autonomy levels, and protocol abstraction carried forward. The shift was in <strong>positioning</strong>: from broad surveillance to a focused ICP of remote critical infrastructure operators where the false-alarm problem is qualified pain.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 02 — PIPELINE -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">// 02</span>
+      <span class="section-title">ALERT-TO-RESPONSE LOOP</span>
+      <span class="section-meta">FOUR-STAGE PIPELINE</span>
+    </div>
+    <p class="section-lede">From raw sensor event to deterministic action. The first three stages happen in under two seconds. The fourth happens with whatever urgency the verdict demands.</p>
+    <div class="pipeline">
+      <div class="stage">
+        <div class="stage-num">// 01</div>
+        <div class="stage-name">Detect</div>
+        <div class="stage-desc">Existing cameras and sensors fire raw alerts. We don't replace CV &mdash; we reason about what the cameras already see.</div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">// 02</div>
+        <div class="stage-name">Correlate</div>
+        <div class="stage-desc">Cross-system reasoning: camera + access control + zone history + org context + expected activity. Postgres-backed agent memory.</div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">// 03</div>
+        <div class="stage-name">Decide</div>
+        <div class="stage-desc">4-tier decision architecture. LLM reasons; deterministic guardrails enforce safety. Structural separation in code.</div>
+      </div>
+      <div class="stage">
+        <div class="stage-num">// 04</div>
+        <div class="stage-name">Respond</div>
+        <div class="stage-desc">Audio deterrent, notification routing, escalation chains, drone dispatch via MQTT/MAVLink. Full audit trail.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 — CROSS-SYSTEM REASONING -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">// 03</span>
+      <span class="section-title">CROSS-SYSTEM CORRELATION</span>
+      <span class="section-meta">FIVE-STREAM REASONING</span>
+    </div>
+    <p class="section-lede">The same alert text resolves to different verdicts depending on context. No single signal carries the answer; the agent reasons across <span class="pnx-text" style="color: var(--pnx); font-family: var(--mono); font-size: 0.95em;">five streams</span> simultaneously before classifying.</p>
+    <div class="reasoning">
+      <div class="stream-list">
+        <div class="stream"><span><span class="stream-pip"></span>Camera Feed</span><span class="stream-tag">CV DETECTION</span></div>
+        <div class="stream"><span><span class="stream-pip"></span>Access Control</span><span class="stream-tag">BADGE EVENTS</span></div>
+        <div class="stream"><span><span class="stream-pip"></span>Zone History</span><span class="stream-tag">POSTGRES</span></div>
+        <div class="stream"><span><span class="stream-pip"></span>Org Policy</span><span class="stream-tag">TENANT CONFIG</span></div>
+        <div class="stream"><span><span class="stream-pip"></span>Expected Activity</span><span class="stream-tag">SCHEDULE</span></div>
+      </div>
+      <div class="core">
+        <div class="core-label">// REASONING CORE</div>
+        <div class="core-name">Cross-System<br>Correlation</div>
+      </div>
+      <div class="out-list">
+        <div class="out threat"><span class="verdict">Threat</span> Dispatch + escalate</div>
+        <div class="out susp"><span class="verdict">Suspicious</span> Audio deterrent + log</div>
+        <div class="out benign"><span class="verdict">Benign</span> Suppress, no notify</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 — SAFETY TIERS -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">// 04</span>
+      <span class="section-title">4-TIER SAFETY ARCHITECTURE</span>
+      <span class="section-meta">LLM NEVER IN CRITICAL PATH</span>
+    </div>
+    <p class="section-lede">Bar widths show the relative frequency of decisions handled at each tier. Deterministic rules absorb most events; LLM and human escalation are reserved for genuine ambiguity.</p>
+    <div class="tier-stack">
+      <div class="tier tier-1"><div class="tier-bar"><span class="tier-num">T1</span>Deterministic Rules</div><div class="tier-meta"><span class="pct">~70%</span> of events &middot; instant</div></div>
+      <div class="tier tier-2"><div class="tier-bar"><span class="tier-num">T2</span>Policy-Bounded Action</div><div class="tier-meta"><span class="pct">~20%</span> of events &middot; tenant rules</div></div>
+      <div class="tier tier-3"><div class="tier-bar"><span class="tier-num">T3</span>LLM with Guardrails</div><div class="tier-meta"><span class="pct">~9%</span> of events &middot; ambiguous context</div></div>
+      <div class="tier tier-4"><div class="tier-bar"><span class="tier-num">T4</span>Human Confirmation</div><div class="tier-meta"><span class="pct">~1%</span> of events &middot; escalation only</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 — COMPETITIVE -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">// 05</span>
+      <span class="section-title">FIELD INTEL &middot; COMPETITORS</span>
+      <span class="section-meta">CONFIRMED HOSTILES</span>
+    </div>
+    <table class="comp">
+      <thead>
+        <tr>
+          <th>PLAYER</th>
+          <th>STAGE</th>
+          <th>WHAT THEY DO</th>
+          <th>WHERE THEY STOP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Hakimo</td>
+          <td><span class="stage-pill">$10.5M &middot; 100+ customers</span></td>
+          <td>AI camera triage, voice-down, SOP execution</td>
+          <td>No drone integration, no cross-system reasoning, no portfolio intelligence</td>
+        </tr>
+        <tr>
+          <td>Calipsa / Pelco</td>
+          <td><span class="stage-pill">22K sites &middot; 130K cameras</span></td>
+          <td>False alarm filtering via CV, monitoring center embedded</td>
+          <td>Analytics layer only &mdash; no reasoning, no response orchestration</td>
+        </tr>
+        <tr>
+          <td>Percepto</td>
+          <td><span class="stage-pill">$67M &middot; FAA BVLOS waiver</span></td>
+          <td>Drone-in-a-box for industrial sites</td>
+          <td>Hardware-locked, ~$200K+ per site, patrols but doesn't reason</td>
+        </tr>
+        <tr>
+          <td>Remote Video Monitoring</td>
+          <td><span class="stage-pill">$3-5K/mo per site</span></td>
+          <td>Humans watching feeds in monitoring centers</td>
+          <td>96% false alarm rate &mdash; the primary incumbent we displace</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 06 — IMPACT -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-num">// 06</span>
+      <span class="section-title">PRODUCTION POSTURE</span>
+      <span class="section-meta">v12.0 HARDENED 2026.03.28</span>
+    </div>
+    <div class="impact-grid">
+      <div class="impact">
+        <div class="impact-label">// ENGINEERING</div>
+        <h3>v12.0 Hardened</h3>
+        <ul>
+          <li>17 milestones shipped, 156+ phases executed</li>
+          <li>~455K lines of TypeScript across the platform</li>
+          <li>194+ requirements satisfied with verification</li>
+          <li>End-to-end agent-verified intelligence pipeline</li>
+          <li>Multi-tenant from day one with strict isolation</li>
+        </ul>
+      </div>
+      <div class="impact dark">
+        <div class="impact-label">// ICP &amp; DISTRIBUTION</div>
+        <h3>Remote Critical Infra</h3>
+        <ul>
+          <li>Solar portfolio operators &mdash; theft &amp; vandalism pain</li>
+          <li>Utility companies (substations) &mdash; compliance &amp; safety</li>
+          <li>Telecom tower operators &mdash; multi-site portfolio buyers</li>
+          <li>Director / VP of Security or Ops at portfolio level</li>
+          <li>Qualifying question: what happens between detection and response?</li>
+        </ul>
+      </div>
+      <div class="impact dark">
+        <div class="impact-label">// DIFFERENTIATION</div>
+        <h3>What No Competitor Does</h3>
+        <ul>
+          <li>Cross-system contextual reasoning (5 streams)</li>
+          <li>Autonomous response orchestration, not just alerting</li>
+          <li>Drone dispatch readiness via MQTT + MAVLink</li>
+          <li>Multi-site portfolio intelligence layer</li>
+          <li>Full incident lifecycle with SOC 2 / ISO 27001 audit trails</li>
+        </ul>
+      </div>
+      <div class="impact">
+        <div class="impact-label">// FOUNDER DISCIPLINE</div>
+        <h3>Pico, Safety-First</h3>
+        <ul>
+          <li>Every abstraction is a tax &mdash; consolidate before adding</li>
+          <li>LLM never in the safety-critical path</li>
+          <li>Memory is Postgres queries, not vector recall (SD-036)</li>
+          <li>No CV pipeline replication &mdash; reason about what cameras see</li>
+          <li>Don't replicate fleet management &mdash; FlytBase exists at $99/mo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>OPERATOR DOSSIER &middot; <span class="pnx-text">PNX-12 / WATCHTOWER</span> &middot; PANOPTRIS</div>
+    <div>BUILT 2026 &middot; ADDISON APISARNTHANARAX</div>
+  </div>
+</footer>
+</body>
+</html>
