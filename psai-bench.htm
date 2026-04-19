@@ -46,12 +46,16 @@
   .tag.highlight { background: var(--black); color: var(--white); }
   /* TRACK BAR CHART */
   .track-chart { border: var(--border); padding: 2rem; }
-  .track-row { display: grid; grid-template-columns: 200px 1fr 100px; gap: 1.5rem; align-items: center; padding: 1.25rem 0; border-bottom: 1px solid var(--gray-200); }
+  .track-row { display: grid; grid-template-columns: 300px 1fr 100px; gap: 1.5rem; align-items: center; padding: 1.25rem 0; border-bottom: 1px solid var(--gray-200); }
   .track-row:last-child { border-bottom: none; }
-  .track-name { font-family: var(--sans); font-weight: 700; font-size: 1rem; }
-  .track-name .track-input { display: block; font-family: var(--mono); font-size: 0.62rem; color: var(--gray-600); font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.2rem; }
-  .track-bar { height: 36px; background: var(--gray-100); border: var(--border-thin); position: relative; overflow: hidden; }
-  .track-fill { height: 100%; background: var(--accent); display: flex; align-items: center; padding-left: 0.75rem; color: var(--white); font-family: var(--mono); font-size: 0.7rem; }
+  .track-name { font-family: var(--sans); }
+  .track-name .track-label { font-weight: 700; font-size: 1rem; display: block; line-height: 1.2; }
+  .track-name .track-input { display: block; font-family: var(--mono); font-size: 0.62rem; color: var(--gray-600); font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.25rem; }
+  .track-name .track-context { display: block; font-size: 0.78rem; color: var(--gray-600); line-height: 1.45; margin-top: 0.45rem; }
+  .track-bar { height: 36px; background: var(--gray-100); border: var(--border-thin); position: relative; }
+  .track-fill { height: 100%; background: var(--accent); display: flex; align-items: center; justify-content: flex-end; padding: 0 0.6rem; color: var(--white); font-family: var(--mono); font-size: 0.7rem; font-weight: 700; min-width: 44px; }
+  .track-fill.narrow { min-width: 0; padding: 0; }
+  .track-fill.narrow + .pct-label { position: absolute; left: calc(var(--w) + 8px); top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 0.7rem; font-weight: 700; }
   .track-count { font-family: var(--serif); font-size: 1.6rem; text-align: right; color: var(--accent); }
   /* CONTEXT MATRIX */
   .matrix-section { margin-top: 2rem; }
@@ -188,31 +192,35 @@
     <div class="track-chart">
       <div class="track-row">
         <div class="track-name">
-          Metadata Track
+          <span class="track-label">Metadata Track</span>
           <span class="track-input">Alert text + zone + device + weather + time</span>
+          <span class="track-context">Pure reasoning over structured context</span>
         </div>
         <div class="track-bar">
-          <div class="track-fill" style="width: 100%;">Pure reasoning over structured context</div>
+          <div class="track-fill" style="width: 100%;">100%</div>
         </div>
         <div class="track-count">8,000</div>
       </div>
       <div class="track-row">
         <div class="track-name">
-          Visual Track
+          <span class="track-label">Visual Track</span>
           <span class="track-input">Metadata + video clip URI</span>
+          <span class="track-context">Does video add triage value?</span>
         </div>
         <div class="track-bar">
-          <div class="track-fill" style="width: 36.25%;">Does video add triage value?</div>
+          <div class="track-fill" style="width: 36.25%;">36%</div>
         </div>
         <div class="track-count">2,900</div>
       </div>
       <div class="track-row">
         <div class="track-name">
-          Multi-Sensor Track
+          <span class="track-label">Multi-Sensor Track</span>
           <span class="track-input">Camera + PIR + badge + vibration + thermal</span>
+          <span class="track-context">Sensor fusion reasoning</span>
         </div>
         <div class="track-bar">
-          <div class="track-fill" style="width: 12.5%;">Sensor fusion reasoning</div>
+          <div class="track-fill narrow" style="width: 12.5%; --w: 12.5%;"></div>
+          <span class="pct-label" style="position: absolute; left: calc(12.5% + 8px); top: 50%; transform: translateY(-50%); color: var(--accent); font-family: var(--mono); font-size: 0.7rem; font-weight: 700;">12.5%</span>
         </div>
         <div class="track-count">1,000</div>
       </div>

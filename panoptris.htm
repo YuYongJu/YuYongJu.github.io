@@ -81,17 +81,19 @@
   .comp-table th { background: var(--black); color: var(--white); font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; }
   .comp-table td:first-child { font-weight: 700; font-family: var(--sans); }
   /* SAFETY PYRAMID */
-  .safety-stack { display: flex; flex-direction: column; align-items: center; margin: 1.5rem 0 0.5rem; }
-  .tier-row { display: flex; align-items: center; width: 100%; margin-bottom: 0.5rem; gap: 1rem; }
-  .tier-bar { height: 64px; border: var(--border); display: flex; align-items: center; padding: 0 1.25rem; font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; transition: background 0.15s; }
-  .tier-bar:hover { background: var(--accent-light); }
-  .tier-bar.t1 { width: 90%; background: var(--gray-100); }
-  .tier-bar.t2 { width: 65%; }
-  .tier-bar.t3 { width: 40%; background: var(--accent-light); }
+  .safety-stack { display: flex; flex-direction: column; gap: 0.75rem; margin: 1.5rem 0 0.5rem; }
+  .tier-row { display: grid; grid-template-columns: 220px 1fr 220px; align-items: center; gap: 1rem; }
+  .tier-label { font-family: var(--sans); font-weight: 700; font-size: 0.95rem; line-height: 1.2; }
+  .tier-label .tier-num { font-family: var(--serif); font-size: 1.4rem; color: var(--accent); margin-right: 0.5rem; font-weight: 400; vertical-align: -2px; }
+  .tier-bar-wrap { position: relative; height: 56px; background: var(--gray-100); border: var(--border-thin); }
+  .tier-bar { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding: 0 0.85rem; font-family: var(--mono); font-size: 0.75rem; font-weight: 700; transition: background 0.15s; }
+  .tier-bar:hover { filter: brightness(0.96); }
+  .tier-bar.t1 { width: 90%; background: var(--gray-200); color: var(--gray-800); }
+  .tier-bar.t2 { width: 65%; background: var(--gray-400); color: var(--white); }
+  .tier-bar.t3 { width: 40%; background: var(--accent-light); color: var(--accent); }
   .tier-bar.t4 { width: 18%; background: var(--black); color: var(--white); }
-  .tier-meta { font-family: var(--mono); font-size: 0.65rem; color: var(--gray-600); white-space: nowrap; }
-  .tier-num { font-family: var(--serif); font-size: 1.5rem; color: var(--accent); margin-right: 0.75rem; }
-  .tier-bar.t4 .tier-num { color: var(--white); }
+  .tier-meta { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-600); white-space: nowrap; }
+  .tier-meta .pct { color: var(--accent); font-weight: 700; }
   /* STREAMS DIAGRAM */
   .streams { display: grid; grid-template-columns: 2fr 1fr 2fr; align-items: center; gap: 1rem; margin-top: 1.5rem; }
   .stream-list { display: flex; flex-direction: column; gap: 0.5rem; }
@@ -321,20 +323,24 @@
     </p>
     <div class="safety-stack">
       <div class="tier-row">
-        <div class="tier-bar t1"><span class="tier-num">T1</span>Deterministic Rules</div>
-        <div class="tier-meta">~70% of events &mdash; instant</div>
+        <div class="tier-label"><span class="tier-num">T1</span>Deterministic Rules</div>
+        <div class="tier-bar-wrap"><div class="tier-bar t1">90%</div></div>
+        <div class="tier-meta"><span class="pct">~70%</span> of events &mdash; instant</div>
       </div>
       <div class="tier-row">
-        <div class="tier-bar t2"><span class="tier-num">T2</span>Policy-Bounded Action</div>
-        <div class="tier-meta">~20% of events &mdash; tenant rules</div>
+        <div class="tier-label"><span class="tier-num">T2</span>Policy-Bounded Action</div>
+        <div class="tier-bar-wrap"><div class="tier-bar t2">65%</div></div>
+        <div class="tier-meta"><span class="pct">~20%</span> of events &mdash; tenant rules</div>
       </div>
       <div class="tier-row">
-        <div class="tier-bar t3"><span class="tier-num">T3</span>LLM with Guardrails</div>
-        <div class="tier-meta">~9% of events &mdash; ambiguous context</div>
+        <div class="tier-label"><span class="tier-num">T3</span>LLM with Guardrails</div>
+        <div class="tier-bar-wrap"><div class="tier-bar t3">40%</div></div>
+        <div class="tier-meta"><span class="pct">~9%</span> of events &mdash; ambiguous context</div>
       </div>
       <div class="tier-row">
-        <div class="tier-bar t4"><span class="tier-num">T4</span>Human Confirmation</div>
-        <div class="tier-meta">~1% of events &mdash; escalation only</div>
+        <div class="tier-label"><span class="tier-num">T4</span>Human Confirmation</div>
+        <div class="tier-bar-wrap"><div class="tier-bar t4">18%</div></div>
+        <div class="tier-meta"><span class="pct">~1%</span> of events &mdash; escalation only</div>
       </div>
     </div>
   </div>
