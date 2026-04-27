@@ -222,10 +222,10 @@
           Radiation oncology is a rapidly evolving field, with IJROBP publishing nearly <strong>2,000 abstracts annually</strong>. Identifying shifts in research priorities &mdash; from emerging techniques like FLASH therapy to declining paradigms &mdash; is critical for clinicians, researchers, and funding bodies, but impossible to track manually at scale.
         </p>
         <p>
-          This project applies <strong>BERTopic</strong> with domain-optimized PubMedBERT embeddings to cluster a decade of IJROBP abstracts into coherent research themes. A novel <strong>two-phase LLM validation pipeline</strong> using GPT-4o-mini ensures topic quality through both statistical similarity analysis (c-TF-IDF) and semantic document-topic fit assessment, achieving 90% agreement with automated evaluation.
+          This project applies <strong>BERTopic</strong> with domain-optimized PubMedBERT embeddings to cluster a decade of IJROBP abstracts into coherent research themes. A novel <strong>two-phase self-validation pipeline</strong> using GPT-4o-mini scores topic quality through both statistical similarity analysis (c-TF-IDF) and semantic document-topic fit assessment, with only <strong>2.5% strong disagreements</strong> across the sampled set.
         </p>
         <p>
-          The resulting framework surfaces actionable insights: five emerging research frontiers, five declining areas, and a clear field-wide shift toward hypofractionation, stereotactic techniques, and immunotherapy combinations. An abstract based on this work was submitted to <strong>ASTRO 2026</strong>.
+          The resulting framework surfaces candidate insights for clinician review: five emerging research frontiers, five declining areas, and a clear field-wide shift toward hypofractionation, stereotactic techniques, and immunotherapy combinations. Analyses contributed to the lab's <strong>ASTRO 2026</strong> submission cycle (acceptance pending).
         </p>
       </div>
       <div class="tags-box">
@@ -317,9 +317,8 @@
         <ul>
           <li>Phase 1: Topic merge assessment</li>
           <li>Phase 2: Document fit scoring</li>
-          <li>90% agreement rate (36/40)</li>
-          <li>Only 2.5% strong disagreements</li>
-          <li>196 documents flagged for review</li>
+          <li>Only 2.5% strong disagreements (1/40)</li>
+          <li>196 documents flagged for clinician review</li>
         </ul>
       </div>
       <div class="method-card">
@@ -573,7 +572,7 @@
         <span class="label">Academic Output</span>
         <h3>ASTRO 2026</h3>
         <ul class="finding-list">
-          <li>Abstract submitted to <strong>ASTRO 2026</strong> annual conference</li>
+          <li>Contributed analyses to the lab's <strong>ASTRO 2026</strong> submission cycle (acceptance pending)</li>
           <li>14 interactive Altair HTML visualizations generated</li>
           <li>Comprehensive portfolio and PDF case study produced</li>
           <li>Framework ready for application to any medical literature corpus</li>
@@ -587,15 +586,15 @@
           <li><strong>Novel two-phase LLM validation</strong> framework for topic modeling</li>
           <li>Domain-specific embedding selection (PubMedBERT vs. general)</li>
           <li>Outlier reduction from 18.6% to <strong>6.9%</strong> via c-TF-IDF tuning</li>
-          <li>Only <strong>2.5%</strong> strong disagreements in automated validation</li>
-          <li>Estimated 90% &rarr; <strong>95%+</strong> accuracy with targeted refinement</li>
+          <li>Only <strong>2.5%</strong> strong disagreements in self-validation sampling</li>
+          <li>Iterative refinement path identified for the lowest-coherence clusters</li>
         </ul>
       </div>
       <div class="impact-block">
         <span class="label">Quality</span>
         <h3>Validation Rigor</h3>
         <ul class="finding-list">
-          <li>90% agreement between LLM and model-based classification</li>
+          <li>Self-validated alignment between BERTopic clusters and GPT-4o-mini scoring on the sampled set</li>
           <li>196 documents flagged for manual review (<strong>4.6%</strong> of corpus)</li>
           <li>Topic 0 analysis: 359 docs, 125 misclassified (34% poor fit)</li>
           <li>Best topics (50, 99): <strong>100% correct</strong> assignment rate</li>
