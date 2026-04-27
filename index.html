@@ -628,7 +628,7 @@
       <div class="hero-meta">
         <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &mdash;
         <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &mdash;
-        <a href="mailto:AddisonApisarn@gmail.com">Email</a><br>
+        <a href="mailto:addisonapisarn@gmail.com" data-email="addisonapisarn@gmail.com" class="email-link">Email</a><br>
         Project Portfolio &mdash; 2026
       </div>
     </div>
@@ -1349,11 +1349,56 @@
       Addison Apisarnthanarax &mdash;
       <a href="https://github.com/YuYongJu" target="_blank">GitHub</a> &middot;
       <a href="https://www.linkedin.com/in/addi-api/" target="_blank">LinkedIn</a> &middot;
-      <a href="mailto:AddisonApisarn@gmail.com">AddisonApisarn@gmail.com</a>
+      <a href="mailto:addisonapisarn@gmail.com" data-email="addisonapisarn@gmail.com" class="email-link">addisonapisarn@gmail.com</a>
     </div>
     <div class="footer-right">Portfolio &mdash; 2026</div>
   </div>
 </div>
+
+<div id="email-toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:#111;color:#fff;padding:10px 18px;border-radius:6px;font:14px/1.4 system-ui,-apple-system,sans-serif;pointer-events:none;transition:opacity .25s,transform .25s;z-index:9999;">Email copied to clipboard</div>
+
+<script>
+(function () {
+  var toast = document.getElementById('email-toast');
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(function () {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(-50%) translateY(20px)';
+    }, 1800);
+  }
+  document.querySelectorAll('a.email-link').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var email = a.getAttribute('data-email') || a.textContent.trim();
+      // Always copy. mailto: still fires via the default href; this just guarantees the user gets the address even if no mail client opens.
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(function () {
+          showToast('Email copied: ' + email);
+        }, function () {
+          // clipboard blocked — fallback below
+          legacyCopy(email);
+        });
+      } else {
+        legacyCopy(email);
+      }
+    });
+  });
+  function legacyCopy(email) {
+    var ta = document.createElement('textarea');
+    ta.value = email;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'absolute';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); showToast('Email copied: ' + email); }
+    catch (e) { showToast('Email: ' + email); }
+    document.body.removeChild(ta);
+  }
+})();
+</script>
 
 </body>
 </html>
