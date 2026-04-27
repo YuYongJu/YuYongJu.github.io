@@ -1372,13 +1372,16 @@
   }
   document.querySelectorAll('a.email-link').forEach(function (a) {
     a.addEventListener('click', function (e) {
+      // Suppress the mailto navigation — opening Chrome's mailto handler is
+      // worse UX than just copying the address. The href stays as mailto:
+      // for screen readers and right-click "Copy email address" — but a
+      // left-click on the link only triggers the clipboard copy below.
+      e.preventDefault();
       var email = a.getAttribute('data-email') || a.textContent.trim();
-      // Always copy. mailto: still fires via the default href; this just guarantees the user gets the address even if no mail client opens.
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(email).then(function () {
           showToast('Email copied: ' + email);
         }, function () {
-          // clipboard blocked — fallback below
           legacyCopy(email);
         });
       } else {
