@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Editorial-brutalist mark matched to portfolio palette: black quad framing a hand-drawn slab "A" with the rose accent square in the corner that mirrors the portfolio's #e11d48 accent. The asymmetric corner stamp is the cue that turns a letterform into a designed mark. Renders crisp at 16x16. -->
+  <rect width="64" height="64" fill="#0a0a0a"/>
+  <!-- The "A": two diagonals meeting at apex + heavy crossbar. Hand-drawn paths keep the weight consistent at small sizes (font-rendering anti-aliasing tends to muddy small glyphs). -->
+  <path d="M 12 52 L 32 12 L 52 52 L 44 52 L 32 26 L 20 52 Z" fill="#fafaf9"/>
+  <rect x="20" y="38" width="24" height="6" fill="#fafaf9"/>
+  <!-- Rose accent corner stamp — matches --accent: #e11d48 from portfolio CSS. -->
+  <rect x="50" y="50" width="6" height="6" fill="#e11d48"/>
+</svg>
