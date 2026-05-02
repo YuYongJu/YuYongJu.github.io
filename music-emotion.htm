@@ -77,7 +77,7 @@
       </div>
     </div>
     <h1 class="hero-title">Multimodal <em>Video-to-Music</em> Recommendation</h1>
-    <p class="hero-subtitle">An AI system that analyzes video content, classifies emotional context with a trained neural network, and recommends emotionally matching music from Spotify &mdash; bridging visual, emotional, and audio modalities.</p>
+    <p class="hero-subtitle">An AI system that analyzes video content, extracts real audio features for every track in a Spotify playlist, classifies emotional context with a Keras neural network, and recommends emotionally matching music &mdash; bridging visual, emotional, and audio modalities with no fabricated data in the loop.</p>
     <div class="metrics">
       <div class="metric">
         <div class="metric-value">3</div>
@@ -108,16 +108,20 @@
           Matching music to video content is a fundamentally multimodal problem &mdash; it requires understanding visual scenes, mapping them to emotional categories, and finding audio that evokes the same feeling. This project builds an end-to-end pipeline that bridges all three modalities automatically.
         </p>
         <p>
-          The system uses <strong>Google Cloud Video Intelligence API</strong> to extract scene labels and context from video content, a <strong>trained Keras neural network</strong> to classify music tracks by emotional content based on Spotify audio features, and the <strong>Spotify Web API</strong> to retrieve playlist metadata. The emotion classifier model (<code>emotion_classifier_model.h5</code>) is trained on standardized audio features using scikit-learn's StandardScaler.
+          The system uses <strong>Google Cloud Video Intelligence API</strong> to extract scene labels and contextual signals from video content, and a <strong>Keras neural network</strong> to classify music tracks by emotion based on real Spotify audio features (danceability, energy, valence, tempo, loudness, mode, acousticness, instrumentalness, liveness, speechiness).
         </p>
         <p>
-          The result is a recommendation engine that takes any video as input and outputs a ranked list of emotionally appropriate music tracks from curated Spotify playlists.
+          Audio features are resolved through a <strong>two-source extractor</strong>: Spotify Web API first, with a <strong>librosa-based local DSP fallback</strong> on each track's 30-second preview MP3 (RMS energy, beat-tracked tempo, chroma key/mode, spectral centroid as valence proxy). The fallback exists because Spotify deprecated the public audio-features endpoint for new third-party apps in November 2024 &mdash; rather than dropping the project, the system computes the same features locally from preview audio.
+        </p>
+        <p>
+          The result is a recommendation engine that takes a video bucket and a Spotify playlist as input and outputs a ranked list of emotionally appropriate tracks, with match scores combining emotion alignment, popularity, and energy match against the video's average label confidence.
         </p>
       </div>
       <div class="tags-box">
         <span class="label">Tech Stack</span>
         <span class="tag highlight">TensorFlow</span>
         <span class="tag highlight">Keras</span>
+        <span class="tag highlight">librosa</span>
         <span class="tag">Google Cloud</span>
         <span class="tag">Video Intelligence</span>
         <span class="tag">Spotify API</span>
@@ -136,8 +140,8 @@
       <div class="pipeline-step">
         <div class="step-number">01</div>
         <div class="step-name">Fetch</div>
-        <div class="step-detail">Retrieve Spotify playlist metadata and audio features (energy, valence, tempo, danceability)</div>
-        <span class="step-tool">Spotify API</span>
+        <div class="step-detail">Retrieve playlist metadata, then resolve real audio features per track (Spotify API, librosa fallback on preview MP3)</div>
+        <span class="step-tool">Spotify + librosa</span>
       </div>
       <div class="pipeline-step">
         <div class="step-number">02</div>
@@ -165,12 +169,12 @@
   <div class="section">
     <span class="label">03 &mdash; Key Results</span>
     <ul class="finding-list">
-      <li>Trained <strong>emotion_classifier_model.h5</strong> neural network for music emotion classification</li>
-      <li><strong>Google Cloud Video Intelligence API</strong> integration for scene label and context extraction</li>
-      <li><strong>Spotify Web API</strong> for playlist metadata retrieval and audio feature analysis</li>
-      <li>Feature scaling with scikit-learn <strong>StandardScaler</strong> for normalized model input</li>
-      <li>Full end-to-end pipeline: <strong>fetch &rarr; analyze &rarr; train &rarr; recommend</strong></li>
-      <li>Bridges three modalities &mdash; visual content, emotion classification, and audio features &mdash; into a unified recommendation system</li>
+      <li>Two-source feature extractor (<code>audio_features.py</code>) &mdash; <strong>Spotify API → librosa</strong> on 30-second preview MP3 &mdash; survives Spotify's Nov 2024 deprecation of public audio-features for new apps</li>
+      <li>Keras MLP (64 → 32 → softmax over 5 emotions) over <strong>standardized real audio features</strong> with rule-based bootstrapping for initial labels</li>
+      <li><strong>Google Cloud Video Intelligence API</strong> integration for label, shot, and explicit-content detection across an entire bucket of MP4s</li>
+      <li>Feature columns aligned with the Spotify schema regardless of source &mdash; downstream classifier code is source-agnostic</li>
+      <li>Full pipeline: <strong>fetch (with features) &rarr; analyze video &rarr; train classifier &rarr; recommend</strong>, all behind one CLI</li>
+      <li>Lazy client initialization &mdash; the Spotify subcommands work without GCP credentials and vice versa</li>
     </ul>
   </div>
 </div>
