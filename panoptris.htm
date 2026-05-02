@@ -151,20 +151,20 @@
     <p class="hero-subtitle">An AI reasoning layer that sits on top of existing cameras, sensors, and access control at unmanned infrastructure sites &mdash; triaging alerts, filtering 90%+ of false alarms through cross-system correlation, and orchestrating response autonomously.</p>
     <div class="metrics">
       <div class="metric">
-        <div class="metric-value">17</div>
-        <div class="metric-label">Milestones Shipped</div>
+        <div class="metric-value">5</div>
+        <div class="metric-label">Context Streams Reasoned</div>
       </div>
       <div class="metric">
-        <div class="metric-value">156<span class="accent">+</span></div>
-        <div class="metric-label">Phases Executed</div>
+        <div class="metric-value">4<span class="accent">-tier</span></div>
+        <div class="metric-label">Safety Architecture</div>
       </div>
       <div class="metric">
-        <div class="metric-value">194<span class="accent">+</span></div>
-        <div class="metric-label">Requirements Met</div>
+        <div class="metric-value">90<span class="accent">%+</span></div>
+        <div class="metric-label">False Alarm Filtering</div>
       </div>
       <div class="metric">
-        <div class="metric-value">455<span class="accent">K</span></div>
-        <div class="metric-label">Lines of TypeScript</div>
+        <div class="metric-value">2</div>
+        <div class="metric-label">Protocols (MQTT &middot; MAVLink)</div>
       </div>
     </div>
   </div>
@@ -396,14 +396,14 @@
     <span class="label">05 &mdash; Production Status</span>
     <div class="impact-grid">
       <div class="impact-block">
-        <span class="label">Engineering Scale</span>
-        <h3>v12.0 Production Hardened</h3>
+        <span class="label">Architecture Decisions</span>
+        <h3>Where Judgment Lives</h3>
         <ul class="finding-list">
-          <li>17 milestones shipped, 156+ phases executed</li>
-          <li>~455K lines of TypeScript across the platform</li>
-          <li>194+ requirements satisfied with verification</li>
-          <li>End-to-end agent-verified intelligence pipeline</li>
-          <li>Multi-tenant from day one with strict isolation</li>
+          <li>LLM reasons across 5 context streams (camera, access control, zone history, policy, activity patterns) before classifying an event</li>
+          <li>4-tier safety model with structural separation in code &mdash; LLM is never in the safety-critical path</li>
+          <li>Multi-tenant from day one with strict per-tenant isolation, audit trails wired for SOC 2 / ISO 27001</li>
+          <li>Drone dispatch is an upgrade path, not a dependency &mdash; product earns value before any drone is on site</li>
+          <li>Camera-first positioning bets on Part 108 timeline rather than against it</li>
         </ul>
       </div>
       <div class="impact-block dark">
