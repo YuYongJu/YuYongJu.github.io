@@ -3,3 +3,9 @@ node_modules/
 .vscode/
 .idea/
 *.log
+
+# Local-only PDF exports and forms. This repo publishes to a PUBLIC
+# GitHub Pages site, so nothing lands here unless it is meant to be world-
+# readable. These are unreferenced by any page and regenerable from the HTML.
+PDF Versions/
+*.pdf
